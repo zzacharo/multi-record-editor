@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { MultiEditorComponent } from './muti-editor/multi-editor/multi-editor.component';
+import { MultiEditorComponent } from './multi-editor';
+import { SHARED_SERVICES } from './shared';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,9 @@ import { MultiEditorComponent } from './muti-editor/multi-editor/multi-editor.co
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [
+    SHARED_SERVICES
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../shared/services/api.service';
 
 @Component({
   selector: 'multi-editor',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MultiEditorComponent implements OnInit {
 
-  constructor() { }
+  records: Array<{}>;
+
+  constructor(private apiService: ApiService) { }
 
   ngOnInit() {
+    this.apiService.fetchUrl('../../assets/record.json')
+      .subscribe(records => {
+        this.records = records;
+      })
   }
 
 }
