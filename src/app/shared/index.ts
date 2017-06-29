@@ -4,4 +4,5 @@ export {
   SHARED_SERVICES
 };
 
-export { Action } from './interfaces'
+export { Action } from './interfaces';
+
