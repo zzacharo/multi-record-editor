@@ -1,17 +1,13 @@
 import { Injectable } from '@angular/core';
 import { fromJS, OrderedSet } from 'immutable';
-<<<<<<< d6d09ad4ac6f02127e43d1594aa3adee11f08a45
-import * as _ from 'lodash';
-=======
->>>>>>> schema-keystore: Service for schema key storage for each schema path
 
 @Injectable()
 export class SchemaKeysStoreService {
 
-<<<<<<< d6d09ad4ac6f02127e43d1594aa3adee11f08a45
   public separator = '/';
   public schemaKeyStoreMap: { [path: string]: OrderedSet<string> } = {};
   public schema;
+
   constructor() { }
 
   public forPath(path: string) {
@@ -48,15 +44,6 @@ export class SchemaKeysStoreService {
   }
 
   public buildSchemaKeyStore(schema: {}) {
-    this.schema = schema;
-=======
-  private schemaSeparator = '/';
-  public keyStoreMap: { [path: string]: OrderedSet<string> } = {};
-
-  constructor() { }
-
-  public buildSchemaKeyStore(schema: {}) {
->>>>>>> schema-keystore: Service for schema key storage for each schema path
     this.buildSchemaKeyStoreRecursively('', schema);
   }
 
@@ -64,7 +51,6 @@ export class SchemaKeysStoreService {
 
     if (schema['type'] === 'object') {
       let finalKeys = Object.keys(schema['properties']);
-<<<<<<< d6d09ad4ac6f02127e43d1594aa3adee11f08a45
       this.schemaKeyStoreMap[path] = fromJS(finalKeys).toOrderedSet();
       finalKeys
         .filter(key => this.isObjectOrArraySchema(schema['properties'][key]))
@@ -72,22 +58,11 @@ export class SchemaKeysStoreService {
           let newPath = `${path}${this.separator}${key}`;
           this.buildSchemaKeyStoreRecursively(newPath, schema['properties'][key]);
         });
-=======
-      this.keyStoreMap[path] = fromJS(finalKeys).toOrderedSet();
-      finalKeys
-      .filter(key => this.isObjectOrArraySchema(schema['properties'][key]))
-      .forEach(key => {
-        let newPath = `${path}${this.schemaSeparator}${key}`;
-        this.buildSchemaKeyStoreRecursively(newPath, schema['properties'][key]);
-      });
->>>>>>> schema-keystore: Service for schema key storage for each schema path
-
     }
 
     if (schema['type'] === 'array') {
       if (schema['items']['type'] === 'object') {
         let finalKeys = Object.keys(schema['items']['properties']);
-<<<<<<< d6d09ad4ac6f02127e43d1594aa3adee11f08a45
         this.schemaKeyStoreMap[path] = fromJS(finalKeys).toOrderedSet();
         finalKeys
           .filter(key => this.isObjectOrArraySchema(schema['items']['properties'][key]))
@@ -95,15 +70,6 @@ export class SchemaKeysStoreService {
             let newPath = `${path}${this.separator}${key}`;
             this.buildSchemaKeyStoreRecursively(newPath, schema['items']['properties'][key]);
           });
-=======
-        this.keyStoreMap[path] = fromJS(finalKeys).toOrderedSet();
-        finalKeys
-        .filter(key => this.isObjectOrArraySchema(schema['items']['properties'][key]))
-        .forEach(key => {
-          let newPath = `${path}${this.schemaSeparator}${key}`;
-          this.buildSchemaKeyStoreRecursively(newPath, schema['items']['properties'][key]);
-        });
->>>>>>> schema-keystore: Service for schema key storage for each schema path
       }
     }
   }
@@ -111,7 +77,6 @@ export class SchemaKeysStoreService {
   private isObjectOrArraySchema(schema: {}) {
     return schema['type'] === 'object' || schema['type'] === 'array';
   }
-<<<<<<< d6d09ad4ac6f02127e43d1594aa3adee11f08a45
 
   public find_subschema(path: string) {
     let subSchema = this.schema
@@ -140,6 +105,3 @@ export class SchemaKeysStoreService {
     return subSchema
   }
 }
-=======
-}
->>>>>>> schema-keystore: Service for schema key storage for each schema path

@@ -19,9 +19,14 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "",
       "styles": [
+<<<<<<< 911df6d69c20da94b647bd6352ca4fdabe87364f
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
         "styles.scss",
         "../node_modules/font-awesome/css/font-awesome.css"
+=======
+        "styles.css",
+        "../node_modules/bootstrap/dist/css/bootstrap.min.css"
+>>>>>>> autocomplete: first trial
       ],
       "scripts": [
       ],

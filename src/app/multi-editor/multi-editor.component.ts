@@ -129,18 +129,18 @@ export class MultiEditorComponent implements OnInit {
       this.query = ''
     }
     this.queryUsed = this.query
-    this.queryService.searchRecords(this.url, this.query, this.currentPage, this.selectedCollection)      
-      .then((res) => {
-        this.records = res['json_records'];
-        this.totalRecords = res['total_records']
-        this.uuids = res['uuids']
+    this.queryService.searchRecords(this.url, this.query, this.currentPage, this.selectedCollection)
+    .then((res) => {
+      this.records = res['json_records'];
+      this.totalRecords = res['total_records']
+      this.uuids = res['uuids']
+      this.changeDetectorRef.markForCheck();
+    })
+    .catch(error => {
+        this.error_text = error;
         this.changeDetectorRef.markForCheck();
-      })
-      .catch(error =>
-        {this.error_text = error;
-        this.changeDetectorRef.markForCheck();
-        }
-      );
+      }
+    );
   }
 
   setCollection(selectedCollection: string) {

@@ -1,0 +1,9 @@
+<ng-template #noResultsTemplate>
+    <label>No results found</label>
+</ng-template>
+<input [(ngModel)]="selected" (keydown)="checkUserInput($event)" (typeaheadOnSelect)="onModelChange($event)"
+       [typeahead]="options"
+       [optionsListTemplate]="noResultsTemplate"
+       (typeaheadNoResults)="changeTypeaheadNoResults($event)"
+       typeaheadOptionField="nextPath"
+       class="form-control">
