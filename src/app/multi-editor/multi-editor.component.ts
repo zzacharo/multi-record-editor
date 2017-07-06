@@ -39,10 +39,12 @@ export class MultiEditorComponent implements OnInit {
   ];
   url = 'http://localhost:5000/api/multieditor'
   schema_url = 'http://localhost:5000'
+
   constructor(
     private schemaKeysStoreService: SchemaKeysStoreService,
     private changeDetectorRef: ChangeDetectorRef,
     private queryService: QueryService) { }
+    filterExpression: Array<string>;
 
   ngOnInit() {
     this.newRecords = []

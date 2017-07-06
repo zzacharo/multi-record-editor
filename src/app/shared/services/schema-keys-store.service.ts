@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { fromJS, OrderedSet } from 'immutable';
+import * as _ from 'lodash';
 
 @Injectable()
 export class SchemaKeysStoreService {
 
-  public separator = '/';
+  public schemaSeparator = '/';
   public schemaKeyStoreMap: { [path: string]: OrderedSet<string> } = {};
-  public schema;
+  public recordKeysStoreMap: any = {};
+  public schema = {};
 
   constructor() { }
 
@@ -14,7 +16,7 @@ export class SchemaKeysStoreService {
     if (path === '') {
       return this.schemaKeyStoreMap[''].toArray();
     }
-    return this.schemaKeyStoreMap[`${this.separator}${path}`] ? this.schemaKeyStoreMap[`${this.separator}${path}`].toArray() : [];
+    return this.schemaKeyStoreMap[`${this.schemaSeparator}${path}`] ? this.schemaKeyStoreMap[`${this.schemaSeparator}${path}`].toArray() : [];
   }
 
   public forPathReq(path: string) {
@@ -103,5 +105,21 @@ export class SchemaKeysStoreService {
       subSchema = subSchema['items']
     }
     return subSchema
+  }
+
+  public filterRecordByPath(record: any, path: Array<any>) {
+
+    let key = path.pop();
+
+    if (_.isObject(record)) {
+      if (_.isEmpty(path)) {
+        return record[key];
+      }
+      this.recordKeysStoreMap[key] = this.filterRecordByPath(record[key], path);
+    } else if (_.isArray(record)) {
+      record.forEach(value => {
+        this.filterRecordByPath(value, path);
+      })
+    }
   }
 }

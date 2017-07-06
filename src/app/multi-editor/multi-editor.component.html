@@ -29,9 +29,10 @@
         <div *ngIf="totalRecords == 0">
           <h3>Sorry no results found</h3>
         </div>
-        <pre class="card card-block card-header">Model: {{selected | json}}</pre>
-        <autocomplete [options]="options"></autocomplete>
-        <li *ngFor="let record of records ; let count = index; trackBy: identify" class="list-group list-group-item">
+        <div class="left col-md-3">
+          <autocomplete (onValueChange)="filterExpression = $event"></autocomplete>
+        </div>
+        <li *ngFor="let record of records | tagFilter: filterExpression; let count = index; trackBy: identify" class="list-group list-group-item">
           <input #inp type="checkbox" [checked]="(allSelected && checkedRecords.indexOf(uuids[count]) === -1) || (allSelected === false && checkedRecords.indexOf(uuids[count])>-1)"
             (change)="addChecked(uuids[count])">
           <div *ngIf="previewMode == false || inp.checked == false;then notPreview else preview"></div>

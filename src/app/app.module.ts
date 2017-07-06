@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-<<<<<<< 911df6d69c20da94b647bd6352ca4fdabe87364f
 import { AppComponent } from './app.component';
 import { MultiEditorComponent } from './multi-editor';
 import { SHARED_SERVICES } from './shared';
@@ -15,6 +14,8 @@ import { DiffViewComponent } from './diff-view/diff-view.component';
 import { JsonEditorModule } from 'ng2-json-editor';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
+import { TagFilterPipe } from './shared/pipes/tag-filter.pipe';
+import { MaterialChipsModule } from 'angular2-material-chips';
 
 @NgModule({
   declarations: [
@@ -23,16 +24,18 @@ import { AutocompleteComponent } from './autocomplete/autocomplete.component';
     ActionTemplateComponent,
     ActionsTemplateComponent,
     DiffViewComponent,
-    AutocompleteComponent
+    AutocompleteComponent,
+    TagFilterPipe
   ],
   imports: [
     BsDropdownModule.forRoot(),
     BrowserModule,
+    MaterialChipsModule,
     FormsModule,
     HttpModule,
     AlertModule.forRoot(),
     PaginationModule.forRoot(),
-    JsonEditorModule
+    JsonEditorModule,
     TypeaheadModule.forRoot()
   ],
   providers: [
