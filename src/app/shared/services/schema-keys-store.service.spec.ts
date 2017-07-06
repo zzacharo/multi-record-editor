@@ -59,9 +59,9 @@ describe('SchemaKeysStoreService', () => {
     };
 
     service.buildSchemaKeyStore(schema);
-    Object.keys(service.keyStoreMap)
+    Object.keys(service.schemaKeyStoreMap)
     .forEach(key => {
-      expect(service.keyStoreMap[key]).toEqual(expectedMap[key]);
+      expect(service.schemaKeyStoreMap[key]).toEqual(expectedMap[key]);
     });
 
   });

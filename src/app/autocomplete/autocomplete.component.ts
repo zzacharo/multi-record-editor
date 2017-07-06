@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import {TypeaheadMatch} from 'ngx-bootstrap';
+import {Component, Input, Output, ChangeDetectionStrategy, EventEmitter} from '@angular/core';
 import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
+import {Observable} from 'rxjs/Observable';
+import { Set } from 'immutable';
 
 @Component({
   selector: 'autocomplete',
@@ -8,42 +9,86 @@ import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.ser
   styleUrls: ['./autocomplete.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AutocompleteComponent implements OnInit {
+export class AutocompleteComponent {
 
-  @Input() options: Array<{}>;
+  private _typeaheadNoResults = false;
 
+  @Input() _tags: Set<string> = Set<string>();
+
+  @Output() onValueChange: EventEmitter<Array<string>> = new EventEmitter<Array<string>>();
   selected = '';
-  noResultsFound = false;
+  currentPath = '';
+  dataSource: Observable<any>;
 
-  constructor(private schemaKeysStoreService: SchemaKeysStoreService) { }
-
-  ngOnInit() {
+  constructor(private schemaKeysStoreService: SchemaKeysStoreService) {
+    this.dataSource = Observable
+    .create((observer: any) => {
+      observer.next(this.selected);
+    })
+    .mergeMap((token: string) => this.getStatesAsObservable(token));
   }
 
-  onModelChange(event: TypeaheadMatch) {
-    console.log(event.value);
-    let newOptions = this.schemaKeysStoreService.forPath(event.value) ? this.schemaKeysStoreService.forPath(event.value).toArray() : [];
-    if (newOptions.length === 0) {
-      console.log('No nested keys further!!!');
-      return;
+  get tags(): Set<string> {
+    return this._tags;
+  }
+
+  set tags(tags: Set<string>) {
+    this._tags = tags;
+  }
+
+  getStatesAsObservable(token: string): Observable<any> {
+    let path = '';
+    let slashIndex = token.lastIndexOf('/');
+    if (slashIndex < 0) {
+      path = '';
+    } else if (slashIndex === token.length - 1) {
+      path = token.slice(0, -1);
+    } else {
+      path = token.slice(0, slashIndex);
     }
-    this.options = newOptions
-      .map(option => {
-        return { currentPath: event.value, nextPath: `${event.value}/${option}`};
-      });
+    this.currentPath = path;
+    let query = new RegExp(token.slice(slashIndex + 1), 'ig');
+
+    return Observable.of(
+      this.schemaKeysStoreService.forPath(path).filter(state => query.test(state))
+    );
   }
 
-  changeTypeaheadNoResults(e: boolean): void {
-    this.noResultsFound = e;
+  get typeaheadNoResults() {
+    return this._typeaheadNoResults;
   }
 
-  checkUserInput(event) {
-    if (event.which === 46 || event.which === 8) {
-      console.log(this.selected);
-      this.noResultsFound = false;
-    }else if (this.noResultsFound) {
-      event.preventDefault();
+  set typeaheadNoResults(e: boolean) {
+    this._typeaheadNoResults = e;
+  }
+
+  selectUserInput(event) {
+    if (this.currentPath!== '') {
+      this.selected = `${this.currentPath}/${event}`;
+      // this.onValueChange.emit(this.selected);
     }
   }
 
+  onKeyEvent(event) {
+    if (event.which === 13) {
+     // this.onValueChange.emit(this.selected);
+    } else if (event.which === 188) {
+      this.addTag(this.selected);
+      this.onValueChange.emit(this.tags.toJS());
+    }
+  }
+
+  onFilterClick(event) {
+    this.onValueChange.emit(this.tags.toJS());
+  }
+
+  addTag(tag: string) {
+    this.tags = this.tags.add(tag.slice(0, -1));
+    this.selected = '';
+  }
+
+  removeTag(tag: string) {
+    this.tags = this.tags.delete(tag);
+    this.onValueChange.emit(this.tags.toJS());
+  }
 }

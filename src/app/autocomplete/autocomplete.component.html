@@ -1,9 +1,16 @@
-<ng-template #noResultsTemplate>
-    <label>No results found</label>
-</ng-template>
-<input [(ngModel)]="selected" (keydown)="checkUserInput($event)" (typeaheadOnSelect)="onModelChange($event)"
-       [typeahead]="options"
-       [optionsListTemplate]="noResultsTemplate"
-       (typeaheadNoResults)="changeTypeaheadNoResults($event)"
-       typeaheadOptionField="nextPath"
-       class="form-control">
+<div *ngIf="tags && tags.size" class="md-chip-list" [ngClass]="focused">
+    <span *ngFor="let value of tags" class="md-chip">
+    {{value}} <i class="glyphicon glyphicon-remove" (click)="removeTag(value)"></i>
+    </span>
+</div>
+<div class="input-group item-group">
+  <input [(ngModel)]="selected" [typeahead]="dataSource" (typeaheadNoResults)="typeaheadNoResults = $event"
+     (typeaheadOnSelect)="selectUserInput($event)" (keyup)="onKeyEvent($event)" typeaheadWaitMs=100 class="form-control">
+  <span class="input-group-btn">
+    <button class="btn btn-default" type="button" (click)="onFilterClick($event)">
+      <span class="glyphicon glyphicon-search"></span></button>
+  </span>
+</div>
+<div *ngIf="typeaheadNoResults===true">
+    <i class="glyphicon glyphicon-remove"></i> No Results Found
+</div>
