@@ -6,16 +6,22 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { MultiEditorComponent } from './multi-editor';
 import { SHARED_SERVICES } from './shared';
+import { AlertModule } from 'ngx-bootstrap';
+import { NgxPaginationModule } from 'ngx-pagination'; 
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MultiEditorComponent
+    MultiEditorComponent,
   ],
   imports: [
+    BsDropdownModule.forRoot(),
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    AlertModule.forRoot(),
+    NgxPaginationModule
   ],
   providers: [
     SHARED_SERVICES
