@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 @Injectable()
 export class SchemaKeysStoreService {
 
-  public schemaSeparator = '/';
+  public separator = '/';
   public schemaKeyStoreMap: { [path: string]: OrderedSet<string> } = {};
   public recordKeysStoreMap: any = {};
   public schema = {};
@@ -16,7 +16,7 @@ export class SchemaKeysStoreService {
     if (path === '') {
       return this.schemaKeyStoreMap[''].toArray();
     }
-    return this.schemaKeyStoreMap[`${this.schemaSeparator}${path}`] ? this.schemaKeyStoreMap[`${this.schemaSeparator}${path}`].toArray() : [];
+    return this.schemaKeyStoreMap[`${this.separator}${path}`] ? this.schemaKeyStoreMap[`${this.separator}${path}`].toArray() : [];
   }
 
   public forPathReq(path: string) {
@@ -55,11 +55,11 @@ export class SchemaKeysStoreService {
       let finalKeys = Object.keys(schema['properties']);
       this.schemaKeyStoreMap[path] = fromJS(finalKeys).toOrderedSet();
       finalKeys
-        .filter(key => this.isObjectOrArraySchema(schema['properties'][key]))
-        .forEach(key => {
-          let newPath = `${path}${this.separator}${key}`;
-          this.buildSchemaKeyStoreRecursively(newPath, schema['properties'][key]);
-        });
+      .filter(key => this.isObjectOrArraySchema(schema['properties'][key]))
+      .forEach(key => {
+        let newPath = `${path}${this.separator}${key}`;
+        this.buildSchemaKeyStoreRecursively(newPath, schema['properties'][key]);
+      });
     }
 
     if (schema['type'] === 'array') {
@@ -67,11 +67,11 @@ export class SchemaKeysStoreService {
         let finalKeys = Object.keys(schema['items']['properties']);
         this.schemaKeyStoreMap[path] = fromJS(finalKeys).toOrderedSet();
         finalKeys
-          .filter(key => this.isObjectOrArraySchema(schema['items']['properties'][key]))
-          .forEach(key => {
-            let newPath = `${path}${this.separator}${key}`;
-            this.buildSchemaKeyStoreRecursively(newPath, schema['items']['properties'][key]);
-          });
+        .filter(key => this.isObjectOrArraySchema(schema['items']['properties'][key]))
+        .forEach(key => {
+          let newPath = `${path}${this.separator}${key}`;
+          this.buildSchemaKeyStoreRecursively(newPath, schema['items']['properties'][key]);
+        });
       }
     }
   }

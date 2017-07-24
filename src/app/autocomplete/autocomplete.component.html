@@ -5,7 +5,7 @@
 </div>
 <div class="input-group item-group">
   <input [(ngModel)]="selected" [typeahead]="dataSource" (typeaheadNoResults)="typeaheadNoResults = $event"
-     (typeaheadOnSelect)="selectUserInput($event)" (keyup)="onKeyEvent($event)" typeaheadWaitMs=100 class="form-control">
+     (typeaheadOnSelect)="selectUserInput($event)" (keyup)="onKeyEvent($event)" class="form-control">
   <span class="input-group-btn">
     <button class="btn btn-default" type="button" (click)="onFilterClick($event)">
       <span class="glyphicon glyphicon-search"></span></button>

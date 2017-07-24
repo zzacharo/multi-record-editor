@@ -15,7 +15,6 @@ import { JsonEditorModule } from 'ng2-json-editor';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 import { TagFilterPipe } from './shared/pipes/tag-filter.pipe';
-import { MaterialChipsModule } from 'angular2-material-chips';
 
 @NgModule({
   declarations: [
@@ -30,7 +29,6 @@ import { MaterialChipsModule } from 'angular2-material-chips';
   imports: [
     BsDropdownModule.forRoot(),
     BrowserModule,
-    MaterialChipsModule,
     FormsModule,
     HttpModule,
     AlertModule.forRoot(),
