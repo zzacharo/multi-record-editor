@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 @Injectable()
 export class SchemaKeysStoreService {
 
-  public schemaSeparator = '/';
+  public separator = '/';
   public schemaKeyStoreMap: { [path: string]: OrderedSet<string> } = {};
   public recordKeysStoreMap: any = {};
 
@@ -15,7 +15,7 @@ export class SchemaKeysStoreService {
     if (path === '') {
       return this.schemaKeyStoreMap[''].toArray();
     }
-    return this.schemaKeyStoreMap[`${this.schemaSeparator}${path}`] ? this.schemaKeyStoreMap[`${this.schemaSeparator}${path}`].toArray() : [];
+    return this.schemaKeyStoreMap[`${this.separator}${path}`] ? this.schemaKeyStoreMap[`${this.separator}${path}`].toArray() : [];
   }
 
   public buildSchemaKeyStore(schema: {}) {
@@ -30,7 +30,7 @@ export class SchemaKeysStoreService {
       finalKeys
       .filter(key => this.isObjectOrArraySchema(schema['properties'][key]))
       .forEach(key => {
-        let newPath = `${path}${this.schemaSeparator}${key}`;
+        let newPath = `${path}${this.separator}${key}`;
         this.buildSchemaKeyStoreRecursively(newPath, schema['properties'][key]);
       });
 
@@ -43,7 +43,7 @@ export class SchemaKeysStoreService {
         finalKeys
         .filter(key => this.isObjectOrArraySchema(schema['items']['properties'][key]))
         .forEach(key => {
-          let newPath = `${path}${this.schemaSeparator}${key}`;
+          let newPath = `${path}${this.separator}${key}`;
           this.buildSchemaKeyStoreRecursively(newPath, schema['items']['properties'][key]);
         });
       }
