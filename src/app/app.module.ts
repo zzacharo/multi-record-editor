@@ -9,11 +9,17 @@ import { SHARED_SERVICES } from './shared';
 import { AlertModule } from 'ngx-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination'; 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ActionTemplateComponent} from './action-template'
+import { AdditionTemplateComponent } from './addition-template';
+import { ActionsTemplateComponent } from './actions-template/actions-template.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MultiEditorComponent,
+    ActionTemplateComponent,
+    AdditionTemplateComponent,
+    ActionsTemplateComponent
   ],
   imports: [
     BsDropdownModule.forRoot(),
