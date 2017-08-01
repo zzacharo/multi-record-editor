@@ -22,8 +22,8 @@
       </div>
       <ul class="list-unstyled">
           <actions-template></actions-template>
-        <li *ngFor="let record of records | paginate: { itemsPerPage: 2, currentPage: p, totalItems: total }" class="list-group list-group-item">
-          <pre> {{record | json}} </pre>
+        <li *ngFor="let record of records | paginate: { itemsPerPage: 2, currentPage: p, totalItems: total }; let count = index " class="list-group list-group-item">
+          <diff-template [oldObject] ="record" [newObject]="new_records[count]"></diff-template>
         </li>
       </ul>
       <pagination-controls (pageChange)="p = $event"></pagination-controls>

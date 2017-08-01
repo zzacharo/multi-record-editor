@@ -12,6 +12,9 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ActionTemplateComponent} from './action-template'
 import { AdditionTemplateComponent } from './addition-template';
 import { ActionsTemplateComponent } from './actions-template/actions-template.component';
+import { DiffPipePipe } from './shared/pipes/diff-pipe.pipe';
+import { DiffTemplateComponent } from './diff-template/diff-template.component';
+
 
 @NgModule({
   declarations: [
@@ -19,7 +22,9 @@ import { ActionsTemplateComponent } from './actions-template/actions-template.co
     MultiEditorComponent,
     ActionTemplateComponent,
     AdditionTemplateComponent,
-    ActionsTemplateComponent
+    ActionsTemplateComponent,
+    DiffPipePipe,
+    DiffTemplateComponent
   ],
   imports: [
     BsDropdownModule.forRoot(),
