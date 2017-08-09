@@ -1,7 +1,19 @@
-<li *ngFor="let number of numberOfActions">
-<action-template></action-template>
+<label>Action</label>
+<div class="btn-group" dropdown>
+  <select class="form-control" [ngModel]="selectedAction" (ngModelChange)="onActionChange($event)">
+      <option value="Addition">Addition</option>
+      <option value="Deletion">Deletion</option>
+      <option value="Update">Update</option>
+</select>
+</div>
+<li class="list-unstyled" *ngFor="let action of actions; let count = index ">
+  <me-action-template (onActionDeleted)="onActionDeleted($event)" [action]=action [id]=count></me-action-template>
 </li>
-<button (click)="increaseAction()">Add Action</button>
-<button (click)="decreaseAction()">Remove Action</button>
-<button (click)="submitActions()">Preview Actions</button>
+<button class="button" (click)="increaseAction()">Add action</button>
 
+<li class="list-unstyled" *ngFor="let condition of conditions; let count = index ">
+  <me-conditions-template (onConditionDeleted)="onConditionDeleted($event)" [condition]=condition [id]=count></me-conditions-template>
+</li>
+<button class="button" (click)="increaseCondition()">Add condition</button>
+
+<button class="button" (click)="previewActions()">Preview Actions</button>

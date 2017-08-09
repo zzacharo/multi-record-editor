@@ -2,29 +2,33 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-
 import { AppComponent } from './app.component';
 import { MultiEditorComponent } from './multi-editor';
 import { SHARED_SERVICES } from './shared';
-import { AlertModule } from 'ngx-bootstrap';
-import { NgxPaginationModule } from 'ngx-pagination'; 
+import { AlertModule } from 'ngx-bootstrap/alert';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { ActionTemplateComponent} from './action-template'
-import { AdditionTemplateComponent } from './addition-template';
+import { ActionTemplateComponent} from './action-template';
 import { ActionsTemplateComponent } from './actions-template/actions-template.component';
-import { DiffPipePipe } from './shared/pipes/diff-pipe.pipe';
-import { DiffTemplateComponent } from './diff-template/diff-template.component';
-
+import { DiffViewComponent } from './diff-view/diff-view.component';
+import { JsonEditorModule } from 'ng2-json-editor';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { AdditionTemplateComponent } from './addition-template/addition-template.component';
+import { DeletionTemplateComponent } from './deletion-template/deletion-template.component';
+import { UpdateTemplateComponent } from './update-template/update-template.component';
+import { ConditionsTemplateComponent } from './conditions-template/conditions-template.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MultiEditorComponent,
     ActionTemplateComponent,
-    AdditionTemplateComponent,
     ActionsTemplateComponent,
-    DiffPipePipe,
-    DiffTemplateComponent
+    DiffViewComponent,
+    AdditionTemplateComponent,
+    DeletionTemplateComponent,
+    UpdateTemplateComponent,
+    ConditionsTemplateComponent
   ],
   imports: [
     BsDropdownModule.forRoot(),
@@ -32,7 +36,9 @@ import { DiffTemplateComponent } from './diff-template/diff-template.component';
     FormsModule,
     HttpModule,
     AlertModule.forRoot(),
-    NgxPaginationModule
+    PaginationModule.forRoot(),
+    JsonEditorModule,
+    TypeaheadModule.forRoot()
   ],
   providers: [
     SHARED_SERVICES

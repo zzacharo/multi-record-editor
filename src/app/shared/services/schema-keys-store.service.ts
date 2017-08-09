@@ -7,40 +7,16 @@ export class SchemaKeysStoreService {
 
   public separator = '/';
   public schemaKeyStoreMap: { [path: string]: OrderedSet<string> } = {};
-  public schema;
+  public recordKeysStoreMap: any = {};
+  public schema = {};
+
   constructor() { }
 
-  public forPath(path: string) {
+  public forPath(path: string): object {
     if (path === '') {
       return this.schemaKeyStoreMap[''].toArray();
     }
     return this.schemaKeyStoreMap[`${this.separator}${path}`] ? this.schemaKeyStoreMap[`${this.separator}${path}`].toArray() : [];
-  }
-
-  public forPathReq(path: string) {
-    let schema = this.schema;
-    let split_path = path.split('/');
-    for (let index in split_path) {
-      if (path === '') {
-        return this.schemaKeyStoreMap[''].toArray();
-      }
-      if (schema['type'] === 'object') {
-        schema = schema['properties'][split_path[index]]
-      }
-      else if (schema['type'] === 'array') {
-        if (schema['items']['type'] === 'object') {
-          schema = schema['items']['properties'][split_path[index]]
-        }
-      }
-    }
-    if(schema['required']){
-      return schema['required'];
-    }
-    if (schema['items']){
-    if(schema['items']['required']){
-      return schema['items']['required'];
-    }
-    }
   }
 
   public buildSchemaKeyStore(schema: {}) {
@@ -59,7 +35,6 @@ export class SchemaKeysStoreService {
           let newPath = `${path}${this.separator}${key}`;
           this.buildSchemaKeyStoreRecursively(newPath, schema['properties'][key]);
         });
-
     }
 
     if (schema['type'] === 'array') {
@@ -76,8 +51,37 @@ export class SchemaKeysStoreService {
     }
   }
 
-  private isObjectOrArraySchema(schema: {}) {
+  private isObjectOrArraySchema(schema: {}): boolean {
     return schema['type'] === 'object' || schema['type'] === 'array';
   }
 
+  public findSubschema(path: string): object {
+    let subSchema = this.schema;
+    if (path === '') {
+      return subSchema;
+    }
+    let splitPath = path.split('/');
+    for (let index in splitPath) {
+      if (subSchema['type'] === 'object') {
+        if (subSchema['properties'][splitPath[index]]) {
+          subSchema = subSchema['properties'][splitPath[index]];
+        }
+      } else if (subSchema['type'] === 'array') {
+        if (subSchema['items']['properties'][splitPath[index]]) {
+          subSchema = subSchema['items']['properties'][splitPath[index]];
+        }
+      }
+    }
+    if (subSchema['type'] === 'array') {
+      subSchema = subSchema['items'];
+    } else if (subSchema['type'] !== 'object') {
+      return {
+        type: 'object', alwaysShow: ['value'],
+        properties: { value: subSchema }
+      }; // if primitive key then wrap it
+    }
+    return subSchema;
+  }
+
 }
+

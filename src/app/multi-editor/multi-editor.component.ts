@@ -1,85 +1,163 @@
-import { Component,Input,Output, OnInit, EventEmitter, ElementRef  } from '@angular/core';
-import { ApiService } from '../shared/services/api.service';
+import { Component, Input, Output, OnInit, EventEmitter,
+   ElementRef, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
-import { Observable } from 'rxjs';
-
-
-
-
-const COLLECTIONS: string[] = [
-  'CDS',
-  'HEP',
-  'MARVEL'
-];
+import { QueryService } from '../shared/services/query.service';
+import 'rxjs/add/operator/toPromise';
 
 @Component({
-  selector: 'multi-editor',
+  selector: 'me-multi-editor',
   templateUrl: 'multi-editor.component.html',
   styleUrls: ['multi-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class MultiEditorComponent implements OnInit {
-  p: number = 1;
-  records: Array<{}>;
+  @Input() records: Array<object>;
+  currentPage = 1;
+  totalRecords = -1;
   schema: {};
-  new_records: object[];
-  constructor(private apiService: ApiService,
-    private schemaKeysStoreService: SchemaKeysStoreService) { }
+  query = '';
+  options: object;
+  errorText: string;
+  queryUsed = '';
+  indexUsed: string;
+  actionsUsed: object[];
+  checkedRecords: Array<string> = []; // records that are different from the general selection rule
+  allSelected = true;
+  previewMode = false;
+  selectedCollection: string;
+  newRecords: object[];
+  uuids: string[] = [];
+  filterExpression: Array<string>;
+  collections: object[] = [
+    ['hep', 'HEP'],
+    ['authors', 'Authors'],
+    ['data', 'Data'],
+    ['conferences', 'Conferences'],
+    ['jobs', 'Jobs'],
+    ['institutions', 'Institutions'],
+    ['experiments', 'Experiments'],
+    ['journals', 'Journals']
+  ];
+
+  pageSizes = [5, 10, 15, 20];
+  pageSize = this.pageSizes[0];
+
+
+  constructor(
+    private schemaKeysStoreService: SchemaKeysStoreService,
+    private changeDetectorRef: ChangeDetectorRef,
+    private queryService: QueryService) { }
 
   ngOnInit() {
-    this.new_records=[{
-    "core":true,
-    "preprint_date":"2006",
-    "legacy_creation_date":"2015-07-27",
-    "_collections":[
-      "Literature"
-    ],
-    "authors":[
-      {
-        "raw_affiliations":[
-          {
-            "value":"Comenius University, Bratislava"
-          }
-        ],
-        "affiliations":[
-          {
-            "value":"Comenius U."
-          }
-        ],
-        "ids":[
-          {
-            "value":"M.Fecko.1",
-            "schema":"INSPIRE BAI"
-          }
-        ],
-        "uuid":"e384ab80-349c-49bc-a8bb-6a8eb849135a",
-        "full_name":"Fecko, M."
+    this.newRecords = [];
+    this.selectedCollection = this.collections[0][0];
+    this.onCollectionChange('hep');
+  }
+
+  onSubmit() {
+    this.queryService.submitActions(this.actionsUsed, this.checkedRecords, this.allSelected)
+      .catch((error) => {
+        this.errorText = error;
+      });
+  }
+
+  onPreview(userActions: Object[]) {
+    this.actionsUsed = userActions;
+    this.queryService.previewActions(userActions, this.queryUsed, this.currentPage, this.pageSize)
+      .then((res) => {
+        this.newRecords = res;
+        this.previewMode = true;
+        this.changeDetectorRef.markForCheck();
+      })
+      .catch((error) => {
+        this.errorText = error;
+        this.changeDetectorRef.markForCheck();
+      });
+  }
+
+  private addChecked(uuid: string) {
+    this.checkedRecords.includes(uuid) ? this.checkedRecords.splice(this.checkedRecords.indexOf(uuid), 1)
+     : this.checkedRecords.push(uuid);
+  }
+
+  private selectAll() {
+    this.allSelected = true;
+    this.checkedRecords = [];
+  }
+
+  private deselectAll() {
+    this.allSelected = false;
+    this.checkedRecords = [];
+  }
+
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
+    return Promise.reject(error.message || error);
+  }
+
+  private pageChanged(newPage: number) {
+    this.currentPage = newPage;
+    this.previewMode ? this.getNewPageRecords() : this.queryCollection(this.queryUsed, this.indexUsed);
+  }
+
+  private searchRecords() {
+    this.indexUsed = this.selectedCollection;
+    if (!this.query) {
+      this.query = '';
+    }
+    this.queryUsed = this.query;
+    this.queryCollection(this.query, this.selectedCollection);
+  }
+
+  private getNewPageRecords() {
+    this.queryService.getNewPageRecords(this.actionsUsed, this.queryUsed, this.currentPage, this.indexUsed, this.pageSize)
+    .subscribe((json) => {
+      this.records = json.oldRecords['json_records'];
+      this.uuids = json.oldRecords['uuids'];
+      this.newRecords = json.newRecords;
+      this.changeDetectorRef.markForCheck();
+    },
+    error => { this.errorText = error; this.changeDetectorRef.markForCheck(); });
+  }
+
+  private queryCollection(query, collection) {
+    this.queryService.searchRecords(query, this.currentPage, collection, this.pageSize)
+    .then((res) => {
+      this.records = res['json_records'];
+      this.totalRecords = res['total_records'];
+      this.uuids = res['uuids'];
+      this.changeDetectorRef.markForCheck();
+    })
+    .catch(error => {
+      this.errorText = error;
+      this.changeDetectorRef.markForCheck();
+    }
+    );
+  }
+
+  onCollectionChange(selectedCollection: string) {
+    this.selectedCollection = selectedCollection;
+    this.queryService.getCollection(this.selectedCollection)
+      .then((res) => {
+        this.schema = res;
+        this.schemaKeysStoreService.buildSchemaKeyStore(this.schema);
+      })
+      .catch(error => {
+        this.errorText = error;
+        this.changeDetectorRef.markForCheck();
       }
-    ],
-    "titles":[
-      {
-        "title":"Differential geometry and Lie groups for physicists"
-      }
-    ],
-    "publication_info":[
-      {
-        "year":2011
-      }
-    ],
-    "new_object":'This data is being added'},{},{},{}];
-    Observable.zip(
-      this.apiService.fetchUrl('../../assets/records.json'),
-      this.apiService.fetchUrl('../../assets/schema.json'),
-      (records, schema) => {
-        return {
-          records: records,
-          schema: schema
-        }
-      }
-    ).subscribe(data => {
-      this.records = data.records;
-      this.schema = data.schema;
-      this.schemaKeysStoreService.buildSchemaKeyStore(this.schema);
-    });
+      );
+  }
+
+  setPage(size: number) {
+    this.pageSize = size;
+    this.pageChanged(this.currentPage);
+  }
+
+  trackByFunction(index: number): number {
+    return index;
   }
 }
+
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class ApiService {
@@ -10,6 +10,6 @@ export class ApiService {
 
   fetchUrl(url: string): Observable<Array<{}>> {
     return this.http.get(url)
-      .map(res => res.json())
+      .map(res => res.json());
   }
 }

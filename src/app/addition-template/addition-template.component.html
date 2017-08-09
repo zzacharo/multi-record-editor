@@ -1,3 +1,10 @@
-<div *ngFor="let key of keys">
-<label>{{key}}</label> <label *ngIf="req_keys.indexOf(key) > 0"> This is a required key </label>  <input type="text"  style="width: 8px" [(ngModel)]="map[key]" class="form-control"  placeholder="{{key}} to be added...">
-</div> 
+<label>Field</label>
+<input *ngIf="isEditorVisible == false" (keyup.enter)="onFieldKeyInputEnterKeyup()" type="text" [(ngModel)]="action.mainKey"
+  class="form-control input-field" placeholder="key...">
+<div *ngIf="isEditorVisible == true">
+
+  <div class="editor">
+    <json-editor [config]="{compact:true}" [schema]="subSchema" [record]="record" (recordChange)="saveRecord($event)"></json-editor>
+  </div>
+  <button (click)="closeEditor()" class="btn btn-default " type="button">Done</button>  
+</div>

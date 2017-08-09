@@ -1,32 +1,56 @@
 <img src="../assets/inspire_logo_hep.png" class='inspire-logo' />
 <div class="container">
-    <div class="row">
-      <div class="col-xs-8 col-xs-offset-2">
-        <div class="input-group item-group">
+  <div class="row">
+    <div class="col-xs-8 col-xs-offset-2">
+      <div class="input-group item-group">
         <div class="input-group-btn search-panel">
           <div class="btn-group" dropdown>
-            <button dropdownToggle type="button" class="btn btn-default dropdown-toggle">
-                    	<span id="search_concept">Filter by Collection</span> <span class="caret"></span>
-                    </button>
-            <ul *dropdownMenu class="dropdown-menu" role="menu">
-              <ul *ngFor="let collection of collections">
-                <li role="menuitem"><a class="dropdown-item" href="{{collection}}">{{collection}}</a></li>
-              </ul>
-            </ul>
+            <select class="form-control selector collection-selector" [ngModel]="selectedCollection" (ngModelChange)="onCollectionChange($event)">
+          <option *ngFor="let collection of collections" [ngValue]="collection[0]" > {{collection[1]}} </option>
+          </select>
           </div>
         </div>
-        <input type="text" [(ngModel)]="search_term" class="form-control" name="x" placeholder="Search term...">
+        <input type="text" [(ngModel)]="query" class="form-control" (keyup.enter)="searchRecords()" placeholder="Search term...">
         <span class="input-group-btn">
-                    <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                    <button (click)="searchRecords()" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
         </span>
       </div>
+      <me-actions-template (onPreview)="onPreview($event)"></me-actions-template>
+      <div *ngIf="previewMode == true">
+        <button (click)="onSubmit()" class="btn btn-success" type="button">Submit</button>
+      </div>
       <ul class="list-unstyled">
-          <actions-template></actions-template>
-        <li *ngFor="let record of records | paginate: { itemsPerPage: 2, currentPage: p, totalItems: total }; let count = index " class="list-group list-group-item">
-          <diff-template [oldObject] ="record" [newObject]="new_records[count]"></diff-template>
-        </li>
+        <div *ngIf="errorText">
+          <h3>Sorry we have some problems backstage</h3>
+          <p>You should tell this to your administrator: <b>{{errorText}}</b></div>
+        <div *ngIf="totalRecords == 0">
+          <h3>Sorry no results found</h3>
+        </div>
+        <div *ngIf="totalRecords >0">
+          <div class="selectButtons">
+            <button class="btn-sm btn-success" type="button" (click)="selectAll()">Select All</button>
+          </div>
+          <select class="form-control selector page-selector" [ngModel]="pageSize" (ngModelChange)="setPage($event)">
+                <option *ngFor="let size of pageSizes" [ngValue]="size" > {{size}}</option>
+                </select>
+          <p>{{totalRecords}} records found</p>
+          <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md" [boundaryLinks]="true"
+            [rotate]="false" (pageChanged)="pageChanged($event['page'])" [itemsPerPage]="pageSize" [align]="true"></pagination>
+          <li *ngFor="let record of records ; let count = index; trackBy: trackByFunction" class="list-group list-group-item">
+            <input #inp type="checkbox" [checked]="(allSelected && checkedRecords.indexOf(uuids[count]) === -1) || (allSelected === false && checkedRecords.indexOf(uuids[count])>-1)"
+              (change)="addChecked(uuids[count])">
+            <div *ngIf="previewMode == false;then notPreview else preview"></div>
+            <ng-template #preview>
+              <me-diff-view [oldObject]="record" [newObject]="newRecords[count]"></me-diff-view>
+            </ng-template>
+            <ng-template #notPreview>
+              <pre> {{record | json}} </pre>
+            </ng-template>
+          </li>
+          <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md" [boundaryLinks]="true"
+            [rotate]="false" [itemsPerPage]="pageSize" [align]="true"></pagination>
+        </div>
       </ul>
-      <pagination-controls (pageChange)="p = $event"></pagination-controls>
     </div>
   </div>
 </div>
