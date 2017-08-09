@@ -21,7 +21,6 @@ export class ActionTemplateComponent implements OnInit {
   value;
   ngOnInit() {
     this.actions = ACTIONS
-    this.selectedAction = ACTIONS[0]
   }
 
  SubmitAction()

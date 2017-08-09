@@ -15,7 +15,6 @@ import { ActionsTemplateComponent } from './actions-template/actions-template.co
 import { DiffPipePipe } from './shared/pipes/diff-pipe.pipe';
 import { DiffTemplateComponent } from './diff-template/diff-template.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,

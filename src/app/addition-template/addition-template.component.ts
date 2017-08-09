@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../shared/services/api.service';
 import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
-import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'addition-template',
@@ -19,8 +18,6 @@ export class AdditionTemplateComponent implements OnInit {
     private schemaKeysStoreService: SchemaKeysStoreService) { }
 
   ngOnInit() {
-    this.keys = this.keys;
-    this.req_keys = this.req_keys
   }
 
   
