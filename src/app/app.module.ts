@@ -13,6 +13,7 @@ import { ActionTemplateComponent} from './action-template'
 import { AdditionTemplateComponent } from './addition-template';
 import { ActionsTemplateComponent } from './actions-template/actions-template.component';
 import { DiffViewComponent } from './diff-view/diff-view.component';
+import { JsonEditorModule } from 'ng2-json-editor';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { DiffViewComponent } from './diff-view/diff-view.component';
     FormsModule,
     HttpModule,
     AlertModule.forRoot(),
-    NgxPaginationModule
+    NgxPaginationModule,
+    JsonEditorModule
   ],
   providers: [
     SHARED_SERVICES

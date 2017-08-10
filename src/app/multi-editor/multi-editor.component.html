@@ -20,8 +20,10 @@
                     <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
         </span>
       </div>
+      <div class="big"><json-editor class="big" *ngIf="schema" [config]="{}" [schema]="schema" [record]="{}" (onRecordChange)="saveRecord($event)"></json-editor></div>
+<actions-template (submit)="submitted($event)"></actions-template>
       <ul class="list-unstyled">
-          <actions-template (submit)="submitted($event)"></actions-template>
+          
         <li *ngFor="let record of records | paginate: { itemsPerPage: 2, currentPage: p, totalItems: total }; let count = index " class="list-group list-group-item">
            <div *ngIf="previewMode == true"><diff-view [oldObject] ="record" [newObject]="newRecords[count]"></diff-view> </div>
            <div *ngIf="previewMode == false"><pre> {{record | json}} </pre></div>

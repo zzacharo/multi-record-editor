@@ -13,6 +13,7 @@ export class MultiEditorComponent implements OnInit {
   p = 1;
   records: Array<{}>;
   schema: {};
+  myRecord = {}
   previewMode = false
   newRecords: object[];
   collections: string[] = [
@@ -82,6 +83,9 @@ export class MultiEditorComponent implements OnInit {
   }
   submitted(event){
     this.previewMode = true;
+  }
+  saveRecord(event){
+    this.myRecord = event;
   }
 }
 
