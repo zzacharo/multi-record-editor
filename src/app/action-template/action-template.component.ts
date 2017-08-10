@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-
-const ACTIONS: string[] = ['Addition','Deletion','Update'];
-
-
 @Component({
   selector: 'action-template',
   templateUrl: './action-template.component.html',
@@ -11,16 +7,15 @@ const ACTIONS: string[] = ['Addition','Deletion','Update'];
 })
 
 export class ActionTemplateComponent implements OnInit {
-  actions: string[];
+  actions = ['Addition','Deletion','Update']
   selectedAction;
-  constructor() { }
   mainKey='';
   replaceValue;
   whereKey;
   whereValue;
   value;
+  constructor() { }
   ngOnInit() {
-    this.actions = ACTIONS
   }
 
  SubmitAction()

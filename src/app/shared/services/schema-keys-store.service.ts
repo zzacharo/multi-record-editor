@@ -19,17 +19,17 @@ export class SchemaKeysStoreService {
 
   public forPathReq(path: string) {
     let schema = this.schema;
-    let split_path = path.split('/');
-    for (let index in split_path) {
+    let splitPath = path.split('/');
+    for (let index in splitPath) {
       if (path === '') {
         return this.schemaKeyStoreMap[''].toArray();
       }
       if (schema['type'] === 'object') {
-        schema = schema['properties'][split_path[index]]
+        schema = schema['properties'][splitPath[index]]
       }
       else if (schema['type'] === 'array') {
         if (schema['items']['type'] === 'object') {
-          schema = schema['items']['properties'][split_path[index]]
+          schema = schema['items']['properties'][splitPath[index]]
         }
       }
     }

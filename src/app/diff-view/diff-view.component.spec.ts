@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DiffTemplateComponent } from './diff-template.component';
+import { DiffViewComponent } from './diff-view.component';
 
-describe('DiffTemplateComponent', () => {
-  let component: DiffTemplateComponent;
-  let fixture: ComponentFixture<DiffTemplateComponent>;
+describe('DiffViewComponent', () => {
+  let component: DiffViewComponent;
+  let fixture: ComponentFixture<DiffViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DiffTemplateComponent ]
+      declarations: [ DiffViewComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DiffTemplateComponent);
+    fixture = TestBed.createComponent(DiffViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

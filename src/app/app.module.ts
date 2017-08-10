@@ -6,14 +6,13 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { MultiEditorComponent } from './multi-editor';
 import { SHARED_SERVICES } from './shared';
-import { AlertModule } from 'ngx-bootstrap';
+import { AlertModule } from 'ngx-bootstrap/alert';
 import { NgxPaginationModule } from 'ngx-pagination'; 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ActionTemplateComponent} from './action-template'
 import { AdditionTemplateComponent } from './addition-template';
 import { ActionsTemplateComponent } from './actions-template/actions-template.component';
-import { DiffPipePipe } from './shared/pipes/diff-pipe.pipe';
-import { DiffTemplateComponent } from './diff-template/diff-template.component';
+import { DiffViewComponent } from './diff-view/diff-view.component';
 
 @NgModule({
   declarations: [
@@ -22,8 +21,7 @@ import { DiffTemplateComponent } from './diff-template/diff-template.component';
     ActionTemplateComponent,
     AdditionTemplateComponent,
     ActionsTemplateComponent,
-    DiffPipePipe,
-    DiffTemplateComponent
+    DiffViewComponent
   ],
   imports: [
     BsDropdownModule.forRoot(),

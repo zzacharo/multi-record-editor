@@ -1,7 +1,5 @@
-import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
 import { ActionTemplateComponent } from '../action-template'
-
-
 
 @Component({
   selector: 'actions-template',
@@ -9,34 +7,32 @@ import { ActionTemplateComponent } from '../action-template'
   styleUrls: ['./actions-template.component.scss']
 })
 
-
-
 export class ActionsTemplateComponent implements OnInit {
   @ViewChildren(ActionTemplateComponent) actionComponents: QueryList<ActionTemplateComponent>;
   numberOfActions = [1];
   curNumOfActions = 1;
-  constructor() { };
+  @Output()
+  submit: EventEmitter<boolean> = new EventEmitter();
   actions: object[] = [];
-  
+  constructor() { };
   ngOnInit() {
     this.numberOfActions = this.numberOfActions;
   }
 
-  increaseAction(){
+  increaseAction() {
     this.curNumOfActions++;
     this.numberOfActions.push(this.curNumOfActions);
   }
-  decreaseAction(){
+  decreaseAction() {
     this.curNumOfActions++;
     this.numberOfActions.pop();
   }
-    ngAfterViewInit() {
-    
-  }
-  submitActions(){
-      var that = this;
-      this.actionComponents.forEach(SubmitInstance => that.actions.push(SubmitInstance.SubmitAction()));
-      console.log(this.actions)
-    }
-  }
+  ngAfterViewInit() {
 
+  }
+  submitActions() {
+    var that = this;
+    this.actionComponents.forEach(SubmitInstance => that.actions.push(SubmitInstance.SubmitAction()));
+    this.submit.emit(true);
+  }
+}
