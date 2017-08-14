@@ -7,9 +7,8 @@
     </select>
     </div>
     <div *ngIf="selectedAction == 'Addition'">
-      <label>Field Key:</label><input type="text" style="width: 300px" [(ngModel)]="mainKey" class="form-control" placeholder="Action key...">
-      <label>Input Fields</label>
-      <addition-template [mainKey]="mainKey"></addition-template>
+      <label>Field Key:</label><input (keyup.enter)="showEditor()" type="text" style="width: 300px" [(ngModel)]="mainKey" class="form-control" placeholder="Action key...">
+      <div *ngIf="editor == true" style="width: 700px; height:300px;"> <json-editor *ngIf="editor == true" [config]="{}" [schema]="getSubschema(mainKey)" [record]="{shittyProperty:{}}" (onRecordChange)="saveRecord($event)"></json-editor></div>
       <label>Where Key:</label><input type="text" style="width: 300px" [(ngModel)]="whereKey" class="form-control" placeholder="Where key...">
       <label>Where Value:</label><input type="text" style="width: 300px" [(ngModel)]="whereValue" class="form-control" placeholder="Where value to be checked...">
     </div>

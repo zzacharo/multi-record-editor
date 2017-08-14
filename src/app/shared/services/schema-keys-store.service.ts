@@ -33,13 +33,13 @@ export class SchemaKeysStoreService {
         }
       }
     }
-    if(schema['required']){
+    if (schema['required']) {
       return schema['required'];
     }
-    if (schema['items']){
-    if(schema['items']['required']){
-      return schema['items']['required'];
-    }
+    if (schema['items']) {
+      if (schema['items']['required']) {
+        return schema['items']['required'];
+      }
     }
   }
 
@@ -80,4 +80,30 @@ export class SchemaKeysStoreService {
     return schema['type'] === 'object' || schema['type'] === 'array';
   }
 
+  public find_subschema(path: string) {
+    let subSchema = this.schema
+    if (path === "") {
+      return {'properties':{shittyProperty:subSchema}, 'type':'object'}
+    }
+    let splitPath = path.split('/')
+    for (let index in splitPath) {
+      if (subSchema['type'] === 'object') {
+        if (subSchema['properties'][splitPath[index]]) {
+          subSchema = subSchema['properties'][splitPath[index]]
+        }
+      }
+      else if (subSchema['type'] === 'array') {
+        if (subSchema['items']['properties'][splitPath[index]]) {
+          subSchema = subSchema['items']['properties'][splitPath[index]]
+        }
+      }
+      else {
+        console.log('fixme')
+      }
+    }
+    if (subSchema['type'] === 'array') {
+      subSchema = subSchema['items']
+    }
+    return {'properties':{shittyProperty:subSchema}, 'type':'object'}
+  }
 }

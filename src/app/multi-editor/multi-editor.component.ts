@@ -2,6 +2,7 @@ import { Component, Input, Output, OnInit, EventEmitter, ElementRef } from '@ang
 import { ApiService } from '../shared/services/api.service';
 import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
 import { Observable } from 'rxjs';
+import { Headers, Http } from '@angular/http';
 
 @Component({
   selector: 'multi-editor',
@@ -17,12 +18,14 @@ export class MultiEditorComponent implements OnInit {
   previewMode = false
   newRecords: object[];
   collections: string[] = [
-  'CDS',
-  'HEP',
-  'MARVEL'
+    'CDS',
+    'HEP',
+    'MARVEL'
   ];
+  url = 'http://localhost:5000/multiedit/update'
   constructor(private apiService: ApiService,
-    private schemaKeysStoreService: SchemaKeysStoreService) { }
+    private schemaKeysStoreService: SchemaKeysStoreService,
+    private http: Http) { }
 
   ngOnInit() {
     this.newRecords = [{
@@ -81,11 +84,26 @@ export class MultiEditorComponent implements OnInit {
       this.schemaKeysStoreService.buildSchemaKeyStore(this.schema);
     });
   }
-  submitted(event){
+  submitted(event) {
+    let urlSearchParams = new URLSearchParams();
+    //urlSearchParams.append('username', username);
+    //urlSearchParams.append('password', password);
     this.previewMode = true;
+    let result 
+    this.http
+      .post(this.url, event)
+      .toPromise()
+      .then(res => console.log(res.json()))
+      .catch(this.handleError);
   }
-  saveRecord(event){
-    this.myRecord = event;
+
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
+    return Promise.reject(error.message || error);
   }
 }
+
+
+
+
 

@@ -12,7 +12,7 @@ export class ActionsTemplateComponent implements OnInit {
   numberOfActions = [1];
   curNumOfActions = 1;
   @Output()
-  submit: EventEmitter<boolean> = new EventEmitter();
+  submit: EventEmitter<Object> = new EventEmitter();
   actions: object[] = [];
   constructor() { };
   ngOnInit() {
@@ -33,6 +33,7 @@ export class ActionsTemplateComponent implements OnInit {
   submitActions() {
     var that = this;
     this.actionComponents.forEach(SubmitInstance => that.actions.push(SubmitInstance.SubmitAction()));
-    this.submit.emit(true);
+    this.submit.emit(this.actions);
+    this.actions = []
   }
 }
