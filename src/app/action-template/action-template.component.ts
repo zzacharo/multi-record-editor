@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
 
 @Component({
@@ -11,6 +11,7 @@ export class ActionTemplateComponent implements OnInit {
   actions = ['Addition','Deletion','Update']
   selectedAction;
   mainKey='';
+  regex;
   editor = false;
   replaceValue;
   whereKey;
@@ -18,6 +19,8 @@ export class ActionTemplateComponent implements OnInit {
   whereValue;
   value;
   myRecord = {}
+  @Output() onElementDeleted: EventEmitter<any> = new EventEmitter();
+  @Input() id;
   constructor(private schemaKeysStoreService: SchemaKeysStoreService) { }
   ngOnInit() {
   }
@@ -26,6 +29,7 @@ export class ActionTemplateComponent implements OnInit {
   {  let action: Object = {
     selectedAction: this.selectedAction,
     mainKey:this.mainKey,
+    regex:this.regex,
     value:this.value,
     updateValue:this.replaceValue,
     whereKey:this.whereKey,
@@ -42,5 +46,9 @@ export class ActionTemplateComponent implements OnInit {
   }
   showEditor(){
     this.editor = true
+  }
+
+  deleteElement() {
+    this.onElementDeleted.emit(this.id);
   }
 }

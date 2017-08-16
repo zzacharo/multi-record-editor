@@ -15,6 +15,8 @@ export class MultiEditorComponent implements OnInit {
   records: Array<{}>;
   schema: {};
   myRecord = {}
+  checkedRecords = [] //records that are different from the general selection rule
+  allSelected = true
   previewMode = false
   newRecords: object[];
   collections: string[] = [
@@ -84,19 +86,34 @@ export class MultiEditorComponent implements OnInit {
       this.schemaKeysStoreService.buildSchemaKeyStore(this.schema);
     });
   }
-  submitted(event) {
-    let urlSearchParams = new URLSearchParams();
-    //urlSearchParams.append('username', username);
-    //urlSearchParams.append('password', password);
-    this.previewMode = true;
-    let result 
+  onSubmit(event) {
+    let result
     this.http
       .post(this.url, event)
       .toPromise()
       .then(res => console.log(res.json()))
       .catch(this.handleError);
+    this.previewMode = true;      
   }
 
+  private addChecked(count: number) {
+    if (this.checkedRecords.includes(count)) {
+      this.checkedRecords.splice(this.checkedRecords.indexOf(count), 1)
+    }
+    else {
+      this.checkedRecords.push(count)
+    }
+  }
+  
+  private selectAll(){
+    this.allSelected = true
+    this.checkedRecords = []
+  }
+
+  private deselectAll(){
+    this.allSelected = false
+    this.checkedRecords = []
+  }
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);
