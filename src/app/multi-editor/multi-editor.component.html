@@ -25,7 +25,7 @@
         <button class="btn btn-success" type="button" (click)="selectAll()">Select All</button>
         <button class="btn btn-warning" type="button" (click)="deselectAll()">Deselect All</button>
         <li *ngFor="let record of records | paginate: { itemsPerPage: 2, currentPage: p, totalItems: total }; let count = index " class="list-group list-group-item">
-          <input type="checkbox" [checked]="(allSelected && checkedRecords.indexOf(count) === -1) || (allSelected === false && checkedRecords.indexOf(count)>-1)" (change)="addChecked(count)">
+          <input type="checkbox" [checked]="(allSelected && checkedRecords.indexOf(record.control_number) === -1) || (allSelected === false && checkedRecords.indexOf(record.control_number)>-1)" (change)="addChecked(record.control_number)">
           <div *ngIf="previewMode == true"><diff-view [oldObject] ="record" [newObject]="newRecords[count]"></diff-view> </div>
            <div *ngIf="previewMode == false"><pre> {{record | json}} </pre></div>
         </li>

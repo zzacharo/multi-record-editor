@@ -14,7 +14,7 @@ export class DiffViewComponent implements OnInit {
 
   ngOnInit() {
     if (this.newObject != undefined) {
-      this.diffObjects = diffJson(this.oldObject, this.newObject)
+      this.diffObjects = diffJson(JSON.parse(JSON.stringify(this.oldObject)), this.newObject)
     }
   }
 
