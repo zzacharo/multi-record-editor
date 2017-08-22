@@ -17,7 +17,8 @@
       <label>Field Key:</label><input type="text" style="width: 300px" [(ngModel)]="mainKey" class="form-control" placeholder="Action key...">
       <label>Input Value:</label><input type="text" style="width: 300px" [(ngModel)]="value" class="form-control" placeholder="Value to be placed...">
       <label>Update Value:</label><input type="text" style="width: 300px" [(ngModel)]="replaceValue" class="form-control" placeholder="Value to be replaced...">
-      <label>Where Key:</label><input type="text" style="width: 300px" [(ngModel)]="whereKey" class="form-control" placeholder="Where key...">
+      <label>Where Key:</label><label style="margin-left:150px">Regex</label><input style="margin-left:4px;" type="checkbox" [checked]>  
+      <input type="text" style="width: 300px;" [(ngModel)]="whereKey" class="form-control" placeholder="Where key...">
       <label>Where Value:</label><input type="text" style="width: 300px" [(ngModel)]="whereValue" class="form-control" placeholder="Where value to be checked...">
     </div>
 

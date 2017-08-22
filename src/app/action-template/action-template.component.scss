@@ -1,0 +1,24 @@
+label {
+    padding-left: 15px;
+    text-indent: -15px;
+    display: inline-block;
+  }
+
+  input:focus {
+    background-color: #B6D4DE;
+    border: 1px solid #555;
+}
+
+input {
+    background-color: #f1f1f1;
+}
+
+.checkbox {
+    margin-left:10px;
+}
+
+select {
+    width: 100%;
+    border-radius: 4px;
+    background-color: #f1f1f1;
+}
