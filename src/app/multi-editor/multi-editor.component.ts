@@ -11,9 +11,12 @@ import { Headers, Http } from '@angular/http';
 })
 
 export class MultiEditorComponent implements OnInit {
-  p = 1;
+  currentPage = 1;
   records: Array<{}>;
+  totalRecords: number;
   schema: {};
+  query: string;
+  queryUsed: string;
   myRecord = {}
   checkedRecords = [] //records that are different from the general selection rule
   allSelected = true
@@ -32,8 +35,8 @@ export class MultiEditorComponent implements OnInit {
   ngOnInit() {
     this.newRecords = []
     Observable.zip(
-      this.apiService.fetchUrl('../../assets/records.json'),
-      this.apiService.fetchUrl('../../assets/schema.json'),
+      this.apiService.fetchUrl(`http://localhost:5000/api/multieditor/search?page_num=1&query_string=''`),
+      this.apiService.fetchUrl('../../assets/schema.json'),//fixme schema needs to be fetched from the records or collections
       (records, schema) => {
         return {
           records: records,
@@ -41,7 +44,8 @@ export class MultiEditorComponent implements OnInit {
         }
       }
     ).subscribe(data => {
-      this.records = data.records;
+      this.records = data.records['json_records'];
+      this.totalRecords = data.records['total_records'];
       this.schema = data.schema;
       this.schemaKeysStoreService.buildSchemaKeyStore(this.schema);
     });
@@ -80,6 +84,30 @@ export class MultiEditorComponent implements OnInit {
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);
+  }
+
+  private pageChanged($event){
+    this.http
+    .get(`http://localhost:5000/api/multieditor/search?page_num=${$event.page}&query_string=${this.queryUsed}`)
+    .map(res => res.json())
+    .toPromise()
+    .then((res) =>{ 
+      this.records = res['json_records'];
+    })
+    .catch(this.handleError);
+  }
+
+  private searchRecords(){
+    this.queryUsed = this.query
+    this.http
+    .get(`http://localhost:5000/api/multieditor/search?page_num=${this.currentPage}&query_string=${this.query}`)
+    .map(res => res.json())
+    .toPromise()
+    .then((res) =>{ 
+      this.records = res['json_records'];
+      this.totalRecords = res['total_records']
+    })
+    .catch(this.handleError);
   }
 }
 

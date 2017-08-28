@@ -11,7 +11,8 @@ export class ActionTemplateComponent implements OnInit {
   actions = ['Addition','Deletion','Update']
   selectedAction;
   mainKey='';
-  regex;
+  updateRegex: boolean;
+  whereRegex: boolean;
   editor = false;
   replaceValue;
   whereKey;
@@ -29,9 +30,10 @@ export class ActionTemplateComponent implements OnInit {
   {  let action: Object = {
     selectedAction: this.selectedAction,
     mainKey:this.mainKey,
-    regex:this.regex,
+    whereRegex:this.whereRegex,
     value:this.value,
     updateValue:this.replaceValue,
+    updateRegex:this.updateRegex,
     whereKey:this.whereKey,
     whereValue:this.whereValue
   }

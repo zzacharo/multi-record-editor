@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { MultiEditorComponent } from './multi-editor';
 import { SHARED_SERVICES } from './shared';
 import { AlertModule } from 'ngx-bootstrap/alert';
-import { NgxPaginationModule } from 'ngx-pagination'; 
+import { PaginationModule } from 'ngx-bootstrap/pagination'; 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ActionTemplateComponent} from './action-template'
 import { AdditionTemplateComponent } from './addition-template';
@@ -30,7 +30,7 @@ import { JsonEditorModule } from 'ng2-json-editor';
     FormsModule,
     HttpModule,
     AlertModule.forRoot(),
-    NgxPaginationModule,
+    PaginationModule.forRoot(),
     JsonEditorModule
   ],
   providers: [

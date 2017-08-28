@@ -1,5 +1,5 @@
 <li class="list-unstyled" *ngFor="let number of numberOfActions">
   <action-template (onElementDeleted)="onElementDeleted($event)" id={{number}}></action-template>
 </li>
-<button (click)="increaseAction()">Add Action</button>
-<button (click)="submitActions()">Preview Actions</button>
+<button class ="button" (click)="increaseAction()">Add Action</button>
+<button class ="button" (click)="submitActions()">Preview Actions</button>

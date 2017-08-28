@@ -22,3 +22,25 @@ select {
     border-radius: 4px;
     background-color: #f1f1f1;
 }
+
+
+.button {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #FFFFFF;
+    background-color: #E11616;
+    border: none;
+    border-radius: 15px;
+  }
+  
+  .button:hover {background-color: #FF0000}
+  
+  .button:active {
+    background-color: #C41313;
+    transform: translateY(2px);
+  }
