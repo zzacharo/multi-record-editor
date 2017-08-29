@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
+import { Action } from '../actions-template/actions-template.component'
 
 @Component({
   selector: 'action-template',
@@ -8,45 +9,27 @@ import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.ser
 })
 
 export class ActionTemplateComponent implements OnInit {
-  actions = ['Addition','Deletion','Update']
-  selectedAction;
-  mainKey='';
-  updateRegex: boolean;
-  whereRegex: boolean;
+  actionOptions = ['Addition', 'Deletion', 'Update']
   editor = false;
-  replaceValue;
-  whereKey;
   subSchema = {}
-  whereValue;
-  value;
   myRecord = {}
   @Output() onElementDeleted: EventEmitter<any> = new EventEmitter();
-  @Input() id;
+  @Input() id: number;
+  @Input() action: Action;
   constructor(private schemaKeysStoreService: SchemaKeysStoreService) { }
   ngOnInit() {
+    this.action.selectedAction = this.actionOptions[0]
   }
 
- SubmitAction()
-  {  let action: Object = {
-    selectedAction: this.selectedAction,
-    mainKey:this.mainKey,
-    whereRegex:this.whereRegex,
-    value:this.value,
-    updateValue:this.replaceValue,
-    updateRegex:this.updateRegex,
-    whereKey:this.whereKey,
-    whereValue:this.whereValue
-  }
-      return action;
-  }
-
-  saveRecord(event){
+  saveRecord(event) {
     this.myRecord = event;
   }
-  getSubschema(path: string){
-    return this.schemaKeysStoreService.find_subschema(this.mainKey)
+
+  getSubschema(path: string) {
+    return this.schemaKeysStoreService.find_subschema(this.action.mainKey)
   }
-  showEditor(){
+
+  showEditor() {
     this.editor = true
   }
 

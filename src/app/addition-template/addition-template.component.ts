@@ -31,14 +31,13 @@ export class AdditionTemplateComponent implements OnInit {
         subkeys = this.schemaKeysStoreService.forPath(`${this.mainKey}/${key}`);
         if (subkeys.length > 0){
          this.keys.splice(index,1);
-         this.keys = this.keys.concat(subkeys.map(x => {return `${key}->${x}`;}));
+         this.keys = this.keys.concat(subkeys.map(x => `${key}->${x}`));
          requiredSubkeys = this.schemaKeysStoreService.forPathReq(`${this.mainKey}/${key}`);
          if(requiredSubkeys){
          this.requiredKeys = this.requiredKeys.concat(requiredSubkeys.map(x => `${key}->${x}`));
          }
         }
       })
-    console.log(this.requiredKeys)
     }
 
 }

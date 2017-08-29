@@ -1,6 +1,17 @@
 import { Component, OnInit, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
 import { ActionTemplateComponent } from '../action-template'
 
+export interface Action {
+  selectedAction: string,
+  mainKey: string,
+  whereRegex: boolean,
+  value: string,
+  updateValue: string,
+  updateRegex: boolean,
+  whereKey: string,
+  whereValue: string
+}
+
 @Component({
   selector: 'actions-template',
   templateUrl: './actions-template.component.html',
@@ -8,35 +19,35 @@ import { ActionTemplateComponent } from '../action-template'
 })
 
 export class ActionsTemplateComponent implements OnInit {
-  @ViewChildren(ActionTemplateComponent) actionComponents: QueryList<ActionTemplateComponent>;
-  numberOfActions = [1];
-  curNumOfActions = 1;
+  //@ViewChildren(ActionTemplateComponent) actionComponents: QueryList<ActionTemplateComponent>;
+  actions:Action [] = [];
   @Output() onSubmit: EventEmitter<Object> = new EventEmitter();
-  actions: object[] = [];
+
   constructor() { };
   ngOnInit() {
-    this.numberOfActions = this.numberOfActions;
+    this.increaseAction();
   }
 
   increaseAction() {
-    this.curNumOfActions++;
-    this.numberOfActions.push(this.curNumOfActions);
+    let action : Action = {selectedAction: '',
+    mainKey: '',
+    whereRegex: false,
+    value: '',
+    updateValue: '',
+    updateRegex: false,
+    whereKey: '',
+    whereValue: ''};
+    this.actions.push(action);
   }
-  decreaseAction() {
-    this.curNumOfActions++;
-    this.numberOfActions.pop();
-  }
-  ngAfterViewInit() {
 
-  }
   submitActions() {
     var that = this;
-    this.actionComponents.forEach(SubmitInstance => that.actions.push(SubmitInstance.SubmitAction()));
+    //this.actionComponents.forEach(SubmitInstance => that.actions.push(SubmitInstance.SubmitAction()));
     this.onSubmit.emit(this.actions);
     this.actions = []
   }
 
   onElementDeleted(event) {
-      this.numberOfActions.splice(this.numberOfActions.indexOf(event), 1);
+      this.actions.splice(event, 1);
   }
 }
