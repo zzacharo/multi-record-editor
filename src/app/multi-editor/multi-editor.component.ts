@@ -13,7 +13,7 @@ import { Headers, Http } from '@angular/http';
 export class MultiEditorComponent implements OnInit {
   currentPage = 1;
   records: Array<{}>;
-  totalRecords: number;
+  totalRecords = 0;
   schema: {};
   query: string;
   queryUsed: string;

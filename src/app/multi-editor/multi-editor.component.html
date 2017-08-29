@@ -26,6 +26,7 @@
         <button class="btn-sm btn-success" type="button" (click)="selectAll()">Select All</button>
         <button class="btn-sm btn-warning" type="button" (click)="deselectAll()">Deselect All</button>
         </div>
+        <div *ngIf="totalRecords == 0"><h3>Sorry no results found</h3></div>
         <li *ngFor="let record of records ; let count = index " class="list-group list-group-item">
           <input type="checkbox" [checked]="(allSelected && checkedRecords.indexOf(record.control_number) === -1) || (allSelected === false && checkedRecords.indexOf(record.control_number)>-1)" (change)="addChecked(record.control_number)">
           <div *ngIf="previewMode == true"><diff-view [oldObject] ="record" [newObject]="newRecords[count]"></diff-view> </div>

@@ -44,7 +44,6 @@ export class ActionsTemplateComponent implements OnInit {
     var that = this;
     //this.actionComponents.forEach(SubmitInstance => that.actions.push(SubmitInstance.SubmitAction()));
     this.onSubmit.emit(this.actions);
-    this.actions = []
   }
 
   onElementDeleted(event) {
