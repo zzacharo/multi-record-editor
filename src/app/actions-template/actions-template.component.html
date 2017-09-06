@@ -1,5 +1,5 @@
 <li class="list-unstyled" *ngFor="let action of actions; let count = index ">
-  <action-template (onElementDeleted)="onElementDeleted($event)" [action]=action [id]=count></action-template>
+  <action-template (elementDeleted)="elementDeleted($event)" [action]=action [id]=count></action-template>
 </li>
 <button class ="button" (click)="increaseAction()">Add Action</button>
 <button class ="button" (click)="submitActions()">Preview Actions</button>

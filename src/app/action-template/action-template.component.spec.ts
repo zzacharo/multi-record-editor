@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ActionTemplateComponent } from './action-template.component';
 import { FormsModule } from '@angular/forms';
 

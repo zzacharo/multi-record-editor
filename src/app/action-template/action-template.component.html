@@ -7,30 +7,46 @@
     </select>
     </div>
     <div *ngIf="action.selectedAction == 'Addition'">
-      <label>Field Key:</label><input (keyup.enter)="showEditor()" type="text" style="width: 300px" [(ngModel)]="action.mainKey" class="form-control input_fields" placeholder="Action key...">
+      <label>Field Key:</label>
+      <input (keyup.enter)="showEditor()" type="text" [(ngModel)]="action.mainKey" class="form-control input-field" placeholder="Action key...">
       <div *ngIf="editor == true" style="width: 700px; height:300px;"> <json-editor *ngIf="editor == true" [config]="{}" [schema]="getSubschema(mainKey)" [record]="{shittyProperty:{}}" (onRecordChange)="saveRecord($event)"></json-editor></div>
-      <label>Where Key:</label><input type="text"  [(ngModel)]="action.whereKey" class="form-control input_fields" placeholder="Where key...">
-      <label>Where Value:</label><label style="margin-left:150px">Regex</label><input style="margin-left:4px;" type="checkbox" [(ngModel)]="action.whereRegex">  
-      <input type="text" [(ngModel)]="action.whereValue" class="form-control input_fields" placeholder="Where value to be checked...">
+      <label>Where Key:</label>
+      <input type="text"  [(ngModel)]="action.whereKey" class="form-control input-field" placeholder="Where key...">
+      <label>Where Value:</label>
+      <label style="margin-left:150px">Regex</label><input style="margin-left:4px;" type="checkbox" [(ngModel)]="action.whereRegex">  
+      <input type="text" [(ngModel)]="action.whereValue" class="form-control input-field" placeholder="Where value to be checked...">
     </div>
     
     <div *ngIf="action.selectedAction == 'Update'">
-      <label>Field Key:</label><input type="text" [(ngModel)]="action.mainKey" class="form-control input_fields" placeholder="Action key...">
-      <label>Input Value:</label><input type="text"  [(ngModel)]="action.value" class="form-control input_fields" placeholder="Value to be placed...">
-      <label>Update Value:</label><label style="margin-left:150px">Regex</label><input style="margin-left:4px;" type="checkbox" [(ngModel)]="action.updateRegex">  
-      <input type="text" [(ngModel)]="action.replaceValue" class="form-control input_fields" placeholder="Value to be replaced...">
+      <label>Field Key:</label>
+      <input type="text" [(ngModel)]="action.mainKey" class="form-control input-field" placeholder="Action key...">
+      <label>Input Value:</label>
+      <input type="text"  [(ngModel)]="action.value" class="form-control input-field" placeholder="Value to be placed...">
+      <label>Update Value:</label>
+      <label style="margin-left:150px">Regex</label>
+      <input style="margin-left:4px;" type="checkbox" [(ngModel)]="action.updateRegex">  
+      <input type="text" [(ngModel)]="action.replaceValue" class="form-control input-field" placeholder="Value to be replaced...">
       <label>Where Key:</label>
-      <input type="text" [(ngModel)]="action.whereKey" class="form-control input_fields" placeholder="Where key...">
-      <label>Where Value:</label><label style="margin-left:150px">Regex</label><input style="margin-left:4px;" type="checkbox" [(ngModel)]="action.whereRegex" >  
-      <input type="text" [(ngModel)]="action.whereValue" class="form-control input_fields" placeholder="Where value to be checked...">
+      <input type="text" [(ngModel)]="action.whereKey" class="form-control input-field" placeholder="Where key...">
+      <label>Where Value:</label>
+      <label style="margin-left:150px">Regex</label>
+      <input style="margin-left:4px;" type="checkbox" [(ngModel)]="action.whereRegex" >  
+      <input type="text" [(ngModel)]="action.whereValue" class="form-control input-field" placeholder="Where value to be checked...">
     </div>
 
     <div *ngIf="action.selectedAction == 'Deletion'">
-      <label>Field Key:</label><input type="text" [(ngModel)]="action.mainKey" class="form-control input_fields" placeholder="Action key...">
-      <label>Value to delete:</label><input type="text" [(ngModel)]="action.replaceValue" class="form-control input_fields" placeholder="Value to be replaced...">
-      <label>Where Key:</label><input type="text" [(ngModel)]="action.whereKey" class="form-control input_fields" placeholder="Where key...">
-      <label>Where Value:</label><label style="margin-left:150px">Regex</label><input style="margin-left:4px;" type="checkbox" [(ngModel)]="action.whereRegex">  
-      <input type="text" [(ngModel)]="action.whereValue" class="form-control input_fields" placeholder="Where value to be checked...">
+      <label>Field Key:</label>
+      <input type="text" [(ngModel)]="action.mainKey" class="form-control input-field" placeholder="Action key...">
+      <label>Value to delete:</label>
+      <label style="margin-left:150px">Regex</label>
+      <input style="margin-left:4px;" type="checkbox" [(ngModel)]="action.updateRegex">  
+      <input type="text" [(ngModel)]="action.replaceValue" class="form-control input-field" placeholder="Value to be replaced...">
+      <label>Where Key:</label>
+      <input type="text" [(ngModel)]="action.whereKey" class="form-control input-field" placeholder="Where key...">
+      <label>Where Value:</label>
+      <label style="margin-left:150px">Regex</label>
+      <input style="margin-left:4px;" type="checkbox" [(ngModel)]="action.whereRegex">  
+      <input type="text" [(ngModel)]="action.whereValue" class="form-control input-field" placeholder="Where value to be checked...">
     </div>
   </div>
   <button class="button"(click)="deleteElement()">Remove Action</button>  

@@ -46,7 +46,7 @@ export class ActionsTemplateComponent implements OnInit {
     this.onSubmit.emit(this.actions);
   }
 
-  onElementDeleted(event) {
+  elementDeleted(event) {
       this.actions.splice(event, 1);
   }
 }

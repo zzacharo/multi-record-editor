@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
-import { Action } from '../actions-template/actions-template.component'
+import { Action } from '../actions-template'
 
 @Component({
   selector: 'action-template',
@@ -10,10 +10,10 @@ import { Action } from '../actions-template/actions-template.component'
 
 export class ActionTemplateComponent implements OnInit {
   actionOptions = ['Addition', 'Deletion', 'Update']
-  editor = false;
-  subSchema = {}
-  myRecord = {}
-  @Output() onElementDeleted: EventEmitter<any> = new EventEmitter();
+  isEditorVisible = false;
+  subSchema: Object = {}
+  myRecord: Object = {}
+  @Output() elementDeleted: EventEmitter<any> = new EventEmitter();
   @Input() id: number;
   @Input() action: Action;
   constructor(private schemaKeysStoreService: SchemaKeysStoreService) { }
@@ -22,18 +22,18 @@ export class ActionTemplateComponent implements OnInit {
   }
 
   saveRecord(event) {
-    this.myRecord = event;
+    event => this.myRecord;
   }
 
-  getSubschema(path: string) {
+  getSubschema() {
     return this.schemaKeysStoreService.find_subschema(this.action.mainKey)
   }
 
   showEditor() {
-    this.editor = true
+    this.isEditorVisible = true
   }
 
   deleteElement() {
-    this.onElementDeleted.emit(this.id);
+    this.elementDeleted.emit(this.id);
   }
 }

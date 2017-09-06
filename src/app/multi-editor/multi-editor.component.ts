@@ -3,6 +3,7 @@ import { ApiService } from '../shared/services/api.service';
 import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
 import { Observable } from 'rxjs';
 import { Headers, Http } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
 
 @Component({
   selector: 'multi-editor',
@@ -13,19 +14,27 @@ import { Headers, Http } from '@angular/http';
 export class MultiEditorComponent implements OnInit {
   currentPage = 1;
   records: Array<{}>;
-  totalRecords = 0;
+  totalRecords = -1;
   schema: {};
   query: string;
+  error = false;
   queryUsed: string;
-  myRecord = {}
+  indexUsed: string;
   checkedRecords = [] //records that are different from the general selection rule
   allSelected = true
   previewMode = false
+  selectedCollection: string;
   newRecords: object[];
-  collections: string[] = [
-    'CDS',
-    'HEP',
-    'MARVEL'
+  uuids: string[] = []
+  collections: object[] = [
+    ['hep','HEP'],
+    ['authors','Authors'],
+    ['data','Data'],
+    ['conferences','Conferences'],
+    ['jobs','Jobs'],
+    ['institutions','Institutions'],
+    ['experiments','Experiments'],
+    ['journals','Journals']  
   ];
   url = 'http://localhost:5000/multiedit/update'
   constructor(private apiService: ApiService,
@@ -34,33 +43,24 @@ export class MultiEditorComponent implements OnInit {
 
   ngOnInit() {
     this.newRecords = []
-    Observable.zip(
-      this.apiService.fetchUrl(`http://localhost:5000/api/multieditor/search?page_num=1&query_string=''`),
-      this.apiService.fetchUrl('../../assets/schema.json'),//fixme schema needs to be fetched from the records or collections
-      (records, schema) => {
-        return {
-          records: records,
-          schema: schema
-        }
-      }
-    ).subscribe(data => {
-      this.records = data.records['json_records'];
-      this.totalRecords = data.records['total_records'];
-      this.schema = data.schema;
-      this.schemaKeysStoreService.buildSchemaKeyStore(this.schema);
-    });
+    this.selectedCollection = this.collections[0][0]
+    this.searchRecords()
+    this.setCollection()
   }
+
   onSubmit(event) {
     let result
     this.http
       .post(this.url, event)
       .map(res => res.json())
       .toPromise()
-      .then((res) =>{ 
+      .then((res) => {
         this.newRecords = res;
         this.previewMode = true;
       })
-      .catch(this.handleError);
+      .catch((error) => {
+        this.error = true;
+      });
   }
 
   private addChecked(count: number) {
@@ -71,13 +71,13 @@ export class MultiEditorComponent implements OnInit {
       this.checkedRecords.push(count)
     }
   }
-  
-  private selectAll(){
+
+  private selectAll() {
     this.allSelected = true
     this.checkedRecords = []
   }
 
-  private deselectAll(){
+  private deselectAll() {
     this.allSelected = false
     this.checkedRecords = []
   }
@@ -86,28 +86,47 @@ export class MultiEditorComponent implements OnInit {
     return Promise.reject(error.message || error);
   }
 
-  private pageChanged($event){
+  private pageChanged($event) {
     this.http
-    .get(`http://localhost:5000/api/multieditor/search?page_num=${$event.page}&query_string=${this.queryUsed}`)
-    .map(res => res.json())
-    .toPromise()
-    .then((res) =>{ 
-      this.records = res['json_records'];
-    })
-    .catch(this.handleError);
+      .get(`http://localhost:5000/api/multieditor/search?page_num=${$event.page}&query_string=${this.queryUsed}&index=${this.indexUsed}`)
+      .map(res => res.json())
+      .toPromise()
+      .then((res) => {
+        this.records = res['json_records'],
+          this.uuids = res['uuids'];
+      })
+      .catch((error) => {
+        this.error = true;
+      });
   }
 
-  private searchRecords(){
+  private searchRecords() {
+    this.setCollection();
+    this.indexUsed = this.selectedCollection
     this.queryUsed = this.query
     this.http
-    .get(`http://localhost:5000/api/multieditor/search?page_num=${this.currentPage}&query_string=${this.query}`)
+      .get(`http://localhost:5000/api/multieditor/search?page_num=${this.currentPage}&query_string=${this.query}&index=${this.selectedCollection}`)
+      .map(res => res.json())
+      .toPromise()
+      .then((res) => {
+        this.records = res['json_records'];
+        this.totalRecords = res['total_records']
+        this.uuids = res['uuids']
+      })
+      .catch((error) => {
+        this.error = true;
+      });
+  }
+
+  setCollection(){
+    this.http
+    .get(`http://localhost:5000/schemas/records/${this.selectedCollection}.json`)
     .map(res => res.json())
     .toPromise()
-    .then((res) =>{ 
-      this.records = res['json_records'];
-      this.totalRecords = res['total_records']
+    .then((res) => {
+      this.schema = res;
+      this.schemaKeysStoreService.buildSchemaKeyStore(this.schema);
     })
-    .catch(this.handleError);
   }
 }
 
