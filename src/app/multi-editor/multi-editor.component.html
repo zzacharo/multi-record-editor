@@ -5,28 +5,32 @@
         <div class="input-group item-group">
         <div class="input-group-btn search-panel">
           <div class="btn-group" dropdown>
-            <select class="form-control selector" [ngModel]="selectedCollection" (ngModelChange)="setCollection()">
+            <select class="form-control selector" [ngModel]="selectedCollection" (ngModelChange)="setCollection($event)">
           <option *ngFor="let collection of collections" [ngValue]="collection[0]" > {{collection[1]}} </option>
           </select>
           </div>
         </div>
-        <input type="text" [(ngModel)]="query" class="form-control" name="x" placeholder="Search term...">
+        <input type="text" [(ngModel)]="query" class="form-control" (keyup.enter)="searchRecords()" placeholder="Search term...">
         <span class="input-group-btn">
                     <button (click)="searchRecords()" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
         </span>
       </div>
-      <actions-template (onSubmit)="onSubmit($event)"></actions-template>
+      <actions-template (onPreview)="onPreview($event)"></actions-template>
       <ul class="list-unstyled">
         <div style ="margin-left:73%">
         <button class="btn-sm btn-success" type="button" (click)="selectAll()">Select All</button>
         <button class="btn-sm btn-warning" type="button" (click)="deselectAll()">Deselect All</button>
         </div>
-        <div *ngIf="error == True"><h3>Sorry we have some problems backstage</h3></div>
+        <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md"
+        [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+        <div *ngIf="error_text"><h3>Sorry we have some problems backstage</h3>
+        <p>You should tell this to your administrator: <b>{{error_text}}</b></div>
         <div *ngIf="totalRecords == 0"><h3>Sorry no results found</h3></div>
-        <li *ngFor="let record of records ; let count = index " class="list-group list-group-item">
-          <input type="checkbox" [checked]="(allSelected && checkedRecords.indexOf(record.control_number) === -1) || (allSelected === false && checkedRecords.indexOf(record.control_number)>-1)" (change)="addChecked(record.control_number)">
-          <div *ngIf="previewMode == true"><diff-view [oldObject] ="record" [newObject]="newRecords[count]"></diff-view> </div>
-           <div *ngIf="previewMode == false"><pre> {{record | json}} </pre></div>
+        <li *ngFor="let record of records ; let count = index trackBy: trackByFn" class="list-group list-group-item" >
+          <input #inp type="checkbox" [checked]="(allSelected && checkedRecords.indexOf(uuids[count]) === -1) || (allSelected === false && checkedRecords.indexOf(uuids[count])>-1)" (change)="addChecked(uuids[count])">
+          <div *ngIf="previewMode == false || inp.checked == false;then notPreview else preview"></div>
+          <ng-template #preview><diff-view [oldObject] ="record" [newObject]="newRecords[count]"></diff-view> </ng-template>
+          <ng-template #notPreview><pre> {{record | json}} </pre></ng-template>
         </li>
           <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md"
                       [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>

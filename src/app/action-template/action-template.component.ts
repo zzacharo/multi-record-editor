@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
-import { Action } from '../actions-template'
+import { Action } from '../shared'
 
 @Component({
   selector: 'action-template',
@@ -18,7 +18,7 @@ export class ActionTemplateComponent implements OnInit {
   @Input() action: Action;
   constructor(private schemaKeysStoreService: SchemaKeysStoreService) { }
   ngOnInit() {
-    this.action.selectedAction = this.actionOptions[0]
+    this.action.selectedAction = this.actionOptions[0];
   }
 
   saveRecord(event) {
@@ -26,11 +26,19 @@ export class ActionTemplateComponent implements OnInit {
   }
 
   getSubschema() {
-    return this.schemaKeysStoreService.find_subschema(this.action.mainKey)
+    return this.schemaKeysStoreService.find_subschema(this.action.mainKey);
   }
 
   showEditor() {
-    this.isEditorVisible = true
+    this.isEditorVisible = true;
+  }
+
+  addValue(targetArray:string[]) {
+    targetArray.push('');
+  }
+
+  reduceValue(targetArray:string[]) {
+    targetArray.pop();
   }
 
   deleteElement() {

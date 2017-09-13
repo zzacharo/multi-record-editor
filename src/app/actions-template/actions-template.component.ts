@@ -1,16 +1,7 @@
 import { Component, OnInit, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
 import { ActionTemplateComponent } from '../action-template'
+import { Action } from '../shared'
 
-export interface Action {
-  selectedAction: string,
-  mainKey: string,
-  whereRegex: boolean,
-  value: string,
-  updateValue: string,
-  updateRegex: boolean,
-  whereKey: string,
-  whereValue: string
-}
 
 @Component({
   selector: 'actions-template',
@@ -21,7 +12,7 @@ export interface Action {
 export class ActionsTemplateComponent implements OnInit {
   //@ViewChildren(ActionTemplateComponent) actionComponents: QueryList<ActionTemplateComponent>;
   actions:Action [] = [];
-  @Output() onSubmit: EventEmitter<Object> = new EventEmitter();
+  @Output() onPreview: EventEmitter<Object> = new EventEmitter();
 
   constructor() { };
   ngOnInit() {
@@ -33,17 +24,17 @@ export class ActionsTemplateComponent implements OnInit {
     mainKey: '',
     whereRegex: false,
     value: '',
-    updateValue: '',
+    updateValues: [''],
     updateRegex: false,
     whereKey: '',
-    whereValue: ''};
+    whereValues: ['']};
     this.actions.push(action);
   }
 
   submitActions() {
     var that = this;
     //this.actionComponents.forEach(SubmitInstance => that.actions.push(SubmitInstance.SubmitAction()));
-    this.onSubmit.emit(this.actions);
+    this.onPreview.emit(this.actions);
   }
 
   elementDeleted(event) {
