@@ -1,8 +1,8 @@
 <img src="../assets/inspire_logo_hep.png" class='inspire-logo' />
 <div class="container">
-    <div class="row">
-      <div class="col-xs-8 col-xs-offset-2">
-        <div class="input-group item-group">
+  <div class="row">
+    <div class="col-xs-8 col-xs-offset-2">
+      <div class="input-group item-group">
         <div class="input-group-btn search-panel">
           <div class="btn-group" dropdown>
             <select class="form-control selector" [ngModel]="selectedCollection" (ngModelChange)="setCollection($event)">
@@ -17,23 +17,35 @@
       </div>
       <actions-template (onPreview)="onPreview($event)"></actions-template>
       <ul class="list-unstyled">
-        <div style ="margin-left:73%">
-        <button class="btn-sm btn-success" type="button" (click)="selectAll()">Select All</button>
-        <button class="btn-sm btn-warning" type="button" (click)="deselectAll()">Deselect All</button>
+        <div class = "selectButtons">
+          <button class="btn-sm btn-success" type="button" (click)="selectAll()">Select All</button>
+          <button class="btn-sm btn-warning" type="button" (click)="deselectAll()">Deselect All</button>
         </div>
-        <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md"
-        [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-        <div *ngIf="error_text"><h3>Sorry we have some problems backstage</h3>
-        <p>You should tell this to your administrator: <b>{{error_text}}</b></div>
-        <div *ngIf="totalRecords == 0"><h3>Sorry no results found</h3></div>
-        <li *ngFor="let record of records ; let count = index trackBy: trackByFn" class="list-group list-group-item" >
-          <input #inp type="checkbox" [checked]="(allSelected && checkedRecords.indexOf(uuids[count]) === -1) || (allSelected === false && checkedRecords.indexOf(uuids[count])>-1)" (change)="addChecked(uuids[count])">
+        <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md" [boundaryLinks]="true"
+          [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+        <div *ngIf="error_text">
+          <h3>Sorry we have some problems backstage</h3>
+          <p>You should tell this to your administrator: <b>{{error_text}}</b></div>
+        <div *ngIf="totalRecords == 0">
+          <h3>Sorry no results found</h3>
+        </div>
+        <li *ngFor="let record of records ; let count = index; trackBy: identify" class="list-group list-group-item">
+          <input #inp type="checkbox" [checked]="(allSelected && checkedRecords.indexOf(uuids[count]) === -1) || (allSelected === false && checkedRecords.indexOf(uuids[count])>-1)"
+            (change)="addChecked(uuids[count])">
           <div *ngIf="previewMode == false || inp.checked == false;then notPreview else preview"></div>
-          <ng-template #preview><diff-view [oldObject] ="record" [newObject]="newRecords[count]"></diff-view> </ng-template>
-          <ng-template #notPreview><pre> {{record | json}} </pre></ng-template>
+          <ng-template #preview>
+            <diff-view [oldObject]="record" [newObject]="newRecords[count]"></diff-view>
+          </ng-template>
+          <ng-template #notPreview>
+            <pre> {{record | json}} </pre>
+          </ng-template>
         </li>
-          <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md"
-                      [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+        <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md" [boundaryLinks]="true"
+          [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+          <div class = "selectButtons">
+              <button class="btn-sm btn-success" type="button" (click)="selectAll()">Select All</button>
+              <button class="btn-sm btn-warning" type="button" (click)="deselectAll()">Deselect All</button>
+            </div>
       </ul>
     </div>
   </div>

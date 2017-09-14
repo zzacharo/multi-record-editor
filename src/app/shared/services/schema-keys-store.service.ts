@@ -83,7 +83,7 @@ export class SchemaKeysStoreService {
   public find_subschema(path: string) {
     let subSchema = this.schema
     if (path === "") {
-      return {'properties':{shittyProperty:subSchema}, 'type':'object'}
+      return subSchema
     }
     let splitPath = path.split('/')
     for (let index in splitPath) {
@@ -104,6 +104,6 @@ export class SchemaKeysStoreService {
     if (subSchema['type'] === 'array') {
       subSchema = subSchema['items']
     }
-    return {'properties':{shittyProperty:subSchema}, 'type':'object'}
+    return subSchema
   }
 }

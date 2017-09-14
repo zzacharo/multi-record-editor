@@ -9,7 +9,7 @@ import { diffJson } from 'diff'
 export class DiffViewComponent implements OnInit {
   @Input() oldObject: object;
   @Input() newObject: object;
-  diffObjects;
+  diffObjects: Object[];
   constructor() { }
 
   ngOnInit() {

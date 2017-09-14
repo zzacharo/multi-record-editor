@@ -1,8 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter, ElementRef, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { ApiService } from '../shared/services/api.service';
 import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
-import { Observable } from 'rxjs';
-import { Headers, Http, RequestOptions } from '@angular/http';
+import { QueryService } from '../shared/services/query.service'
 import 'rxjs/add/operator/toPromise';
 
 @Component({
@@ -40,15 +38,11 @@ export class MultiEditorComponent implements OnInit, OnChanges {
     ['journals', 'Journals']
   ];
   url = 'http://localhost:5000/api/multieditor'
-  constructor(private apiService: ApiService,
+  schema_url = 'http://localhost:5000'
+  constructor(
     private schemaKeysStoreService: SchemaKeysStoreService,
-    private http: Http,
-    private changeDetectorRef: ChangeDetectorRef) { }
-
-  createAuthorizationHeader(headers: Headers) {
-    headers.append('Access-Control-Allow-Origin', 'localhost:4200');
-    headers.append('Access-Control-Allow-Credentials', 'true');
-  }
+    private changeDetectorRef: ChangeDetectorRef,
+    private queryService: QueryService) { }
 
   ngOnInit() {
     this.newRecords = []
@@ -56,10 +50,6 @@ export class MultiEditorComponent implements OnInit, OnChanges {
     this.searchRecords()
     this.setCollection('hep')
     document.cookie = "_pk_id.11.1fff=99911b90596f9e8d.1504879999.2.1505216503.1505216503.; _pk_ses.11.1fff=*"
-    let headers = new Headers()
-    this.createAuthorizationHeader(headers)
-    let options = new RequestOptions({ headers: headers, withCredentials: true });
-    this.options = options
   }
 
   ngOnChanges(changes) {
@@ -68,34 +58,16 @@ export class MultiEditorComponent implements OnInit, OnChanges {
     }
   }
 
-  onSubmit(event) {
-    this.http
-      .post(`${this.url}/update`, {
-        'userActions': event,
-        'ids': this.checkedRecords,
-        'allSelected': this.allSelected,
-      },
-      this.options
-      )
-      .map(res => res.json())
-      .toPromise()
+  onSubmit(userActions:object[]) {
+     this.queryService.submitActions(userActions, this.url, this.checkedRecords, this.allSelected)
       .catch((error) => {
         this.error_text = error;
       });
   }
 
-  onPreview(event: Object[]) {
-    this.actionsUsed = event;
-    this.http
-      .post(`${this.url}/preview`, {
-        'userActions': event,
-        'queryString': this.queryUsed,
-        'pageNum': this.currentPage
-      },
-      this.options
-      )
-      .map(res => res.json())
-      .toPromise()
+  onPreview(userActions: Object[]) {
+    this.actionsUsed = userActions;
+    this.queryService.previewActions(userActions,this.url, this.queryUsed, this.currentPage)
       .then((res) => {
         this.newRecords = res;
         this.previewMode = true;
@@ -134,25 +106,7 @@ export class MultiEditorComponent implements OnInit, OnChanges {
   private pageChanged($event) {
     this.currentPage = $event.page
     if (this.previewMode) {
-      Observable.zip(
-        this.http
-          .get(`${this.url}/search?page_num=${$event.page}&query_string=${this.queryUsed}&index=${this.indexUsed}`, this.options)
-          .map(res => res.json()),
-        this.http
-          .post(`${this.url}/preview`, {
-            'userActions': this.actionsUsed,
-            'queryString': this.queryUsed,
-            'pageNum': this.currentPage
-          },
-          this.options
-          )
-          .map(res => res.json()),
-        (oldRecords, newRecords) => {
-          return {
-            oldRecords: oldRecords,
-            newRecords: newRecords
-          }
-        })
+      this.queryService.getNewPageRecords(this.actionsUsed, this.url, this.queryUsed, this.currentPage, this.indexUsed)  
         .subscribe((json) => {
           this.records = json.oldRecords['json_records'],
           this.uuids = json.oldRecords['uuids'];
@@ -162,10 +116,7 @@ export class MultiEditorComponent implements OnInit, OnChanges {
         error => {this.error_text = error;this.changeDetectorRef.markForCheck();})
     }
     else {
-      this.http
-        .get(`${this.url}/search?page_num=${$event.page}&query_string=${this.queryUsed}&index=${this.indexUsed}`, this.options)
-        .map(res => res.json())
-        .toPromise()
+      this.queryService.searchRecords(this.url, this.queryUsed, this.currentPage, this.indexUsed)
         .then((res) => {
           this.records = res['json_records'],
           this.uuids = res['uuids'];
@@ -183,15 +134,8 @@ export class MultiEditorComponent implements OnInit, OnChanges {
     if (!this.query) {
       this.query = ''
     }
-    let headers = new Headers()
-    this.createAuthorizationHeader(headers)
-    let options = new RequestOptions({ headers: headers, withCredentials: true });
     this.queryUsed = this.query
-    this.http
-      .get(`${this.url}/search?page_num=${this.currentPage}&query_string=${this.query}&index=${this.selectedCollection}`,
-      options)
-      .map(res => res.json())
-      .toPromise()
+    this.queryService.searchRecords(this.url, this.query, this.currentPage, this.selectedCollection)      
       .then((res) => {
         this.records = res['json_records'];
         this.totalRecords = res['total_records']
@@ -206,14 +150,8 @@ export class MultiEditorComponent implements OnInit, OnChanges {
   }
 
   setCollection(selectedCollection: string) {
-    let headers = new Headers()
-    this.createAuthorizationHeader(headers)
-    let options = new RequestOptions({ headers: headers, withCredentials: true });
     this.selectedCollection = selectedCollection
-    this.http
-      .get(`http://localhost:5000/schemas/records/${this.selectedCollection}.json`, options)
-      .map(res => res.json())
-      .toPromise()
+    this.queryService.getCollection(this.schema_url, this.selectedCollection)      
       .then((res) => {
         this.schema = res;
         this.schemaKeysStoreService.buildSchemaKeyStore(this.schema);
@@ -224,6 +162,10 @@ export class MultiEditorComponent implements OnInit, OnChanges {
           this.changeDetectorRef.markForCheck();
         }
       );
+  }
+
+  identify(index) {
+    return index;
   }
 }
 

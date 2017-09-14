@@ -11,8 +11,8 @@ import { Action } from '../shared'
 export class ActionTemplateComponent implements OnInit {
   actionOptions = ['Addition', 'Deletion', 'Update']
   isEditorVisible = false;
-  subSchema: Object = {}
-  myRecord: Object = {}
+  subSchema = {}
+  myRecord = {}
   @Output() elementDeleted: EventEmitter<any> = new EventEmitter();
   @Input() id: number;
   @Input() action: Action;
@@ -43,5 +43,9 @@ export class ActionTemplateComponent implements OnInit {
 
   deleteElement() {
     this.elementDeleted.emit(this.id);
+  }
+
+  identify(index:number){
+    return index
   }
 }
