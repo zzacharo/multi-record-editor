@@ -8,68 +8,72 @@
     </div>
     <div *ngIf="action.selectedAction == 'Addition'">
       <label>Field Key:</label>
-      <input (keyup.enter)="showEditor()" type="text" [(ngModel)]="action.mainKey" class="form-control input-field" placeholder="Action key...">
-      <div *ngIf="isEditorVisible == true" style="width: 800px; height:400px;">
-        <json-editor *ngIf="isEditorVisible == true" [config]="{}" [schema]="getSubschema(mainKey)" [record]="{}" (onRecordChange)="saveRecord($event)"></json-editor>
+      <input *ngIf="isEditorVisible == false" (keyup.enter)="showEditor()" type="text" [(ngModel)]="action.mainKey" class="form-control input-field"
+        placeholder="Action key...">
+      <div *ngIf="isEditorVisible == true">
+        <div class="editor">
+        <json-editor [config]="{}" [schema]="getSubschema(mainKey)" [record]="myRecord" (recordChange)="saveRecord($event)"></json-editor>
       </div>
-      <label>Where Key:</label>
-      <input type="text" [(ngModel)]="action.whereKey" class="form-control input-field" placeholder="Where key...">
-      <label>Where Values:</label>
-      <label>Regex</label><input class = ".checkbox" type="checkbox" [(ngModel)]="action.whereRegex">
-      <li class="list-unstyled" *ngFor="let updateValue of action.whereValues; let count = index;trackBy:identify ">
-        <input type="text" [(ngModel)]="action.whereValues[count]" class="form-control input-field" placeholder="Where value to be checked...">
-      </li>
-      <button (click)="addValue(action.whereValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
-      <button (click)="reduceValue(action.whereValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
+      <button (click)="closeEditor()" class="btn btn-default " type="button">Done</button>
     </div>
-    <div *ngIf="action.selectedAction == 'Update'">
-      <label>Field Key:</label>
-      <input type="text" [(ngModel)]="action.mainKey" class="form-control input-field" placeholder="Action key...">
-      <label>Input Value:</label>
-      <input type="text" [(ngModel)]="action.value" class="form-control input-field" placeholder="Value to be placed...">
-      <label>Update Value:</label>
-      <label class = ".regex" >Regex</label>
-      <input class = ".checkbox" type="checkbox" [(ngModel)]="action.updateRegex">
-      <li class="list-unstyled" *ngFor="let updateValue of action.updateValues; let count = index ">
-        <input type="text" [(ngModel)]="action.updateValues[count]" class="form-control input-field" placeholder="Where value to be checked...">
-      </li>
-      <button (click)="addValue(action.updateValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
-      <button (click)="reduceValue(action.updateValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
-      <br>
-      <label>Where Key:</label>
-      <input type="text" [(ngModel)]="action.whereKey" class="form-control input-field" placeholder="Where key...">
-      <label>Where Value:</label>
-      <label class = ".regex">Regex</label>
-      <input class = ".checkbox" type="checkbox" [(ngModel)]="action.whereRegex">
-      <li class="list-unstyled" *ngFor="let updateValue of action.whereValues; let count = index ">
-        <input type="text" [(ngModel)]="action.whereValues[count]" class="form-control input-field" placeholder="Where value to be checked...">
-      </li>
-      <button (click)="addValue(action.whereValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
-      <button (click)="reduceValue(action.whereValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
-    </div>
-
-    <div *ngIf="action.selectedAction == 'Deletion'">
-      <label>Field Key:</label>
-      <input type="text" [(ngModel)]="action.mainKey" class="form-control input-field" placeholder="Action key...">
-      <label>Value to delete:</label>
-      <label class = ".regex">Regex</label>
-      <input class = ".checkbox" type="checkbox" [(ngModel)]="action.updateRegex">
-      <li class="list-unstyled" *ngFor="let updateValue of action.updateValues; let count = index ">
-        <input type="text" [(ngModel)]="action.updateValues[count]" class="form-control input-field" placeholder="Where value to be checked...">
-      </li>
-      <button (click)="addValue(action.updateValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
-      <button (click)="reduceValue(action.updateValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
-      <label>Where Key:</label>
-      <input type="text" [(ngModel)]="action.whereKey" class="form-control input-field" placeholder="Where key...">
-      <label>Where Value:</label>
-      <label class = ".regex">Regex</label>
-      <input class = ".checkbox" type="checkbox" [(ngModel)]="action.whereRegex">
-      <li class="list-unstyled" *ngFor="let updateValue of action.whereValues; let count = index ">
-        <input type="text" [(ngModel)]="action.whereValues[count]" class="form-control input-field" placeholder="Where value to be checked...">
-      </li>
-      <button (click)="addValue(action.whereValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
-      <button (click)="reduceValue(action.whereValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
-    </div>
+    <label>Where Key:</label>
+    <input type="text" [(ngModel)]="action.whereKey" class="form-control input-field" placeholder="Where key...">
+    <label>Where Values:</label>
+    <label class="regex">Regex</label><input class="regex-checkbox" type="checkbox" [(ngModel)]="action.whereRegex">
+    <li class="list-unstyled" *ngFor="let updateValue of action.whereValues; let count = index;trackBy:identify ">
+      <input type="text" [(ngModel)]="action.whereValues[count]" class="form-control input-field" placeholder="Where value to be checked...">
+    </li>
+    <button (click)="addValue(action.whereValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+    <button (click)="reduceValue(action.whereValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
   </div>
-  <button class="button" (click)="deleteElement()">Remove Action</button>
+  <div *ngIf="action.selectedAction == 'Update'">
+    <label>Field Key:</label>
+    <input type="text" [(ngModel)]="action.mainKey" class="form-control input-field" placeholder="Action key...">
+    <label>Input Value:</label>
+    <input type="text" [(ngModel)]="action.value" class="form-control input-field" placeholder="Value to be placed...">
+    <label>Update Value:</label>
+    <label class="regex">Regex</label>
+    <input class="regex-checkbox" type="checkbox" [(ngModel)]="action.updateRegex">
+    <li class="list-unstyled" *ngFor="let updateValue of action.updateValues; let count = index ">
+      <input type="text" [(ngModel)]="action.updateValues[count]" class="form-control input-field" placeholder="Where value to be checked...">
+    </li>
+    <button (click)="addValue(action.updateValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+    <button (click)="reduceValue(action.updateValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
+    <br>
+    <label>Where Key:</label>
+    <input type="text" [(ngModel)]="action.whereKey" class="form-control input-field" placeholder="Where key...">
+    <label>Where Value:</label>
+    <label class="regex">Regex</label>
+    <input class="regex-checkbox" type="checkbox" [(ngModel)]="action.whereRegex">
+    <li class="list-unstyled" *ngFor="let updateValue of action.whereValues; let count = index ">
+      <input type="text" [(ngModel)]="action.whereValues[count]" class="form-control input-field" placeholder="Where value to be checked...">
+    </li>
+    <button (click)="addValue(action.whereValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+    <button (click)="reduceValue(action.whereValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
+  </div>
+
+  <div *ngIf="action.selectedAction == 'Deletion'">
+    <label>Field Key:</label>
+    <input type="text" [(ngModel)]="action.mainKey" class="form-control input-field" placeholder="Action key...">
+    <label>Value to delete:</label>
+    <label class="regex">Regex</label>
+    <input class="regex-checkbox" type="checkbox" [(ngModel)]="action.updateRegex">
+    <li class="list-unstyled" *ngFor="let updateValue of action.updateValues; let count = index ">
+      <input type="text" [(ngModel)]="action.updateValues[count]" class="form-control input-field" placeholder="Where value to be checked...">
+    </li>
+    <button (click)="addValue(action.updateValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+    <button (click)="reduceValue(action.updateValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
+    <label>Where Key:</label>
+    <input type="text" [(ngModel)]="action.whereKey" class="form-control input-field" placeholder="Where key...">
+    <label>Where Value:</label>
+    <label class="regex">Regex</label>
+    <input class="regex-checkbox" type="checkbox" [(ngModel)]="action.whereRegex">
+    <li class="list-unstyled" *ngFor="let updateValue of action.whereValues; let count = index ">
+      <input type="text" [(ngModel)]="action.whereValues[count]" class="form-control input-field" placeholder="Where value to be checked...">
+    </li>
+    <button (click)="addValue(action.whereValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+    <button (click)="reduceValue(action.whereValues)" class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
+  </div>
+</div>
+<button class="button" (click)="deleteElement()">Remove Action</button>
 </div>

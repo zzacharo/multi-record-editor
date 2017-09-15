@@ -12,7 +12,7 @@ export class ActionTemplateComponent implements OnInit {
   actionOptions = ['Addition', 'Deletion', 'Update']
   isEditorVisible = false;
   subSchema = {}
-  myRecord = {}
+  _myRecord = {}
   @Output() elementDeleted: EventEmitter<any> = new EventEmitter();
   @Input() id: number;
   @Input() action: Action;
@@ -22,7 +22,7 @@ export class ActionTemplateComponent implements OnInit {
   }
 
   saveRecord(event) {
-    event => this.myRecord;
+     this.myRecord= event;
   }
 
   getSubschema() {
@@ -31,6 +31,7 @@ export class ActionTemplateComponent implements OnInit {
 
   showEditor() {
     this.isEditorVisible = true;
+    this.action.value = this.myRecord;
   }
 
   addValue(targetArray:string[]) {
@@ -47,5 +48,17 @@ export class ActionTemplateComponent implements OnInit {
 
   identify(index:number){
     return index
+  }
+
+  closeEditor(){
+    this.isEditorVisible = false;
+  }
+
+  get myRecord() {
+    return this._myRecord;
+  }
+
+  set myRecord(record) {
+    this._myRecord = record;
   }
 }

@@ -10,7 +10,7 @@ import 'rxjs/add/operator/toPromise';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class MultiEditorComponent implements OnInit, OnChanges {
+export class MultiEditorComponent implements OnInit {
   currentPage = 1;
   @Input() records: Array<{}>;
   totalRecords = -1;
@@ -50,12 +50,6 @@ export class MultiEditorComponent implements OnInit, OnChanges {
     this.searchRecords()
     this.setCollection('hep')
     document.cookie = "_pk_id.11.1fff=99911b90596f9e8d.1504879999.2.1505216503.1505216503.; _pk_ses.11.1fff=*"
-  }
-
-  ngOnChanges(changes) {
-    if (changes == 'previewMode') {
-      console.log('gotcha')
-    }
   }
 
   onSubmit(userActions:object[]) {
