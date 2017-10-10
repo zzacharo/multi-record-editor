@@ -1,3 +1,56 @@
-<ul *ngFor="let record of records">
-  {{record | json}}
-</ul>
+<img src="../assets/inspire_logo_hep.png" class='inspire-logo' />
+<div class="container">
+  <div class="row">
+    <div class="col-xs-8 col-xs-offset-2">
+      <div class="input-group item-group">
+        <div class="input-group-btn search-panel">
+          <div class="btn-group" dropdown>
+            <select class="form-control selector collection-selector" [ngModel]="selectedCollection" (ngModelChange)="onCollectionChange($event)">
+          <option *ngFor="let collection of collections" [ngValue]="collection[0]" > {{collection[1]}} </option>
+          </select>
+          </div>
+        </div>
+        <input type="text" [(ngModel)]="query" class="form-control" (keyup.enter)="searchRecords()" placeholder="Search term...">
+        <div class="input-group-btn">
+          <button (click)="searchRecords()" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+        </div>
+      </div>
+      <me-actions-template (onPreview)="onPreview($event)"></me-actions-template>
+      <div *ngIf="previewMode == true">
+        <button (click)="onSubmit()" class="btn btn-success" type="button">Submit</button>
+      </div>
+      <ul class="list-unstyled">
+        <div *ngIf="errorText">
+          <h3>Sorry we have some problems backstage</h3>
+          <p>You should tell this to your administrator: <b>{{errorText}}</b></div>
+        <div *ngIf="totalRecords == 0">
+          <h3>Sorry no results found</h3>
+        </div>
+        <div *ngIf="totalRecords >0">
+          <div class="selectButtons">
+            <button class="btn-sm btn-success" type="button" (click)="selectAll()">Select All</button>
+          </div>
+          <select class="form-control selector page-selector" [ngModel]="pageSize" (ngModelChange)="setPageSize($event)">
+                <option *ngFor="let size of pageSizes" [ngValue]="size" > {{size}}</option>
+                </select>
+          <p>{{totalRecords}} records found</p>
+          <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md" [boundaryLinks]="true"
+            [rotate]="false" (pageChanged)="onPageChange($event.page)" [itemsPerPage]="pageSize" [align]="true"></pagination>
+          <li *ngFor="let record of records ; let count = index; trackBy: trackByFunction" class="list-group list-group-item">
+            <input #inp type="checkbox" [checked]="(allSelected && checkedRecords.indexOf(uuids[count]) === -1) || (allSelected === false && checkedRecords.indexOf(uuids[count])>-1)"
+              (change)="addChecked(uuids[count])">
+            <div *ngIf="previewMode == false;then notPreview else preview"></div>
+            <ng-template #preview>
+              <me-diff-view [oldObject]="record" [newObject]="newRecords[count]"></me-diff-view>
+            </ng-template>
+            <ng-template #notPreview>
+              <pre> {{record | json}} </pre>
+            </ng-template>
+          </li>
+          <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md" [boundaryLinks]="true"
+            [rotate]="false" [itemsPerPage]="pageSize" [align]="true"></pagination>
+        </div>
+      </ul>
+    </div>
+  </div>
+</div>

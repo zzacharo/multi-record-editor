@@ -59,10 +59,71 @@ describe('SchemaKeysStoreService', () => {
 
     service.buildSchemaKeyStore(schema);
     Object.keys(service.schemaKeyStoreMap)
-    .forEach(key => {
-      expect(service.schemaKeyStoreMap[key]).toEqual(expectedMap[key]);
-    });
+      .forEach(key => {
+        expect(service.schemaKeyStoreMap[key]).toEqual(expectedMap[key]);
+      });
+  });
 
+
+
+  it('it should find items of innerArray', () => {
+    let schema = {
+      type: 'object',
+      properties: {
+        anArray: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              anObject: {
+                type: 'object',
+                properties: {
+                  prop1: {
+                    type: 'string'
+                  },
+                  prop2: {
+                    type: 'string'
+                  }
+                }
+              },
+              aString: {
+                type: 'string'
+              },
+              innerArray: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    prop1: {
+                      type: 'string'
+                    },
+                    prop2: {
+                      type: 'string'
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+
+    let expectedMap = {
+      type: 'object',
+      properties: {
+        prop1: {
+          type: 'string'
+        },
+        prop2: {
+          type: 'string'
+        }
+      }
+    };
+
+    service.buildSchemaKeyStore(schema);
+    let subschema = service.findSubschema('anArray/innerArray');
+    expect(subschema).toEqual(expectedMap);
   });
 
 });
