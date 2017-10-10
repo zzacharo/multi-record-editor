@@ -1,8 +1,8 @@
 <label>Field:</label>
 <input type="text" [(ngModel)]="condition.key" class="form-control input-field" placeholder="Field key...">
 <div class="btn-group" dropdown>
-  <select class="form-control selector collection-selector" [ngModel]="condition.matchType" (ngModelChange)="onCollectionChange($event)">
-<option *ngFor="let matchType of matchTypes" [ngValue]="matchType" > {{matchType}} </option>
+  <select class="form-control selector collection-selector" [(ngModel)]="condition.matchType">
+<option *ngFor="let matchType of matchTypes" [(ngValue)]="matchType" > {{matchType}} </option>
 </select>
 </div>
 <input type="text" [(ngModel)]="condition.value" class="form-control input-field" placeholder="Condition value...">
