@@ -1,8 +1,13 @@
-import { Component, Input, Output, OnInit, EventEmitter,
-   ElementRef, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
-import { QueryService } from '../shared/services/query.service';
+import {
+  Component, Input, Output, OnInit, EventEmitter,
+  ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core';
+
 import 'rxjs/add/operator/toPromise';
+
+import { SchemaKeysStoreService, QueryService } from '../shared/services';
+import { UserActions } from '../shared/interfaces';
+
 
 @Component({
   selector: 'me-multi-editor',
@@ -12,24 +17,26 @@ import 'rxjs/add/operator/toPromise';
 })
 
 export class MultiEditorComponent implements OnInit {
-  @Input() records: Array<object>;
+  @Input() records: object[];
   currentPage = 1;
   totalRecords = -1;
-  schema: {};
+  schema: object;
   query = '';
   options: object;
   errorText: string;
-  queryUsed = '';
-  indexUsed: string;
-  actionsUsed: object[];
-  checkedRecords: Array<string> = []; // records that are different from the general selection rule
+  lastSearchedQuery = '';
+  lastSearchedCollection: string;
+  previewedActions: UserActions;
+  // records that are different from the general selection rule
+  checkedRecords: string[] = [];
   allSelected = true;
   previewMode = false;
   selectedCollection: string;
   newRecords: object[];
   uuids: string[] = [];
-  filterExpression: Array<string>;
-  collections: object[] = [
+  filterExpression: string[];
+
+  readonly collections: object[] = [
     ['hep', 'HEP'],
     ['authors', 'Authors'],
     ['data', 'Data'],
@@ -40,7 +47,7 @@ export class MultiEditorComponent implements OnInit {
     ['journals', 'Journals']
   ];
 
-  pageSizes = [5, 10, 15, 20];
+  readonly pageSizes = [5, 10, 15, 20];
   pageSize = this.pageSizes[0];
 
 
@@ -56,15 +63,15 @@ export class MultiEditorComponent implements OnInit {
   }
 
   onSubmit() {
-    this.queryService.submitActions(this.actionsUsed, this.checkedRecords, this.allSelected)
+    this.queryService.submitActions(this.previewedActions, this.checkedRecords, this.allSelected)
       .catch((error) => {
         this.errorText = error;
       });
   }
 
-  onPreview(userActions: Object[]) {
-    this.actionsUsed = userActions;
-    this.queryService.previewActions(userActions, this.queryUsed, this.currentPage, this.pageSize)
+  onPreview(userActions: UserActions) {
+    this.previewedActions = userActions;
+    this.queryService.previewActions(userActions, this.lastSearchedQuery, this.currentPage, this.pageSize)
       .then((res) => {
         this.newRecords = res;
         this.previewMode = true;
@@ -76,9 +83,46 @@ export class MultiEditorComponent implements OnInit {
       });
   }
 
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.previewMode ? this.getNewPageRecords() : this.queryCollection(this.lastSearchedQuery, this.lastSearchedCollection);
+  }
+
+  searchRecords() {
+    this.lastSearchedCollection = this.selectedCollection;
+    if (!this.query) {
+      this.query = '';
+    }
+    this.lastSearchedQuery = this.query;
+    this.queryCollection(this.query, this.selectedCollection);
+  }
+
+  onCollectionChange(selectedCollection: string) {
+    this.selectedCollection = selectedCollection;
+    this.queryService.fetchCollectionSchema(this.selectedCollection)
+      .then((res) => {
+        this.schema = res;
+        this.schemaKeysStoreService.buildSchemaKeyStore(this.schema);
+      })
+      .catch(error => {
+        this.errorText = error;
+        this.changeDetectorRef.markForCheck();
+      }
+      );
+  }
+
+  setPageSize(size: number) {
+    this.pageSize = size;
+    this.onPageChange(this.currentPage);
+  }
+
+  trackByFunction(index: number): number {
+    return index;
+  }
+
   private addChecked(uuid: string) {
     this.checkedRecords.includes(uuid) ? this.checkedRecords.splice(this.checkedRecords.indexOf(uuid), 1)
-     : this.checkedRecords.push(uuid);
+      : this.checkedRecords.push(uuid);
   }
 
   private selectAll() {
@@ -91,57 +135,25 @@ export class MultiEditorComponent implements OnInit {
     this.checkedRecords = [];
   }
 
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error);
-  }
-
-  private pageChanged(newPage: number) {
-    this.currentPage = newPage;
-    this.previewMode ? this.getNewPageRecords() : this.queryCollection(this.queryUsed, this.indexUsed);
-  }
-
-  private searchRecords() {
-    this.indexUsed = this.selectedCollection;
-    if (!this.query) {
-      this.query = '';
-    }
-    this.queryUsed = this.query;
-    this.queryCollection(this.query, this.selectedCollection);
-  }
-
   private getNewPageRecords() {
-    this.queryService.getNewPageRecords(this.actionsUsed, this.queryUsed, this.currentPage, this.indexUsed, this.pageSize)
-    .subscribe((json) => {
-      this.records = json.oldRecords['json_records'];
-      this.uuids = json.oldRecords['uuids'];
-      this.newRecords = json.newRecords;
-      this.changeDetectorRef.markForCheck();
-    },
-    error => { this.errorText = error; this.changeDetectorRef.markForCheck(); });
+    this.queryService
+      .fetchNewPageRecords(this.previewedActions, this.lastSearchedQuery, this.currentPage, this.lastSearchedCollection, this.pageSize)
+      .subscribe((json) => {
+        this.records = json.oldRecords['json_records'];
+        this.uuids = json.oldRecords['uuids'];
+        this.newRecords = json.newRecords;
+        this.changeDetectorRef.markForCheck();
+      },
+      error => { this.errorText = error; this.changeDetectorRef.markForCheck(); });
   }
 
   private queryCollection(query, collection) {
     this.queryService.searchRecords(query, this.currentPage, collection, this.pageSize)
-    .then((res) => {
-      this.records = res['json_records'];
-      this.totalRecords = res['total_records'];
-      this.uuids = res['uuids'];
-      this.changeDetectorRef.markForCheck();
-    })
-    .catch(error => {
-      this.errorText = error;
-      this.changeDetectorRef.markForCheck();
-    }
-    );
-  }
-
-  onCollectionChange(selectedCollection: string) {
-    this.selectedCollection = selectedCollection;
-    this.queryService.getCollection(this.selectedCollection)
-      .then((res) => {
-        this.schema = res;
-        this.schemaKeysStoreService.buildSchemaKeyStore(this.schema);
+      .then((json) => {
+        this.records = json['json_records'];
+        this.totalRecords = json['total_records'];
+        this.uuids = json['uuids'];
+        this.changeDetectorRef.markForCheck();
       })
       .catch(error => {
         this.errorText = error;
@@ -150,14 +162,6 @@ export class MultiEditorComponent implements OnInit {
       );
   }
 
-  setPage(size: number) {
-    this.pageSize = size;
-    this.pageChanged(this.currentPage);
-  }
-
-  trackByFunction(index: number): number {
-    return index;
-  }
 }
 
 

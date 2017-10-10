@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActionTemplateComponent } from '../action-template';
-import { Action, Condition } from '../shared/interfaces';
+import { UserActions } from '../shared/interfaces';
 import { AppGlobalsService } from '../shared/services';
 
 @Component({
@@ -10,57 +10,56 @@ import { AppGlobalsService } from '../shared/services';
 })
 
 export class ActionsTemplateComponent implements OnInit {
-  actions: Action[] = [];
-  conditions: Condition[] = [];
-  selectedAction: string;
-  @Output() onPreview: EventEmitter<Object> = new EventEmitter();
+  userActions: UserActions;
+  selectedAction = 'Addition';
+  @Output() onPreview = new EventEmitter<UserActions>();
 
   constructor(private appGlobalsService: AppGlobalsService) { };
 
   ngOnInit() {
-    this.selectedAction = 'Addition';
-    this.increaseAction();
-    this.increaseCondition();
+    this.addDefaultAction();
+    this.addDefaultCondition();
   }
   get matchTypes(): string[] {
     return this.appGlobalsService.matchTypes;
   }
 
-  increaseAction() {
-    let action: Action = {
-      selectedAction: this.selectedAction,
+  addDefaultAction() {
+    let action = {
+      actionName: this.selectedAction,
       mainKey: '',
       value: '',
       updateValue: '',
       matchType: this.matchTypes[0]
     };
-    this.actions.push(action);
+    this.userActions.actions.push(action);
   }
 
-  increaseCondition() {
-    let condition: Condition = {
+  addDefaultCondition() {
+    let condition = {
       key: '',
       value: '',
       matchType: this.matchTypes[0]
     };
-    this.conditions.push(condition);
+    this.userActions.conditions.push(condition);
   }
 
-  previewActions() {
-    this.onPreview.emit({ 'actions': this.actions, 'conditions': this.conditions });
+  onPreviewClick() {
+    this.onPreview.emit(this.userActions);
   }
 
   onActionDeleted(id: number) {
-    this.actions.splice(id, 1);
+    this.userActions.actions.splice(id, 1);
   }
 
   onConditionDeleted(id: number) {
-    this.conditions.splice(id, 1);
+    this.userActions.conditions.splice(id, 1);
   }
 
   onActionChange(actionType: string) {
-    this.actions.forEach((value, index) => {
-      this.actions[index].selectedAction = actionType;
-    });
+    this.userActions.actions
+      .forEach((value, index) => {
+        this.userActions.actions[index].actionName = actionType;
+      });
   }
 }

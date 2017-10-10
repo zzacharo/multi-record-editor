@@ -75,10 +75,14 @@ export class SchemaKeysStoreService {
     if (subSchema['type'] === 'array') {
       subSchema = subSchema['items'];
     } else if (subSchema['type'] !== 'object') {
+      // if primitive key then wrap it
       return {
-        type: 'object', alwaysShow: ['value'],
-        properties: { value: subSchema }
-      }; // if primitive key then wrap it
+        type: 'object',
+        alwaysShow: ['value'],
+        properties: {
+          value: subSchema
+        }
+      };
     }
     return subSchema;
   }

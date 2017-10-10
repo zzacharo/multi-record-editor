@@ -8,5 +8,9 @@ export const SHARED_SERVICES = [
   AppGlobalsService
 ];
 
-export {  SchemaKeysStoreService, QueryService, AppGlobalsService }
+export {
+  SchemaKeysStoreService,
+  QueryService,
+  AppGlobalsService
+}
 

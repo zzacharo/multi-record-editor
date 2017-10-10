@@ -11,9 +11,9 @@
           </div>
         </div>
         <input type="text" [(ngModel)]="query" class="form-control" (keyup.enter)="searchRecords()" placeholder="Search term...">
-        <span class="input-group-btn">
-                    <button (click)="searchRecords()" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
-        </span>
+        <div class="input-group-btn">
+          <button (click)="searchRecords()" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+        </div>
       </div>
       <me-actions-template (onPreview)="onPreview($event)"></me-actions-template>
       <div *ngIf="previewMode == true">
@@ -30,12 +30,12 @@
           <div class="selectButtons">
             <button class="btn-sm btn-success" type="button" (click)="selectAll()">Select All</button>
           </div>
-          <select class="form-control selector page-selector" [ngModel]="pageSize" (ngModelChange)="setPage($event)">
+          <select class="form-control selector page-selector" [ngModel]="pageSize" (ngModelChange)="setPageSize($event)">
                 <option *ngFor="let size of pageSizes" [ngValue]="size" > {{size}}</option>
                 </select>
           <p>{{totalRecords}} records found</p>
           <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md" [boundaryLinks]="true"
-            [rotate]="false" (pageChanged)="pageChanged($event['page'])" [itemsPerPage]="pageSize" [align]="true"></pagination>
+            [rotate]="false" (pageChanged)="onPageChange($event.page)" [itemsPerPage]="pageSize" [align]="true"></pagination>
           <li *ngFor="let record of records ; let count = index; trackBy: trackByFunction" class="list-group list-group-item">
             <input #inp type="checkbox" [checked]="(allSelected && checkedRecords.indexOf(uuids[count]) === -1) || (allSelected === false && checkedRecords.indexOf(uuids[count])>-1)"
               (change)="addChecked(uuids[count])">

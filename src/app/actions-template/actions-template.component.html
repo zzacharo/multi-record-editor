@@ -6,14 +6,14 @@
       <option value="Update">Update</option>
 </select>
 </div>
-<li class="list-unstyled" *ngFor="let action of actions; let count = index ">
+<li class="list-unstyled" *ngFor="let action of userActions.actions; let count = index ">
   <me-action-template (onActionDeleted)="onActionDeleted($event)" [action]=action [id]=count></me-action-template>
 </li>
-<button class="button" (click)="increaseAction()">Add action</button>
+<button class="button" (click)="addDefaultAction()">Add action</button>
 
-<li class="list-unstyled" *ngFor="let condition of conditions; let count = index ">
+<li class="list-unstyled" *ngFor="let condition of userActions.conditions; let count = index ">
   <me-conditions-template (onConditionDeleted)="onConditionDeleted($event)" [condition]=condition [id]=count></me-conditions-template>
 </li>
-<button class="button" (click)="increaseCondition()">Add condition</button>
+<button class="button" (click)="addDefaultCondition()">Add condition</button>
 
-<button class="button" (click)="previewActions()">Preview Actions</button>
+<button class="button" (click)="onPreviewClick()">Preview Actions</button>

@@ -1,14 +1,14 @@
 <div class="container">
-  <div class="row">
-    <div *ngIf="action.selectedAction == 'Addition'">
+  <div class="row" [ngSwitch]="action.selectedAction">
+    <div *ngSwitchCase="'Addition'">
         <me-addition-template [action]=action></me-addition-template>        
   </div>
-  <div *ngIf="action.selectedAction == 'Update'">
+  <div *ngSwitchCase="'Update'">
       <me-update-template [action]=action></me-update-template>
   </div>
-  <div *ngIf="action.selectedAction == 'Deletion'">
+  <div *ngSwitchCase="'Deletion'">
       <me-deletion-template [action]=action></me-deletion-template>
   </div>
 </div>
-<button class="button" (click)="deleteElement()">Remove Action</button>
+<button class="button" (click)="onRemoveClick()">Remove Action</button>
 </div>

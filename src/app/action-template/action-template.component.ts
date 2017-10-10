@@ -8,12 +8,14 @@ import { Action } from '../shared/interfaces';
 })
 
 export class ActionTemplateComponent {
-  @Output() onActionDeleted = new EventEmitter<number>();
   @Input() id: number;
   @Input() action: Action;
+
+  @Output() onActionDeleted = new EventEmitter<number>();
+
   constructor() { }
 
-  deleteElement() {
+  onRemoveClick() {
     this.onActionDeleted.emit(this.id);
   }
 

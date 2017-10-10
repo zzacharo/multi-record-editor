@@ -14,7 +14,7 @@ export class DiffViewComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['oldObject'] || changes['newObject']) {
-      if (this.newObject !== undefined) {
+      if (!this.newObject) {
         this.diffObjects = diffJson(this.oldObject, this.newObject);
       }
     }

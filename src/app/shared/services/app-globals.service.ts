@@ -2,5 +2,10 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class AppGlobalsService {
-  matchTypes = ['is equal to', 'contains', 'matches regular expression', 'does not exist'];
+  readonly matchTypes = [
+    'contains',
+    'is equal to',
+    'does not exist',
+    'matches regular expression'
+  ];
 }
