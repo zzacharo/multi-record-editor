@@ -21,8 +21,6 @@ export class MultiEditorComponent implements OnInit {
   currentPage = 1;
   totalRecords = -1;
   schema: object;
-  query = '';
-  options: object;
   errorText: string;
   lastSearchedQuery = '';
   lastSearchedCollection: string;
@@ -34,7 +32,6 @@ export class MultiEditorComponent implements OnInit {
   selectedCollection: string;
   newRecords: object[];
   uuids: string[] = [];
-  filterExpression: string[];
 
   readonly collections: object[] = [
     ['hep', 'HEP'],
@@ -88,13 +85,13 @@ export class MultiEditorComponent implements OnInit {
     this.previewMode ? this.getNewPageRecords() : this.queryCollection(this.lastSearchedQuery, this.lastSearchedCollection);
   }
 
-  searchRecords() {
+  searchRecords(query: string) {
     this.lastSearchedCollection = this.selectedCollection;
-    if (!this.query) {
-      this.query = '';
+    if (!query) {
+      query = '';
     }
-    this.lastSearchedQuery = this.query;
-    this.queryCollection(this.query, this.selectedCollection);
+    this.lastSearchedQuery = query;
+    this.queryCollection(query, this.selectedCollection);
   }
 
   onCollectionChange(selectedCollection: string) {

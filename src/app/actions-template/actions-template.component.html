@@ -1,10 +1,10 @@
 <label>Action</label>
 <div class="btn-group" dropdown>
-  <select class="form-control" [ngModel]="selectedAction" (ngModelChange)="onActionChange($event)">
+  <select class="form-control" [ngModel]="actionName" (ngModelChange)="onActionChange($event)">
       <option value="Addition">Addition</option>
       <option value="Deletion">Deletion</option>
       <option value="Update">Update</option>
-</select>
+  </select>
 </div>
 <li class="list-unstyled" *ngFor="let action of userActions.actions; let count = index ">
   <me-action-template (onActionDeleted)="onActionDeleted($event)" [action]=action [id]=count></me-action-template>

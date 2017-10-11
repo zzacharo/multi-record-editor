@@ -17,6 +17,9 @@ import { AdditionTemplateComponent } from './addition-template/addition-template
 import { DeletionTemplateComponent } from './deletion-template/deletion-template.component';
 import { UpdateTemplateComponent } from './update-template/update-template.component';
 import { ConditionsTemplateComponent } from './conditions-template/conditions-template.component';
+import { EditorToolbarContainerComponent } from './editor-toolbar-container/editor-toolbar-container.component';
+import { EditorToolbarSaveComponent } from './editor-toolbar-container/editor-toolbar-save/editor-toolbar-save.component';
+import { EditorToolbarSearchComponent } from './editor-toolbar-container/editor-toolbar-search/editor-toolbar-search.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,10 @@ import { ConditionsTemplateComponent } from './conditions-template/conditions-te
     AdditionTemplateComponent,
     DeletionTemplateComponent,
     UpdateTemplateComponent,
-    ConditionsTemplateComponent
+    ConditionsTemplateComponent,
+    EditorToolbarContainerComponent,
+    EditorToolbarSaveComponent,
+    EditorToolbarSearchComponent,
   ],
   imports: [
     BsDropdownModule.forRoot(),

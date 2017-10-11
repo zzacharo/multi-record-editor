@@ -10,7 +10,7 @@ import { AppGlobalsService } from '../shared/services';
 })
 
 export class ActionsTemplateComponent implements OnInit {
-  userActions: UserActions;
+  userActions: UserActions = { actions: [], conditions: [] };
   selectedAction = 'Addition';
   @Output() onPreview = new EventEmitter<UserActions>();
 

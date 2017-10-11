@@ -2,7 +2,7 @@
 <input type="text" [(ngModel)]="action.mainKey" class="form-control input-field" placeholder="field key...">
 <p>when value</p>
 <div class="btn-group" dropdown>
-  <select class="form-control selector collection-selector" [ngModel]="action.matchType" (ngModelChange)="onCollectionChange($event)">
+  <select class="form-control selector collection-selector" [ngModel]="action.matchType">
   <option *ngFor="let matchType of matchTypes" [ngValue]="matchType" > {{matchType}} </option>
   </select>
 </div>

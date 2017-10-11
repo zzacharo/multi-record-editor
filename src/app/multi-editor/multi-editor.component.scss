@@ -1,3 +1,25 @@
+$green-sea: #16a085;
+
+.btn {
+  border-radius: 0;
+
+  &.btn-success {
+    background-color: $green-sea;
+    border-color: $green-sea;
+    color: white;
+
+    &:hover, &:active, &:focus {
+      background-color: lighten($green-sea, 5%) !important;
+      color: white;
+    }
+  }
+
+  .fa {
+    margin-right: 5px;
+  }
+}
+
+
 .item-group {
   margin-bottom: 100px;
 }
@@ -21,10 +43,6 @@
   outline: none;
   border: none;
   background-color: #FFF;
-}
-
-.collection-selector{
-  width:130px;
 }
 
 .page-selector{

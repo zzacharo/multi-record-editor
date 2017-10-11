@@ -1,5 +1,5 @@
 <label>Field</label>
-<input *ngIf="isEditorVisible == false" (keyup.enter)="onFieldKeyInputEnterKeyup()" type="text" [(ngModel)]="action.mainKey"
+<input *ngIf="isEditorVisible == false" (keyup.enter)="onEnterKeyup()" type="text" [(ngModel)]="action.mainKey"
   class="form-control input-field" placeholder="key...">
 <div *ngIf="isEditorVisible == true">
 
