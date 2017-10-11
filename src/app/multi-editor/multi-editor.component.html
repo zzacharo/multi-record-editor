@@ -1,15 +1,19 @@
 <me-editor-toolbar-container (onSearchRecordClick)="searchRecords(query)" (onCollectionChange)="onCollectionChange($event)"></me-editor-toolbar-container>
-<div class="container">
+<div class="container me-container">
   <div class="row">
-    <div class="col-xs-8 col-xs-offset-2">
       <me-actions-template (onPreview)="onPreview($event)"></me-actions-template>
       <div *ngIf="previewMode === true">
         <button (click)="onSubmit()" class="btn btn-success" type="button">Submit</button>
       </div>
+      <div class="me-bar">
+        Results
+      </div>
       <ul class="list-unstyled">
         <div *ngIf="errorText">
           <h3>Sorry we have some problems backstage</h3>
-          <p>You should tell this to your administrator: <b>{{errorText}}</b></div>
+          <p>You should tell this to your administrator:
+            <b>{{errorText}}</b>
+        </div>
         <div *ngIf="totalRecords === 0">
           <h3>Sorry no results found</h3>
         </div>
@@ -18,8 +22,8 @@
             <button class="btn-sm btn-success" type="button" (click)="selectAll()">Select All</button>
           </div>
           <select class="form-control selector page-selector" [ngModel]="pageSize" (ngModelChange)="setPageSize($event)">
-                <option *ngFor="let size of pageSizes" [ngValue]="size" > {{size}}</option>
-                </select>
+            <option *ngFor="let size of pageSizes" [ngValue]="size"> {{size}}</option>
+          </select>
           <p>{{totalRecords}} records found</p>
           <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md" [boundaryLinks]="true"
             [rotate]="false" (pageChanged)="onPageChange($event.page)" [itemsPerPage]="pageSize" [align]="true"></pagination>
@@ -38,6 +42,5 @@
             [rotate]="false" [itemsPerPage]="pageSize" [align]="true"></pagination>
         </div>
       </ul>
-    </div>
   </div>
 </div>

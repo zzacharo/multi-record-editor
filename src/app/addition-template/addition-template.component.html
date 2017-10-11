@@ -1,10 +1,13 @@
-<label>Field</label>
-<input *ngIf="isEditorVisible == false" (keyup.enter)="onEnterKeyup()" type="text" [(ngModel)]="action.mainKey"
-  class="form-control input-field" placeholder="key...">
-<div *ngIf="isEditorVisible == true">
-
-  <div class="editor">
-    <json-editor [config]="{compact:true}" [schema]="subSchema" [record]="record" (recordChange)="saveRecord($event)"></json-editor>
+<form class="form-inline">
+  <label class="form-group">Field:</label>
+  <div class="form-group">
+    <input *ngIf="isEditorVisible === false" (keyup.enter)="onEnterKeyUp()" type="text" name="key" [(ngModel)]="action.mainKey"
+      class="form-control input-sm" placeholder="field key">
+    <div *ngIf="isEditorVisible === true">
+      <div class="editor">
+        <json-editor [config]="{compact:true}" [schema]="subSchema" [record]="record" (recordChange)="saveRecord($event)"></json-editor>
+      </div>
+      <button (click)="closeEditor()" class="btn btn-default " type="button">Done</button>
+    </div>
   </div>
-  <button (click)="closeEditor()" class="btn btn-default " type="button">Done</button>  
-</div>
+</form>

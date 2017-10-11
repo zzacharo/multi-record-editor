@@ -1,9 +1,19 @@
-<label>Field:</label>
-<input type="text" [(ngModel)]="condition.key" class="form-control input-field" placeholder="Field key...">
-<div class="btn-group" dropdown>
-  <select class="form-control selector collection-selector" [(ngModel)]="condition.matchType">
-<option *ngFor="let matchType of matchTypes" [(ngValue)]="matchType" > {{matchType}} </option>
-</select>
-</div>
-<input type="text" [(ngModel)]="condition.value" class="form-control input-field" placeholder="Condition value...">
-<button class="button" (click)="deleteElement()">Remove Action</button>
+<form class="form-inline">
+  <label class="form-group">Field:</label>
+  <div class="form-group">
+    <input type="text" name="key" [(ngModel)]="condition.key" class="form-control input-sm" placeholder="field key">
+  </div>
+  <div class="form-group">
+    <div class="btn-group dropdown">
+      <select class="form-control selector input-sm" name="matchSelector" [(ngModel)]="condition.matchType">
+        <option *ngFor="let matchType of matchTypes" [ngValue]="matchType"> {{matchType}} </option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <input type="text" name="value" [(ngModel)]="condition.value" class="form-control input-sm" placeholder="condition value">
+  </div>
+  <div *ngIf="canDelete" class="form-group">
+    <i class="fa fa-times" (click)="deleteElement()" aria-hidden="true"></i>
+  </div>
+</form>
