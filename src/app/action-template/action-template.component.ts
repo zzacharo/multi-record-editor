@@ -8,16 +8,7 @@ import { Action } from '../shared/interfaces';
 })
 
 export class ActionTemplateComponent {
-  @Input() id: number;
   @Input() action: Action;
-
-  @Output() onActionDeleted = new EventEmitter<number>();
-
-  constructor() { }
-
-  onRemoveClick() {
-    this.onActionDeleted.emit(this.id);
-  }
 
   trackByFunction(index: number): number {
     return index;

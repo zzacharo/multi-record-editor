@@ -1,20 +1,32 @@
 .button {
+    margin-top: 10px;
+    margin-bottom: 20px;
     display: inline-block;
-    padding: 6px 12px;
+    padding: 4px 6px;
     font-size: 12px;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
     outline: none;
-    color: #FFFFFF;
-    background-color: #35BF16;
-    border: none;
-    border-radius: 15px;
+    color: black;
+    background-color: #dae8ef;
+    border-top: 1px gray;
+    border-radius: 5px;
   }
   
-  .button:hover {background-color: #3e8e41}
-  
-  .button:active {
-    background-color: #3e8e41;
-    transform: translateY(2px);
+  .button:hover {background-color: rgb(241, 241, 241)}
+
+  .action{
+    margin-top: 10px;
+    margin-left: 10px;
   }
+
+  .info-text{
+    margin-top:10px;
+    margin-left: 10px;
+  }
+
+  .fa-times{
+    color: gray;
+    cursor: pointer;
+}

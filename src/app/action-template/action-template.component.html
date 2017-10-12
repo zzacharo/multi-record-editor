@@ -1,14 +1,11 @@
-<div class="container">
-  <div class="row" [ngSwitch]="action.selectedAction">
+<div class="form-group" [ngSwitch]="action.actionName">
     <div *ngSwitchCase="'Addition'">
-        <me-addition-template [action]=action></me-addition-template>        
-  </div>
-  <div *ngSwitchCase="'Update'">
-      <me-update-template [action]=action></me-update-template>
-  </div>
-  <div *ngSwitchCase="'Deletion'">
-      <me-deletion-template [action]=action></me-deletion-template>
-  </div>
-</div>
-<button class="button" (click)="onRemoveClick()">Remove Action</button>
+        <me-addition-template [action]=action></me-addition-template>
+    </div>
+    <div *ngSwitchCase="'Update'">
+        <me-update-template [action]=action></me-update-template>
+    </div>
+    <div *ngSwitchCase="'Deletion'">
+        <me-deletion-template [action]=action></me-deletion-template>
+    </div>
 </div>

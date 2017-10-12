@@ -48,12 +48,12 @@ export class ActionsTemplateComponent implements OnInit {
     this.onPreview.emit(this.userActions);
   }
 
-  onActionDeleted(id: number) {
-    this.userActions.actions.splice(id, 1);
+  onRemoveAction(index: number) {
+    this.userActions.actions.splice(index, 1);
   }
 
-  onConditionDeleted(id: number) {
-    this.userActions.conditions.splice(id, 1);
+  onRemoveCondition(index: number) {
+    this.userActions.conditions.splice(index, 1);
   }
 
   onActionChange(actionType: string) {
