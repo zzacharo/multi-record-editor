@@ -1,14 +1,13 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import { Action} from '../shared/interfaces';
+import { Action } from '../shared/interfaces';
 import { AppGlobalsService } from '../shared/services';
 
 @Component({
-  selector: 'me-deletion-template',
-  templateUrl: './deletion-template.component.html',
-  styleUrls: ['./deletion-template.component.scss']
+  selector: 'me-update-action',
+  templateUrl: './update-action.component.html',
+  styleUrls: ['./update-action.component.scss']
 })
-
-export class DeletionTemplateComponent {
+export class UpdateTemplateComponent {
   @Input() action: Action;
   constructor(private appGlobalsService: AppGlobalsService) { }
 

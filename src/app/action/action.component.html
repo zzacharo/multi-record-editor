@@ -1,0 +1,11 @@
+<div class="form-group" [ngSwitch]="action.actionName">
+    <div *ngSwitchCase="'Addition'">
+        <me-addition-action [action]=action></me-addition-action>
+    </div>
+    <div *ngSwitchCase="'Update'">
+        <me-update-action [action]=action></me-update-action>
+    </div>
+    <div *ngSwitchCase="'Deletion'">
+        <me-delete-action [action]=action></me-delete-action>
+    </div>
+</div>

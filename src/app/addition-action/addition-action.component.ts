@@ -3,9 +3,9 @@ import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.ser
 import { Action } from '../shared/interfaces';
 
 @Component({
-  selector: 'me-addition-template',
-  templateUrl: './addition-template.component.html',
-  styleUrls: ['./addition-template.component.scss']
+  selector: 'me-addition-action',
+  templateUrl: './addition-action.component.html',
+  styleUrls: ['./addition-action.component.scss']
 })
 export class AdditionTemplateComponent {
   @Input() action: Action;

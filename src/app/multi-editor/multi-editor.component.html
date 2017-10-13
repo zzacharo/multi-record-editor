@@ -1,7 +1,7 @@
 <me-editor-toolbar-container (onSearchRecordClick)="searchRecords(query)" (onCollectionChange)="onCollectionChange($event)"></me-editor-toolbar-container>
 <div class="container me-container">
   <div class="row">
-      <me-actions-template (onPreview)="onPreview($event)"></me-actions-template>
+      <me-actions (onPreview)="onPreview($event)"></me-actions>
       <div *ngIf="previewMode === true">
         <button (click)="onSubmit()" class="btn btn-success" type="button">Submit</button>
       </div>
@@ -32,6 +32,9 @@
               (change)="addChecked(uuids[count])">
             <div *ngIf="previewMode === false;then notPreview else preview"></div>
             <ng-template #preview>
+                <div *ngIf="recordErrors[count]">
+                  <span class="error">{{recordErrors[count]}} tagme</span>
+                </div>
               <me-diff-view [oldObject]="record" [newObject]="newRecords[count]"></me-diff-view>
             </ng-template>
             <ng-template #notPreview>

@@ -17,11 +17,12 @@ import { UserActions } from '../shared/interfaces';
 })
 
 export class MultiEditorComponent implements OnInit {
-  @Input() records: object[];
+  records: object[];
   currentPage = 1;
   totalRecords = -1;
   schema: object;
   errorText: string;
+  recordErrors: string[];
   lastSearchedQuery = '';
   lastSearchedCollection: string;
   previewedActions: UserActions;
@@ -70,7 +71,8 @@ export class MultiEditorComponent implements OnInit {
     this.previewedActions = userActions;
     this.queryService.previewActions(userActions, this.lastSearchedQuery, this.currentPage, this.pageSize)
       .then((res) => {
-        this.newRecords = res;
+        this.newRecords = res['json_records'];
+        this.recordErrors = res['errors'];
         this.previewMode = true;
         this.changeDetectorRef.markForCheck();
       })
@@ -138,7 +140,8 @@ export class MultiEditorComponent implements OnInit {
       .subscribe((json) => {
         this.records = json.oldRecords['json_records'];
         this.uuids = json.oldRecords['uuids'];
-        this.newRecords = json.newRecords;
+        this.newRecords = json.newRecords['json_records'];
+        this.recordErrors = json.newRecords['errors'];
         this.changeDetectorRef.markForCheck();
       },
       error => { this.errorText = error; this.changeDetectorRef.markForCheck(); });

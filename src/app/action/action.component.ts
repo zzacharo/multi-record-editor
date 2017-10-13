@@ -2,9 +2,9 @@ import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { Action } from '../shared/interfaces';
 
 @Component({
-  selector: 'me-action-template',
-  templateUrl: './action-template.component.html',
-  styleUrls: ['./action-template.component.scss']
+  selector: 'me-action',
+  templateUrl: './action.component.html',
+  styleUrls: ['./action.component.scss']
 })
 
 export class ActionTemplateComponent {
