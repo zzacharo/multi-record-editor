@@ -1,12 +1,12 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ActionTemplateComponent } from '../action-template';
+import { ActionTemplateComponent } from '../action';
 import { UserActions } from '../shared/interfaces';
 import { AppGlobalsService } from '../shared/services';
 
 @Component({
-  selector: 'me-actions-template',
-  templateUrl: './actions-template.component.html',
-  styleUrls: ['./actions-template.component.scss']
+  selector: 'me-actions',
+  templateUrl: './actions.component.html',
+  styleUrls: ['./actions.component.scss']
 })
 
 export class ActionsTemplateComponent implements OnInit {
@@ -57,6 +57,7 @@ export class ActionsTemplateComponent implements OnInit {
   }
 
   onActionChange(actionType: string) {
+    this.selectedAction = actionType;
     this.userActions.actions
       .forEach((value, index) => {
         this.userActions.actions[index].actionName = actionType;

@@ -3,9 +3,9 @@ import { Condition } from '../shared/interfaces';
 import { AppGlobalsService } from '../shared/services';
 
 @Component({
-  selector: 'me-conditions-template',
-  templateUrl: './conditions-template.component.html',
-  styleUrls: ['./conditions-template.component.scss']
+  selector: 'me-conditions',
+  templateUrl: './conditions.component.html',
+  styleUrls: ['./conditions.component.scss']
 })
 export class ConditionsTemplateComponent {
   @Input() condition: Condition;

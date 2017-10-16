@@ -9,7 +9,6 @@ import { UserActions } from '../interfaces';
 
 @Injectable()
 export class QueryService {
-
   readonly url = `${environment.baseUrl}/api/multieditor`;
   readonly schemaUrl = `${environment.baseUrl}/schemas/records`;
 
@@ -25,12 +24,13 @@ export class QueryService {
       .toPromise();
   }
 
-  previewActions(userActions: UserActions, queryString: string, page: number, pageSize: number): Promise<object[]> {
+  previewActions(userActions: UserActions, queryString: string, pageNum: number, pageSize: number): Promise<object[]> {
     return this.http
       .post(`${this.url}/preview`, {
         userActions,
         queryString,
-        pageNum: page
+        pageNum,
+        pageSize
       }).map(res => res.json())
       .toPromise();
   }
@@ -38,7 +38,7 @@ export class QueryService {
   fetchNewPageRecords(userActions: UserActions, queryString: string, page: number, collection: string, pageSize: number): Observable<any> {
     return Observable.zip(
       this.http
-        .get(`${this.url}/search?page_num=${page}&query_string=${queryString}&index=${collection}&pageSize=${pageSize}`)
+        .get(`${this.url}/search?pageNum=${page}&query_string=${queryString}&index=${collection}&pageSize=${pageSize}`)
         .map(res => res.json()),
       this.http
         .post(`${this.url}/preview`, {
