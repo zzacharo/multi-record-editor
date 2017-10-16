@@ -1,22 +1,16 @@
 $green-sea: #16a085;
 
-.btn {
-  border-radius: 0;
-
-  &.btn-success {
-    background-color: $green-sea;
-    border-color: $green-sea;
-    color: white;
-
-    &:hover, &:active, &:focus {
-      background-color: lighten($green-sea, 5%) !important;
-      color: white;
-    }
-  }
-
-  .fa {
-    margin-right: 5px;
-  }
+.button {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: inline-block;
+  padding: 4px 6px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  border-radius: 5px;
 }
 
 .page-selector{
@@ -33,4 +27,19 @@ $green-sea: #16a085;
 
 .error{
   color: red;
+}
+
+.results-checkbox{
+  margin-top: -1px;
+}
+
+.results-record-num{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.preview-border{
+  border-bottom: 2px solid;
+  border-color: #dae8ef;
+  margin-bottom: 10px;
 }

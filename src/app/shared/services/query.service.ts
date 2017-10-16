@@ -14,11 +14,10 @@ export class QueryService {
 
   constructor(private http: Http) { }
 
-  submitActions(userActions: UserActions, checkedRecords: string[], allSelected: boolean): Promise<void> {
+  submitActions(userActions: UserActions, checkedRecords: string[]): Promise<void> {
     return this.http
       .post(`${this.url}/update`, {
         userActions,
-        allSelected,
         ids: checkedRecords,
       }).map(res => res.json())
       .toPromise();

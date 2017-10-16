@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActionTemplateComponent } from '../action';
 import { UserActions } from '../shared/interfaces';
-import { AppGlobalsService } from '../shared/services';
+import { AppGlobalsService, UserActionsService } from '../shared/services';
 
 @Component({
   selector: 'me-actions',
@@ -10,50 +10,37 @@ import { AppGlobalsService } from '../shared/services';
 })
 
 export class ActionsComponent implements OnInit {
-  userActions: UserActions = { actions: [], conditions: [] };
   selectedAction = 'Addition';
-  @Output() onPreview = new EventEmitter<UserActions>();
+  userActions: UserActions;
 
-  constructor(private appGlobalsService: AppGlobalsService) { };
+  constructor(
+    private appGlobalsService: AppGlobalsService,
+    private userActionsService: UserActionsService) { };
 
   ngOnInit() {
-    this.addDefaultAction();
-    this.addDefaultCondition();
+    this.userActions = this.userActionsService.getUserActions();
+    this.userActionsService.addDefaultAction(this.selectedAction, this.matchTypes[0]);
+    this.userActionsService.addDefaultCondition(this.matchTypes[0]);
   }
+
   get matchTypes(): string[] {
     return this.appGlobalsService.matchTypes;
   }
 
-  addDefaultAction() {
-    let action = {
-      actionName: this.selectedAction,
-      mainKey: '',
-      value: '',
-      updateValue: '',
-      matchType: this.matchTypes[0]
-    };
-    this.userActions.actions.push(action);
+  addAction() {
+    this.userActionsService.addDefaultAction(this.selectedAction, this.matchTypes[0]);
   }
 
-  addDefaultCondition() {
-    let condition = {
-      key: '',
-      value: '',
-      matchType: this.matchTypes[0]
-    };
-    this.userActions.conditions.push(condition);
-  }
-
-  onPreviewClick() {
-    this.onPreview.emit(this.userActions);
+  addCondition() {
+    this.userActionsService.addDefaultCondition(this.matchTypes[0]);
   }
 
   onRemoveAction(index: number) {
-    this.userActions.actions.splice(index, 1);
+    this.userActionsService.removeAction(index);
   }
 
   onRemoveCondition(index: number) {
-    this.userActions.conditions.splice(index, 1);
+    this.userActionsService.removeCondition(index);
   }
 
   onActionChange(actionType: string) {
