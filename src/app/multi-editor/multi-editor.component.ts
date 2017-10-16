@@ -5,9 +5,8 @@ import {
 
 import 'rxjs/add/operator/toPromise';
 
-import { SchemaKeysStoreService, QueryService } from '../shared/services';
+import { SchemaKeysStoreService, QueryService, JsonUtilsService, UserActionsService } from '../shared/services';
 import { UserActions } from '../shared/interfaces';
-import { UserActionsService } from '../shared/services';
 
 @Component({
   selector: 'me-multi-editor',
@@ -32,6 +31,7 @@ export class MultiEditorComponent implements OnInit {
   selectedCollection: string;
   newRecords: object[];
   uuids: string[] = [];
+  filterExpression: string;
 
   readonly collections: object[] = [
     ['hep', 'HEP'],
@@ -52,7 +52,8 @@ export class MultiEditorComponent implements OnInit {
     private schemaKeysStoreService: SchemaKeysStoreService,
     private changeDetectorRef: ChangeDetectorRef,
     private queryService: QueryService,
-    private userActionsService: UserActionsService) { }
+    private userActionsService: UserActionsService,
+    private jsonUtilsService: JsonUtilsService) { }
 
   ngOnInit() {
     this.newRecords = [];
@@ -143,6 +144,14 @@ export class MultiEditorComponent implements OnInit {
         this.changeDetectorRef.markForCheck();
       },
       error => { this.errorText = error; this.changeDetectorRef.markForCheck(); });
+  }
+
+  filterNewRecord(record: object): object {
+    let _record = Object.assign({}, record);
+    if (this.filterExpression) {
+        return this.jsonUtilsService.filterObject(_record, [this.filterExpression]);
+      }
+    return record;
   }
 
   private queryCollection(query, collection) {
