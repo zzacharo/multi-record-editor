@@ -7,7 +7,7 @@ import { AppGlobalsService } from '../shared/services';
   templateUrl: './conditions.component.html',
   styleUrls: ['./conditions.component.scss']
 })
-export class ConditionsTemplateComponent {
+export class ConditionsComponent {
   @Input() condition: Condition;
   constructor(private appGlobalsService: AppGlobalsService) { }
 

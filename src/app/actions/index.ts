@@ -1,1 +1,1 @@
-export { ActionsTemplateComponent } from './actions.component';
+export { ActionsComponent } from './actions.component';

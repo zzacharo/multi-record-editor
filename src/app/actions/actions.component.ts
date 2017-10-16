@@ -9,7 +9,7 @@ import { AppGlobalsService } from '../shared/services';
   styleUrls: ['./actions.component.scss']
 })
 
-export class ActionsTemplateComponent implements OnInit {
+export class ActionsComponent implements OnInit {
   userActions: UserActions = { actions: [], conditions: [] };
   selectedAction = 'Addition';
   @Output() onPreview = new EventEmitter<UserActions>();

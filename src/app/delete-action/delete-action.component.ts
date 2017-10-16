@@ -8,7 +8,7 @@ import { AppGlobalsService } from '../shared/services';
   styleUrls: ['./delete-action.component.scss']
 })
 
-export class DeletionTemplateComponent {
+export class DeleteActionComponent {
   @Input() action: Action;
   constructor(private appGlobalsService: AppGlobalsService) { }
 

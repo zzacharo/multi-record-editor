@@ -9,14 +9,14 @@ import { AlertModule } from 'ngx-bootstrap/alert';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ActionTemplateComponent} from './action';
-import { ActionsTemplateComponent } from './actions/actions.component';
+import { ActionsComponent } from './actions/actions.component';
 import { DiffViewComponent } from './diff-view/diff-view.component';
 import { JsonEditorModule } from 'ng2-json-editor';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { AdditionTemplateComponent } from './addition-action/addition-action.component';
-import { DeletionTemplateComponent } from './delete-action/delete-action.component';
-import { UpdateTemplateComponent } from './update-action/update-action.component';
-import { ConditionsTemplateComponent } from './conditions/conditions.component';
+import { AddActionComponent } from './add-action/add-action.component';
+import { DeleteActionComponent } from './delete-action/delete-action.component';
+import { UpdateActionComponent } from './update-action/update-action.component';
+import { ConditionsComponent } from './conditions/conditions.component';
 import { EditorToolbarContainerComponent } from './editor-toolbar-container/editor-toolbar-container.component';
 import { EditorToolbarSaveComponent } from './editor-toolbar-container/editor-toolbar-save/editor-toolbar-save.component';
 import { EditorToolbarSearchComponent } from './editor-toolbar-container/editor-toolbar-search/editor-toolbar-search.component';
@@ -26,12 +26,12 @@ import { EditorToolbarSearchComponent } from './editor-toolbar-container/editor-
     AppComponent,
     MultiEditorComponent,
     ActionTemplateComponent,
-    ActionsTemplateComponent,
+    ActionsComponent,
     DiffViewComponent,
-    AdditionTemplateComponent,
-    DeletionTemplateComponent,
-    UpdateTemplateComponent,
-    ConditionsTemplateComponent,
+    AddActionComponent,
+    DeleteActionComponent,
+    UpdateActionComponent,
+    ConditionsComponent,
     EditorToolbarContainerComponent,
     EditorToolbarSaveComponent,
     EditorToolbarSearchComponent,
