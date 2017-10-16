@@ -7,7 +7,7 @@ import { AppGlobalsService } from '../shared/services';
   templateUrl: './update-action.component.html',
   styleUrls: ['./update-action.component.scss']
 })
-export class UpdateTemplateComponent {
+export class UpdateActionComponent {
   @Input() action: Action;
   constructor(private appGlobalsService: AppGlobalsService) { }
 

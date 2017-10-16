@@ -4,10 +4,10 @@ import { Action } from '../shared/interfaces';
 
 @Component({
   selector: 'me-addition-action',
-  templateUrl: './addition-action.component.html',
-  styleUrls: ['./addition-action.component.scss']
+  templateUrl: './add-action.component.html',
+  styleUrls: ['./add-action.component.scss']
 })
-export class AdditionTemplateComponent {
+export class AddActionComponent {
   @Input() action: Action;
   isEditorVisible = false;
   isInputField = false;
