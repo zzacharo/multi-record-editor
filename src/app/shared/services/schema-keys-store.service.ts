@@ -12,7 +12,7 @@ export class SchemaKeysStoreService {
 
   constructor() { }
 
-  public forPath(path: string): object {
+  public forPath(path: string): Array<string> {
     if (path === '') {
       return this.schemaKeyStoreMap[''].toArray();
     }
