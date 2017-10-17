@@ -1,7 +1,9 @@
 <form class="form-inline">
   <label class="form-group">Field:</label>
   <div class="form-group">
-    <input type="text" name="key" [(ngModel)]="condition.key" class="form-control input-sm" placeholder="field key">
+    <me-autocomplete-input type="text" name="key" [value]="condition.key"
+                           (valueChange)="condition.key = event" [className]="'form-control input-sm'" placeholder="field key">
+    </me-autocomplete-input>
   </div>
   <div class="form-group">
     <div class="btn-group dropdown">

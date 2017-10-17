@@ -20,6 +20,7 @@ import { ConditionsComponent } from './conditions/conditions.component';
 import { EditorToolbarContainerComponent } from './editor-toolbar-container/editor-toolbar-container.component';
 import { EditorToolbarSaveComponent } from './editor-toolbar-container/editor-toolbar-save/editor-toolbar-save.component';
 import { EditorToolbarSearchComponent } from './editor-toolbar-container/editor-toolbar-search/editor-toolbar-search.component';
+import { AutocompleteInputComponent } from './autocomplete-input';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { EditorToolbarSearchComponent } from './editor-toolbar-container/editor-
     MultiEditorComponent,
     ActionTemplateComponent,
     ActionsComponent,
+    AutocompleteInputComponent,
     DiffViewComponent,
     AddActionComponent,
     DeleteActionComponent,

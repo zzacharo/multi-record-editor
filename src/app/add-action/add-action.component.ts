@@ -15,12 +15,6 @@ export class AddActionComponent {
   record = {};
   constructor(private schemaKeysStoreService: SchemaKeysStoreService) { }
 
-  onEnterKeyUp() {
-    this.subSchema = this.schemaKeysStoreService.findSubschema(this.action.mainKey);
-    this.action.value = {};
-    this.isEditorVisible = true;
-  }
-
   saveRecord(record: object) {
     // if user is adding a premitive key return only the value
     this.action.value = this.subSchema['alwaysShow'] ? record[Object.keys(record)[0]] : record;
@@ -28,6 +22,13 @@ export class AddActionComponent {
 
   closeEditor() {
     this.isEditorVisible = false;
+  }
+
+  onValueChange(value: string) {
+    this.action.mainKey = value;
+    this.subSchema = this.schemaKeysStoreService.findSubschema(this.action.mainKey);
+    this.action.value = {};
+    this.isEditorVisible = true;
   }
 
 }
