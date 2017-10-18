@@ -13,9 +13,9 @@ import 'rxjs/add/operator/map';
 })
 export class AutocompleteInputComponent {
 
-  @Output() valueChange = new EventEmitter<string>();
-  @Input() value = '';
   @Input() className;
+  @Output() valueChange = new EventEmitter<string>();
+  value = '';
 
   private readonly separator = '/';
   currentPath = '';
