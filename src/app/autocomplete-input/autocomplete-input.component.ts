@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutocompleteInputComponent {
-
+  @Input() disabled;
   @Input() className;
   @Input() placeholder;
   @Output() valueChange = new EventEmitter<string>();

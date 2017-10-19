@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
 import { Action } from '../shared/interfaces';
+import { AppGlobalsService } from '../shared/services';
 
 @Component({
   selector: 'me-addition-action',
@@ -13,7 +14,13 @@ export class AddActionComponent {
   isInputField = false;
   subSchema: object;
   record = {};
-  constructor(private schemaKeysStoreService: SchemaKeysStoreService) { }
+
+  constructor(
+    private schemaKeysStoreService: SchemaKeysStoreService,
+    private appGlobalService: AppGlobalsService
+  ) {
+    this.appGlobalService.cleanEditors$.subscribe(event => this.closeEditor());
+  }
 
   saveRecord(record: object) {
     // if user is adding a premitive key return only the value
@@ -28,7 +35,10 @@ export class AddActionComponent {
     this.action.mainKey = value;
     this.subSchema = this.schemaKeysStoreService.findSubschema(this.action.mainKey);
     this.action.value = {};
-    this.isEditorVisible = true;
   }
 
+  openEditor() {
+    this.appGlobalService.closeEditor();
+    this.isEditorVisible = true;
+  }
 }
