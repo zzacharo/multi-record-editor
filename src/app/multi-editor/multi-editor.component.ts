@@ -7,7 +7,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { SchemaKeysStoreService, QueryService } from '../shared/services';
 import { UserActions } from '../shared/interfaces';
-
+import { UserActionsService } from '../shared/services';
 
 @Component({
   selector: 'me-multi-editor',
@@ -28,7 +28,6 @@ export class MultiEditorComponent implements OnInit {
   previewedActions: UserActions;
   // records that are different from the general selection rule
   checkedRecords: string[] = [];
-  allSelected = true;
   previewMode = false;
   selectedCollection: string;
   newRecords: object[];
@@ -46,13 +45,14 @@ export class MultiEditorComponent implements OnInit {
   ];
 
   readonly pageSizes = [5, 10, 15, 20];
-  pageSize = this.pageSizes[0];
+  pageSize = this.pageSizes[1];
 
 
   constructor(
     private schemaKeysStoreService: SchemaKeysStoreService,
     private changeDetectorRef: ChangeDetectorRef,
-    private queryService: QueryService) { }
+    private queryService: QueryService,
+    private userActionsService: UserActionsService) { }
 
   ngOnInit() {
     this.newRecords = [];
@@ -61,15 +61,19 @@ export class MultiEditorComponent implements OnInit {
   }
 
   onSubmit() {
-    this.queryService.submitActions(this.previewedActions, this.checkedRecords, this.allSelected)
+    this.queryService.submitActions(this.previewedActions, this.checkedRecords)
       .catch((error) => {
         this.errorText = error;
       });
   }
 
-  onPreview(userActions: UserActions) {
-    this.previewedActions = userActions;
-    this.queryService.previewActions(userActions, this.lastSearchedQuery, this.currentPage, this.pageSize)
+  get userActions(): UserActions {
+    return this.userActionsService.getUserActions();
+  }
+
+  onPreviewClick() {
+    this.previewedActions = this.userActions;
+    this.queryService.previewActions(this.userActions, this.lastSearchedQuery, this.currentPage, this.pageSize)
       .then((res) => {
         this.newRecords = res['json_records'];
         this.recordErrors = res['errors'];
@@ -125,12 +129,6 @@ export class MultiEditorComponent implements OnInit {
   }
 
   private selectAll() {
-    this.allSelected = true;
-    this.checkedRecords = [];
-  }
-
-  private deselectAll() {
-    this.allSelected = false;
     this.checkedRecords = [];
   }
 

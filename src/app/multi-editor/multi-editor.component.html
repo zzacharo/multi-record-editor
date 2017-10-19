@@ -1,49 +1,49 @@
 <me-editor-toolbar-container (onSearchRecordClick)="searchRecords(query)" (onCollectionChange)="onCollectionChange($event)"></me-editor-toolbar-container>
 <div class="container me-container">
-  <div class="row">
-    <me-actions (onPreview)="onPreview($event)"></me-actions>
-    <div *ngIf="previewMode === true">
-      <button (click)="onSubmit()" class="btn btn-success" type="button">Submit</button>
-    </div>
-    <div class="me-bar">
-      Results
-    </div>
-    <ul class="list-unstyled">
-      <div *ngIf="errorText">
-        <h3>Sorry we have some problems backstage</h3>
-        <p>You should tell this to your administrator:
-          <b>{{errorText}}</b>
-      </div>
-      <div *ngIf="totalRecords === 0">
-        <h3>Sorry no results found</h3>
-      </div>
-      <div *ngIf="totalRecords > 0">
-        <div class="selectButtons">
-          <button class="btn-sm btn-success" type="button" (click)="selectAll()">Select All</button>
-        </div>
-        <select class="form-control selector page-selector" [ngModel]="pageSize" (ngModelChange)="setPageSize($event)">
-          <option *ngFor="let size of pageSizes" [ngValue]="size"> {{size}}</option>
-        </select>
-        <p>{{totalRecords}} records found</p>
-        <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md" [boundaryLinks]="true"
-                    [rotate]="false" (pageChanged)="onPageChange($event.page)" [itemsPerPage]="pageSize" [align]="true"></pagination>
-        <li *ngFor="let record of records ; let count = index; trackBy: trackByFunction" class="list-group list-group-item">
-          <input #inp type="checkbox" [checked]="(allSelected && checkedRecords.indexOf(uuids[count]) === -1) || (allSelected === false && checkedRecords.indexOf(uuids[count])>-1)"
-                 (change)="addChecked(uuids[count])">
-          <div *ngIf="previewMode === false;then notPreview else preview"></div>
-          <ng-template #preview>
-            <div *ngIf="recordErrors[count]">
-              <span class="error">{{recordErrors[count]}} tagme</span>
-            </div>
-            <me-diff-view [oldObject]="record" [newObject]="newRecords[count]"></me-diff-view>
-          </ng-template>
-          <ng-template #notPreview>
-            <pre> {{record | json}} </pre>
-          </ng-template>
-        </li>
-        <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="5" class="pagination-md" [boundaryLinks]="true"
-                    [rotate]="false" [itemsPerPage]="pageSize" [align]="true"></pagination>
-      </div>
-    </ul>
+  <me-actions></me-actions>
+  <div class="me-bar">
+    Results
   </div>
+
+  <ul class="list-unstyled">
+    <div *ngIf="totalRecords === 0">
+      <h3>Sorry no results found</h3>
+    </div>
+
+    <div *ngIf="totalRecords > 0">
+      <div class="preview-border">
+        <button class="btn-success button" (click)="onPreviewClick()">Preview</button>
+      </div>
+      <div class="row ">
+        <div class="col-md-2">
+          <span>
+            <input class="results-checkbox" type="checkbox" [checked]="checkedRecords.length === 0" (change)="selectAll()"> Select all results</span>
+        </div>
+        <div class="col-md-2  col-md-offset-5">
+          <span class="results-record-num">{{totalRecords}} records found</span>
+        </div>
+        <div class="col-md-3">
+          <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="3" class="pagination-md" [boundaryLinks]="false"
+            [rotate]="false" (pageChanged)="onPageChange($event.page)" [itemsPerPage]="pageSize" [align]="false"></pagination>
+        </div>
+      </div>
+
+      <li *ngFor="let record of records ; let count = index; trackBy: trackByFunction" class="list-group list-group-item">
+        <input type="checkbox" [checked]="checkedRecords.indexOf(uuids[count]) === -1" (change)="addChecked(uuids[count])">
+        <div *ngIf="previewMode === false;then recordView else diffView"></div>
+        <ng-template #diffView>
+          <div *ngIf="recordErrors[count]">
+            <span class="error">{{recordErrors[count]}} tagme</span>
+          </div>
+          <me-diff-view [oldObject]="record" [newObject]="newRecords[count]"></me-diff-view>
+        </ng-template>
+        <ng-template #recordView>
+          <pre>{{record | json}} </pre>
+        </ng-template>
+
+      </li>
+      <pagination class="align-right" [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="3" class="pagination-md"
+        [boundaryLinks]="false" [rotate]="false" [itemsPerPage]="pageSize" [align]="false"></pagination>
+    </div>
+  </ul>
 </div>
