@@ -13,7 +13,7 @@ export class DeleteActionComponent {
   constructor(private appGlobalsService: AppGlobalsService) { }
 
   get matchTypes(): string[] {
-    return this.appGlobalsService.matchTypes;
+    return this.appGlobalsService.actionMatchTypes;
   }
 
   trackByFunction(index: number): number {
