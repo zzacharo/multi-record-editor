@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class AppGlobalsService {
   readonly conditionMatchTypes = [
-    'contains',
     'is equal to',
+    'contains',
     'does not exist',
     'matches regular expression'
   ];
 
   readonly actionMatchTypes = [
-    'contains',
     'is equal to',
+    'contains',
     'matches regular expression'
   ];
 }

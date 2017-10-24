@@ -30,7 +30,7 @@
     </form>
   </div>
 </li>
-<button class="button" (click)="addAction()">
+<button class="button" *ngIf="selectedAction != 'Addition'" (click)="addAction()">
   <i class="fa fa-plus"></i> Add</button>
 <div class="me-bar">
   Conditions

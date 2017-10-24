@@ -15,12 +15,7 @@ export class AddActionComponent {
   subSchema: object;
   record = {};
 
-  constructor(
-    private schemaKeysStoreService: SchemaKeysStoreService,
-    private appGlobalService: AppGlobalsService
-  ) {
-    this.appGlobalService.cleanEditors$.subscribe(event => this.closeEditor());
-  }
+  constructor(private schemaKeysStoreService: SchemaKeysStoreService) {}
 
   saveRecord(record: object) {
     // if user is adding a premitive key return only the value
@@ -29,6 +24,8 @@ export class AddActionComponent {
 
   closeEditor() {
     this.isEditorVisible = false;
+    this.action.mainKey = '';
+    this.action.value = {};
   }
 
   onValueChange(value: string) {
@@ -38,7 +35,6 @@ export class AddActionComponent {
   }
 
   openEditor() {
-    this.appGlobalService.closeEditor();
     this.isEditorVisible = true;
   }
 }

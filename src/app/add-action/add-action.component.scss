@@ -26,20 +26,22 @@ select {
 
 
 .button {
+    margin-top: 10px;
+    margin-bottom: 20px;
     display: inline-block;
-    padding: 6px 12px;
+    padding: 4px 6px;
     font-size: 12px;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
     outline: none;
-    color: #FFFFFF;
-    background-color: #E11616;
-    border: none;
-    border-radius: 15px;
+    color: black;
+    background-color: #dae8ef;
+    border-top: 1px gray;
+    border-radius: 5px;
   }
   
-  .button:hover {background-color: #FF0000}
+  .button:hover {background-color: rgb(241, 241, 241)}
   
   .button:active {
     background-color: #C41313;
@@ -52,6 +54,6 @@ select {
 
 .editor{
     width: 400px;
-    height:200px;
+    height: 250px;
     border: 2px solid #dae8ef;
 }
