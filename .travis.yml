@@ -17,3 +17,15 @@ before_install:
   - export CHROME_BIN=chromium-browser
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+before_deploy: npm run build
+deploy:
+  provider: npm
+  skip_cleanup: true
+  email: admin@inspirehep.net
+  api_key:
+    secure: X1tbuFHzLYgWePtCo7G1HknOayhPYkl36xLOA5RpMriX+JqB1fLusvrUNcLb/YkFYiAwQqlnMMD6E/x/9ntjazSAYn+AU4aDzpBflXKgpM5rJz6X7QgXQp/VeXajok1UW/EIIN9X/yQqBpI+6y30fyk3Cq3S8EYw4LigMkrzhbs7wRfXA4FxMDF527XANcgxbzl1L6ysO8Nc/ehtJVGaCBqRam6KoSeuzmpsj0hFvVuWmpeW3Z3PtxUiEoZyzYskJlsru5erIk0H9oiKvax7a0qb5VoqTW+pfyU55KI2csaDm6fMfWbvNpKT1ho6R1rlbfVRfGkv6akS3cYPNIA45qeoN5XSX1ZPEl0wT41+b5g3pidfGaGJNggd/EK5XH9BkYHorCdGIfjucSndtE+anuKv3sZH5W6bT/osSKFzsqq3/9+2MTZvBZ0WiW3TCF7o8sxTkI8navoNbjkQOuKvAXH/VCdKbF/D9G0EZ4yDmh31qY/5t1Av89eCSS86vxkzU6yAQxrETFufNfdVyo1kWApRI+ldQbc3w+QE/VPF39wW3eIrhjVUSOCP3a1HK4r2glMxbyxU4PgviCry/jUTxtEWu5NQ6Ci22mfbz2y0ZDrXEwlj6v2SWEnZNSXFe8f1soyDRk5Uk0Fk/YzQR3n9FkEvXZiFPUSi4uI+do/LR70=
+  on:
+    tags: true
+    repo: inspirehep/ng2-multi-record-editor
+    all_branches: true
+    node: '6.9.1'

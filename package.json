@@ -6,11 +6,14 @@
     "ng": "ng",
     "start": "npm run build && npm run serve",
     "serve": "ng serve",
-    "build": "ng build && npm run lint",
+    "build": "npm run lint && ng build",
     "test": "npm run build && ng test --watch=false",
     "test-dev": "ng test",
     "lint": "tslint \"src/**/*.ts\"",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "preversion": "npm test",
+    "version": "npm run build",
+    "postversion": "git push upstream && git push upstream --tags"
   },
   "private": true,
   "dependencies": {
