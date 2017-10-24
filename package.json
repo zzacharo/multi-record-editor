@@ -1,5 +1,5 @@
 {
-  "name": "ng2-multi-editor",
+  "name": "ng2-multi-record-editor",
   "version": "0.1.0",
   "license": "MIT",
   "scripts": {
@@ -15,7 +15,6 @@
     "version": "npm run build",
     "postversion": "git push upstream && git push upstream --tags"
   },
-  "private": true,
   "dependencies": {
     "@angular/common": "^4.0.0",
     "@angular/compiler": "^4.0.0",
