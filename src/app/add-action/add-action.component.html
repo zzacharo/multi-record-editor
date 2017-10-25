@@ -1,13 +1,13 @@
 <form class="form-inline">
   <label class="form-group">Field:</label>
+  <me-autocomplete-input [disabled]="isEditorVisible" (valueChange)="onValueChange($event)" type="text" name="key" [className]="'form-control input-sm'"></me-autocomplete-input>
   <div class="form-group">
-    <me-autocomplete-input *ngIf="isEditorVisible === false" type="text" name="key"
-                           (valueChange)="onValueChange($event)" className="form-control input-sm" placeholder="field key"></me-autocomplete-input>
+    <button *ngIf="isEditorVisible === false" (click)="openEditor()" class="btn btn-default btn-sm" type="button">Open Editor</button>
     <div *ngIf="isEditorVisible === true">
       <div class="editor">
         <json-editor [config]="{compact:true}" [schema]="subSchema" [record]="record" (recordChange)="saveRecord($event)"></json-editor>
       </div>
-      <button (click)="closeEditor()" class="btn btn-default " type="button">Done</button>
+      <button (click)="closeEditor()" class="btn-sm btn-default button" type="button">Change field</button>
     </div>
   </div>
 </form>

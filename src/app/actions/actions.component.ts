@@ -49,9 +49,7 @@ export class ActionsComponent implements OnInit {
 
   onActionChange(actionType: string) {
     this.selectedAction = actionType;
-    this.userActions.actions
-      .forEach((value, index) => {
-        this.userActions.actions[index].actionName = actionType;
-      });
+    this.userActions.actions = [];
+    this.userActionsService.addAction(this.selectedAction, this.actionMatchTypes[0]);
   }
 }
