@@ -1,4 +1,4 @@
-<me-toolbar [canSave]="previewMode" (save)="onSave()"(onSearchRecordClick)="searchRecords($event)" (onCollectionChange)="onCollectionChange($event)"></me-toolbar>
+<me-toolbar [canSave]="previewMode" (save)="onSave()" (onSearchRecordClick)="searchRecords($event)" (onCollectionChange)="onCollectionChange($event)"></me-toolbar>
 <div class="container me-container">
   <me-actions></me-actions>
   <div class="me-bar">
@@ -15,8 +15,8 @@
     <div *ngIf="totalRecords > 0">
       <div class="tag-filter">
         <label>Show only:</label>
-        <me-autocomplete-input type="text" name="key"
-                               (valueChange)="filterExpression = $event" className="form-control input-sm inline-input" placeholder="field key">
+        <me-autocomplete-input type="text" name="key" (valueChange)="filterRecords($event)" className="form-control input-sm inline-input"
+          placeholder="field key">
         </me-autocomplete-input>
       </div>
       <div class="preview-border">
@@ -25,30 +25,29 @@
       <div class="row">
         <div class="col-md-2">
           <span>
-            <input class="results-checkbox" type="checkbox" [checked]="checkedRecords.length === 0" (change)="selectAll()"> Select all results
+            <input class="results-checkbox" type="checkbox" [ngModel]="checkedRecords.length === 0" (ngModelChange)="selectOrDeselectAll($event)"> Select all results
           </span>
         </div>
         <div class="col-md-2  col-md-offset-5">
-          <span class="results-record-num">{{totalRecords}} records found</span>
+          <span>{{totalRecords}} records found</span>
         </div>
         <div class="col-md-3">
           <pagination [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="3" class="pagination-md" [boundaryLinks]="false"
             [rotate]="false" (pageChanged)="onPageChange($event.page)" [itemsPerPage]="pageSize" [align]="false"></pagination>
         </div>
       </div>
-      <li *ngFor="let record of records | tagFilter:filterExpression; let count = index; trackBy: trackByFunction" class="list-group list-group-item">
+      <li *ngFor="let record of records; let count = index; trackBy: trackByFunction" class="list-group list-group-item">
         <input type="checkbox" [checked]="checkedRecords.indexOf(uuids[count]) === -1" (change)="addChecked(uuids[count])">
         <div *ngIf="previewMode === false;then recordView else diffView"></div>
         <ng-template #diffView>
-          <div *ngIf="recordErrors[count]">
-            <span class="error">{{recordErrors[count]}} tagme</span>
+          <div *ngIf="validationErrors[count]">
+            <span class="alert-danger">{{validationErrors[count]}}</span>
           </div>
-          <me-diff-view [oldObject]="record" [newObject]="filterNewRecord(newRecords[count])"></me-diff-view>
+          <me-diff-view [oldObject]="filterRecord(record)" [newObject]="filterRecord(newRecords[count])"></me-diff-view>
         </ng-template>
         <ng-template #recordView>
-          <pre>{{record | json}} </pre>
+          <pre>{{filterRecord(record) | json}} </pre>
         </ng-template>
-
       </li>
       <pagination class="align-right" [totalItems]="totalRecords" [(ngModel)]="currentPage" [maxSize]="3" class="pagination-md"
         [boundaryLinks]="false" [rotate]="false" [itemsPerPage]="pageSize" [align]="false"></pagination>
