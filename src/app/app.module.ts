@@ -17,9 +17,9 @@ import { AddActionComponent } from './add-action/add-action.component';
 import { DeleteActionComponent } from './delete-action/delete-action.component';
 import { UpdateActionComponent } from './update-action/update-action.component';
 import { ConditionsComponent } from './conditions/conditions.component';
-import { EditorToolbarContainerComponent } from './editor-toolbar-container/editor-toolbar-container.component';
-import { EditorToolbarSaveComponent } from './editor-toolbar-container/editor-toolbar-save/editor-toolbar-save.component';
-import { EditorToolbarSearchComponent } from './editor-toolbar-container/editor-toolbar-search/editor-toolbar-search.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
+import { EditorToolbarSaveComponent } from './toolbar/editor-toolbar-save/editor-toolbar-save.component';
+import { EditorToolbarSearchComponent } from './toolbar/editor-toolbar-search/editor-toolbar-search.component';
 import { AutocompleteInputComponent } from './autocomplete-input';
 
 @NgModule({
@@ -35,7 +35,7 @@ import { AutocompleteInputComponent } from './autocomplete-input';
     DeleteActionComponent,
     UpdateActionComponent,
     ConditionsComponent,
-    EditorToolbarContainerComponent,
+    ToolbarComponent,
     EditorToolbarSaveComponent,
     EditorToolbarSearchComponent,
   ],

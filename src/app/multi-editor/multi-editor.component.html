@@ -1,4 +1,4 @@
-<me-editor-toolbar-container (onCollectionChange)="onCollectionChange($event)"></me-editor-toolbar-container>
+<me-toolbar [canSave]="previewMode" (save)="onSave()"(onSearchRecordClick)="searchRecords($event)" (onCollectionChange)="onCollectionChange($event)"></me-toolbar>
 <div class="container me-container">
   <me-actions></me-actions>
   <div class="me-bar">
@@ -6,10 +6,12 @@
   </div>
 
   <ul class="list-unstyled">
-    <div *ngIf="totalRecords === 0">
-      <h3>Sorry no results found</h3>
+    <div *ngIf="totalRecords === 0 && !errorMessage" class="alert alert-danger">
+      <span>No results found</span>
     </div>
-
+    <div *ngIf="errorMessage" class="alert alert-warning">
+      <span>{{errorMessage}}</span>
+    </div>
     <div *ngIf="totalRecords > 0">
       <div class="tag-filter">
         <label>Show only:</label>

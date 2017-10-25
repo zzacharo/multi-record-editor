@@ -5,7 +5,7 @@ import { UserActions } from '../interfaces';
 export class UserActionsService {
   private userActions: UserActions = { actions: [], conditions: [] };
 
-  addDefaultAction(selectedAction: string, matchType: string) {
+  addAction(selectedAction: string, matchType: string) {
     let action = {
       actionName: selectedAction,
       mainKey: '',
@@ -16,7 +16,7 @@ export class UserActionsService {
     this.userActions.actions.push(action);
   }
 
-  addDefaultCondition(matchType: string) {
+  addCondition(matchType: string) {
     let condition = {
       key: '',
       value: '',

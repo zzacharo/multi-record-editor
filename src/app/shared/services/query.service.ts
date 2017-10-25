@@ -5,16 +5,16 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/zip';
 
 import { environment } from '../../../environments/environment';
-import { UserActions } from '../interfaces';
+import { UserActions, QueryResult, RecordsPreview, RecordsToCompare } from '../interfaces';
 
 @Injectable()
 export class QueryService {
-  readonly url = `${environment.baseUrl}/api/multieditor`;
-  readonly schemaUrl = `${environment.baseUrl}/schemas/records`;
+  private url = `${environment.baseUrl}/api/multieditor`;
+  private schemaUrl = `${environment.baseUrl}/schemas/records`;
 
   constructor(private http: Http) { }
 
-  submitActions(userActions: UserActions, checkedRecords: string[]): Promise<void> {
+  save(userActions: UserActions, checkedRecords: string[]): Promise<void> {
     return this.http
       .post(`${this.url}/update`, {
         userActions,
@@ -23,26 +23,26 @@ export class QueryService {
       .toPromise();
   }
 
-  previewActions(userActions: UserActions, queryString: string, pageNum: number, pageSize: number): Promise<object[]> {
+  previewActions(userActions: UserActions, queryString: string, page: number, pageSize: number): Promise<RecordsPreview> {
     return this.http
       .post(`${this.url}/preview`, {
         userActions,
         queryString,
-        pageNum,
+        pageNum: page,
         pageSize
       }).map(res => res.json())
       .toPromise();
   }
 
-  fetchNewPageRecords(userActions: UserActions, queryString: string, page: number, collection: string, pageSize: number): Observable<any> {
+  fetchBundledRecords(query: string, page: number, collection: string, pageSize: number,
+     userActions: UserActions): Observable<RecordsToCompare> {
     return Observable.zip(
-      this.http
-        .get(`${this.url}/search?pageNum=${page}&query_string=${queryString}&index=${collection}&pageSize=${pageSize}`)
-        .map(res => res.json()),
+      this.searchRecords(query, page, collection, pageSize)
+      ,
       this.http
         .post(`${this.url}/preview`, {
           userActions,
-          queryString,
+          queryString: query,
           pageSize,
           pageNum: page,
         }).map(res => res.json()),
@@ -54,11 +54,10 @@ export class QueryService {
       });
   }
 
-  searchRecords(query: string, page: number, collection: string, pageSize: number): Promise<object> {
+  searchRecords(query: string, page: number, collection: string, pageSize: number): Observable<QueryResult> {
     return this.http
       .get(`${this.url}/search?pageNum=${page}&queryString=${query}&index=${collection}&pageSize=${pageSize}`)
-      .map(res => res.json())
-      .toPromise();
+      .map(res => res.json());
   }
 
   fetchCollectionSchema(selectedCollection: string): Promise<object> {

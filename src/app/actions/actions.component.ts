@@ -19,20 +19,24 @@ export class ActionsComponent implements OnInit {
 
   ngOnInit() {
     this.userActions = this.userActionsService.getUserActions();
-    this.userActionsService.addDefaultAction(this.selectedAction, this.matchTypes[0]);
-    this.userActionsService.addDefaultCondition(this.matchTypes[0]);
+    this.userActionsService.addAction(this.selectedAction, this.actionMatchTypes[0]);
+    this.userActionsService.addCondition(this.conditionMatchTypes[0]);
   }
 
-  get matchTypes(): string[] {
-    return this.appGlobalsService.matchTypes;
+  get actionMatchTypes(): string[] {
+    return this.appGlobalsService.actionMatchTypes;
+  }
+
+  get conditionMatchTypes(): string[] {
+    return this.appGlobalsService.conditionMatchTypes;
   }
 
   addAction() {
-    this.userActionsService.addDefaultAction(this.selectedAction, this.matchTypes[0]);
+    this.userActionsService.addAction(this.selectedAction, this.actionMatchTypes[0]);
   }
 
   addCondition() {
-    this.userActionsService.addDefaultCondition(this.matchTypes[0]);
+    this.userActionsService.addCondition(this.conditionMatchTypes[0]);
   }
 
   onRemoveAction(index: number) {

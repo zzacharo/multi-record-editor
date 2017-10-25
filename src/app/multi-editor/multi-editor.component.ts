@@ -19,12 +19,13 @@ export class MultiEditorComponent implements OnInit {
   records: object[];
   currentPage = 1;
   totalRecords = -1;
+  pageSize = 10;
   schema: object;
-  errorText: string;
-  recordErrors: string[];
+  validationErrors: string[];
   lastSearchedQuery = '';
   lastSearchedCollection: string;
   previewedActions: UserActions;
+  errorMessage: string;
   // records that are different from the general selection rule
   checkedRecords: string[] = [];
   previewMode = false;
@@ -44,9 +45,6 @@ export class MultiEditorComponent implements OnInit {
     ['journals', 'Journals']
   ];
 
-  readonly pageSizes = [5, 10, 15, 20];
-  pageSize = this.pageSizes[1];
-
 
   constructor(
     private schemaKeysStoreService: SchemaKeysStoreService,
@@ -61,10 +59,10 @@ export class MultiEditorComponent implements OnInit {
     this.onCollectionChange('hep');
   }
 
-  onSubmit() {
-    this.queryService.submitActions(this.previewedActions, this.checkedRecords)
+  onSave() {
+    this.queryService.save(this.previewedActions, this.checkedRecords)
       .catch((error) => {
-        this.errorText = error;
+        this.errorMessage = error;
       });
   }
 
@@ -76,20 +74,26 @@ export class MultiEditorComponent implements OnInit {
     this.previewedActions = this.userActions;
     this.queryService.previewActions(this.userActions, this.lastSearchedQuery, this.currentPage, this.pageSize)
       .then((res) => {
-        this.newRecords = res['json_records'];
-        this.recordErrors = res['errors'];
+        this.errorMessage = undefined;
+        this.newRecords = res.json_records;
+        this.validationErrors = res.errors;
         this.previewMode = true;
         this.changeDetectorRef.markForCheck();
       })
       .catch((error) => {
-        this.errorText = error;
+        if (error.json().message) {
+        this.totalRecords = -1;
+        this.errorMessage = error.json().message;
         this.changeDetectorRef.markForCheck();
+        }else {
+          this.errorMessage = error;
+        }
       });
   }
 
   onPageChange(page: number) {
     this.currentPage = page;
-    this.previewMode ? this.getNewPageRecords() : this.queryCollection(this.lastSearchedQuery, this.lastSearchedCollection);
+    this.previewMode ? this.getBundledRecords() : this.queryCollection(this.lastSearchedQuery, this.lastSearchedCollection);
   }
 
   searchRecords(query: string) {
@@ -104,20 +108,16 @@ export class MultiEditorComponent implements OnInit {
   onCollectionChange(selectedCollection: string) {
     this.selectedCollection = selectedCollection;
     this.queryService.fetchCollectionSchema(this.selectedCollection)
-      .then((res) => {
+      .then(res => {
+        this.errorMessage = undefined;
         this.schema = res;
         this.schemaKeysStoreService.buildSchemaKeyStore(this.schema);
       })
       .catch(error => {
-        this.errorText = error;
+        this.errorMessage = error;
         this.changeDetectorRef.markForCheck();
       }
       );
-  }
-
-  setPageSize(size: number) {
-    this.pageSize = size;
-    this.onPageChange(this.currentPage);
   }
 
   trackByFunction(index: number): number {
@@ -133,38 +133,46 @@ export class MultiEditorComponent implements OnInit {
     this.checkedRecords = [];
   }
 
-  private getNewPageRecords() {
+  private getBundledRecords() {
     this.queryService
-      .fetchNewPageRecords(this.previewedActions, this.lastSearchedQuery, this.currentPage, this.lastSearchedCollection, this.pageSize)
+      .fetchBundledRecords(this.lastSearchedQuery, this.currentPage, this.lastSearchedCollection, this.pageSize, this.previewedActions)
       .subscribe((json) => {
-        this.records = json.oldRecords['json_records'];
-        this.uuids = json.oldRecords['uuids'];
-        this.newRecords = json.newRecords['json_records'];
-        this.recordErrors = json.newRecords['errors'];
+        this.records = json.oldRecords.json_records;
+        this.errorMessage = undefined;
+        this.uuids = json.oldRecords.uuids;
+        this.newRecords = json.newRecords.json_records;
+        this.validationErrors = json.newRecords.errors;
         this.changeDetectorRef.markForCheck();
       },
-      error => { this.errorText = error; this.changeDetectorRef.markForCheck(); });
+      error => { this.errorMessage   = error; this.changeDetectorRef.markForCheck(); });
   }
 
   filterNewRecord(record: object): object {
     let _record = Object.assign({}, record);
     if (this.filterExpression) {
-        return this.jsonUtilsService.filterObject(_record, [this.filterExpression]);
-      }
+      return this.jsonUtilsService.filterObject(_record, [this.filterExpression]);
+    }
     return record;
   }
 
   private queryCollection(query, collection) {
     this.queryService.searchRecords(query, this.currentPage, collection, this.pageSize)
+      .toPromise()
       .then((json) => {
+        this.errorMessage = undefined;
         this.records = json['json_records'];
         this.totalRecords = json['total_records'];
         this.uuids = json['uuids'];
         this.changeDetectorRef.markForCheck();
       })
       .catch(error => {
-        this.errorText = error;
-        this.changeDetectorRef.markForCheck();
+        if (error.json().message) {
+          this.totalRecords = -1;
+          this.errorMessage = error.json().message;
+          this.changeDetectorRef.markForCheck();
+        }else {
+          this.errorMessage = error;
+        }
       }
       );
   }

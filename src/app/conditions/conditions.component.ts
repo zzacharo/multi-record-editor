@@ -13,7 +13,7 @@ export class ConditionsComponent {
   constructor(private appGlobalsService: AppGlobalsService) { }
 
   get matchTypes(): string[] {
-    return this.appGlobalsService.matchTypes;
+    return this.appGlobalsService.conditionMatchTypes;
   }
 
   trackByFunction(index: number): number {
