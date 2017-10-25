@@ -1,8 +1,8 @@
 <form class="form-inline">
   <label class="form-group">Field:</label>
   <div class="form-group">
-    <me-autocomplete-input type="text" name="key"
-                           (valueChange)="condition.key = $event" [className]="'form-control input-sm'" placeholder="field key">
+    <me-autocomplete-input type="text" name="key" (valueChange)="condition.key = $event" [className]="'form-control input-sm'"
+      placeholder="field key">
     </me-autocomplete-input>
   </div>
   <div class="form-group">
@@ -10,6 +10,9 @@
       <select class="form-control selector input-sm" name="matchSelector" [(ngModel)]="condition.matchType">
         <option *ngFor="let matchType of matchTypes" [ngValue]="matchType"> {{matchType}} </option>
       </select>
+    </div>
+    <div class="form-group">
+      <input type="text" name="value" [(ngModel)]="condition.value" class="form-control input-sm" placeholder="condition value">
     </div>
   </div>
 </form>
