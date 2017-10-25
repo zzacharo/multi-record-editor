@@ -1,4 +1,4 @@
-<me-editor-toolbar-container (onSearchRecordClick)="searchRecords(query)" (onCollectionChange)="onCollectionChange($event)"></me-editor-toolbar-container>
+<me-editor-toolbar-container (onCollectionChange)="onCollectionChange($event)"></me-editor-toolbar-container>
 <div class="container me-container">
   <me-actions></me-actions>
   <div class="me-bar">
@@ -20,7 +20,7 @@
       <div class="preview-border">
         <button class="btn-success button" (click)="onPreviewClick()">Preview</button>
       </div>
-      <div class="row ">
+      <div class="row">
         <div class="col-md-2">
           <span>
             <input class="results-checkbox" type="checkbox" [checked]="checkedRecords.length === 0" (change)="selectAll()"> Select all results

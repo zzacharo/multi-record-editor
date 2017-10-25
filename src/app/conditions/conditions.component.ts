@@ -9,6 +9,7 @@ import { AppGlobalsService } from '../shared/services';
 })
 export class ConditionsComponent {
   @Input() condition: Condition;
+
   constructor(private appGlobalsService: AppGlobalsService) { }
 
   get matchTypes(): string[] {
