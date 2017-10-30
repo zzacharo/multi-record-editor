@@ -40,7 +40,7 @@ deploy:
     email: admin@inspirehep.net
     api_key:
       secure: gH4L8hYteuweDy/PNlIa5TWX91CaYBwAyJAwdNt5E5Nz8rlaCV/LfI2LvPN+ZQDs8mNVNyG9HbBd46Vl9g8wQzThXV8zKTahsGUTlL5LuBLzzBF4/DzzD7ehMu+A3eZqq1VAdj7QVmvcTFJSfx+WqolnJWdzK+CdhJI2D9c1OpLWEuTH7074E39hpMKn1dt6MvC5aRJIpvL/xKhyMFCSZIvmlKuSrZ5TX6k2NoBvfke72XgO16egYgkJzu0dyGbMJMH2KmHeb8O3aILB1reI3tGKwFPlc4Puki9MF0T6ojO6P/4RRdYwRWS0DCa2+FLYqIV0oygMyFc22eA/yNO02OQYchTb3N+nVZ//CJdguQZoiPMJdczU1W9zOIW8hid/Jj0H6j8PEBn7wQz/R7caZ6R051ugER3Si0cyHtntuQQd0HBoQdcbkf56T8LyWU99uFEKIyOQ3KjOUk2/KH1S/f2Ak6BlJA3Yk95Hu2kDKaBbEdub9DVSAlJP5UQbaw3M4cne/saeK06f3tn1YcW1fn6HClC/RW6aUvbjf5MTQYqXLoZk3I3TrZEv1yXyjPtXmQcR0PfQ14Z24l1JwwPxq+SxsTQ2DXZjkSyuq6g8KorSf16ku2V9vSGYgApLLw5VEJi3IlQ7cBcWl2wP6HSJKup9tZJUmIrKbDKxHQfZ4s4=
-    tag: unstable
+    tag: dev
     on:
       repo: inspirehep/ng2-multi-record-editor
       branch: master
