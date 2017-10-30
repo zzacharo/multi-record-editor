@@ -12,7 +12,7 @@ export class QueryService {
   private url = `${environment.baseUrl}/api/multieditor`;
   private schemaUrl = `${environment.baseUrl}/schemas/records`;
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {}
 
   save(userActions: UserActions, checkedRecords: string[]): Promise<void> {
     return this.http
