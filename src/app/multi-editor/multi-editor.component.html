@@ -12,6 +12,9 @@
     <div *ngIf="errorMessage" class="alert alert-warning">
       <span>{{errorMessage}}</span>
     </div>
+    <div *ngIf="successMessage" class="alert alert-success">
+        <span>{{successMessage}}</span>
+      </div>
     <div *ngIf="totalRecords > 0">
       <div class="tag-filter">
         <label>Show only:</label>
