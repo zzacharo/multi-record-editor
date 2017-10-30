@@ -26,7 +26,8 @@ export class MultiEditorComponent implements OnInit {
   lastSearchedCollection: string;
   previewedActions: UserActions;
   errorMessage: string;
-  // records that are different from the general selection rule
+  successMessage: string;
+  // records that are disselected
   checkedRecords: string[] = [];
   previewMode = false;
   selectedCollection: string;
@@ -61,6 +62,11 @@ export class MultiEditorComponent implements OnInit {
 
   onSave() {
     this.queryService.save(this.previewedActions, this.checkedRecords)
+    .then((res) => {
+      this.successMessage = res['message'];
+      this.totalRecords = -1;
+      this.changeDetectorRef.markForCheck();
+    })
       .catch((error) => {
         if (error.json().message) {
           this.totalRecords = -1;
@@ -112,14 +118,15 @@ export class MultiEditorComponent implements OnInit {
   }
 
   private queryCollection(query: string, collection: string) {
+    this.successMessage = undefined;
+    this.errorMessage = undefined;
     this.queryService.searchRecords(query, this.currentPage, collection, this.pageSize)
       .toPromise()
       .then((json) => {
         this.previewMode = false;
-        this.errorMessage = undefined;
-        this.records = json['json_records'];
-        this.totalRecords = json['total_records'];
-        this.uuids = json['uuids'];
+        this.records = json.json_records;
+        this.totalRecords = json.total_records;
+        this.uuids = json.uuids;
         this.changeDetectorRef.markForCheck();
       })
       .catch(error => {
