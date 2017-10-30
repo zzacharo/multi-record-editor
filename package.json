@@ -1,6 +1,6 @@
 {
   "name": "ng2-multi-record-editor",
-  "version": "0.1.2",
+  "version": "0.1.2-dev.1",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
