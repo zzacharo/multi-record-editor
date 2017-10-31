@@ -60,7 +60,7 @@ describe('JsonUtilsService', () => {
       ]
     };
 
-    let result = service.filterObject(record, ['authors/affiliations/value', 'authors/full_name']);
+    let result = service.filterObject(record, ['authors.affiliations.value', 'authors.full_name']);
     expect(result).toEqual(expected);
   });
 
@@ -104,7 +104,7 @@ describe('JsonUtilsService', () => {
         full_name: 'dummy'
       }
     ]};
-    let tags = ['authors/affiliations/value', 'authors/full_name'];
+    let tags = ['authors.affiliations.value', 'authors.full_name'];
     let result = service.filterObject(record, tags);
     expect(result).toEqual(expected);
   });
