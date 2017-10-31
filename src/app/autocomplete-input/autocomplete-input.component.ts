@@ -1,7 +1,9 @@
 import {Component, Input, Output, ChangeDetectionStrategy, EventEmitter} from '@angular/core';
 import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
 import { ParsedAutocompleteInput } from '../shared/interfaces/parsed-autocomplete-input';
-import {Observable} from 'rxjs/Observable';
+import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 
@@ -16,6 +18,7 @@ export class AutocompleteInputComponent {
   @Input() className;
   @Input() placeholder;
   @Output() valueChange = new EventEmitter<string>();
+  valueChange$ = new Subject<string>();
   value = '';
 
   currentPath = '';
@@ -37,14 +40,24 @@ export class AutocompleteInputComponent {
         this.schemaKeysStoreService.forPath(state.path).filter(item => item.startsWith(state.query))
       );
     });
+    this.valueChange$
+      .debounceTime(500)
+      .subscribe(value => {
+        this.valueChange.emit(value);
+      });
   }
 
-  selectUserInput(event) {
-    this.value = this.currentPath !== '' ? `${this.currentPath}${this.schemaKeysStoreService.separator}${event.value}` : event.value;
+  modelChange(value: string) {
+    this.value = value;
+    this.valueChange$.next(this.value);
+  }
+
+  selectUserInput(match: TypeaheadMatch) {
+    this.value = this.currentPath !== '' ? `${this.currentPath}${this.schemaKeysStoreService.separator}${match.value}` : match.value;
     this.valueChange.emit(this.value);
   }
 
-  private getStateForValue(value): ParsedAutocompleteInput {
+  private getStateForValue(value: string): ParsedAutocompleteInput {
     let path = '';
     let query = '';
     let separatorIndex = value.lastIndexOf(this.schemaKeysStoreService.separator);
