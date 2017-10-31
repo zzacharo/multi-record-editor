@@ -23,12 +23,12 @@ export class MultiEditorComponent implements OnInit {
   schema: object;
   validationErrors: string[];
   lastSearchedQuery = '';
+  allSelected = true;
   lastSearchedCollection: string;
   previewedActions: UserActions;
   errorMessage: string;
   successMessage: string;
-  // records that are disselected
-  checkedRecords: string[] = [];
+  recordSelectionStatus: { [uuid: string]: boolean } = {};
   previewMode = false;
   selectedCollection: string;
   newRecords: object[];
@@ -61,21 +61,40 @@ export class MultiEditorComponent implements OnInit {
   }
 
   onSave() {
-    this.queryService.save(this.previewedActions, this.checkedRecords)
-    .then((res) => {
-      this.successMessage = res['message'];
-      this.totalRecords = -1;
-      this.changeDetectorRef.markForCheck();
-    })
+    let uuids = Object.keys(this.recordSelectionStatus)
+      .filter(key => this.recordSelectionStatus[key] !== this.allSelected);
+    this.queryService.save(this.previewedActions, uuids, this.allSelected)
       .catch((error) => {
         if (error.json().message) {
           this.totalRecords = -1;
           this.errorMessage = error.json().message;
-        }else {
+        } else {
           this.errorMessage = error;
         }
         this.changeDetectorRef.markForCheck();
       });
+  }
+
+  selectAll() {
+    this.allSelected = true;
+    Object.keys(this.recordSelectionStatus)
+      .forEach((item) => { this.recordSelectionStatus[item] = true; });
+    this.changeDetectorRef.markForCheck();
+  }
+
+  deselectAll() {
+    this.allSelected = false;
+    Object.keys(this.recordSelectionStatus)
+      .forEach((item) => { this.recordSelectionStatus[item] = false; });
+    this.changeDetectorRef.markForCheck();
+  }
+
+  private setSelectionStatusesForNewPageRecords() {
+    if (!this.recordSelectionStatus.hasOwnProperty(this.uuids[0])) {
+      this.uuids.forEach(item => {
+        this.recordSelectionStatus[item] = this.allSelected;
+      });
+    }
   }
 
   get userActions(): UserActions {
@@ -94,9 +113,9 @@ export class MultiEditorComponent implements OnInit {
       })
       .catch((error) => {
         if (error.json().message) {
-        this.totalRecords = -1;
-        this.errorMessage = error.json().message;
-        }else {
+          this.totalRecords = -1;
+          this.errorMessage = error.json().message;
+        } else {
           this.errorMessage = error;
         }
         this.changeDetectorRef.markForCheck();
@@ -110,6 +129,9 @@ export class MultiEditorComponent implements OnInit {
 
   searchRecords(query: string) {
     this.lastSearchedCollection = this.selectedCollection;
+    this.currentPage = 1;
+    this.allSelected = true;
+    this.recordSelectionStatus = {};
     if (!query) {
       query = '';
     }
@@ -127,13 +149,14 @@ export class MultiEditorComponent implements OnInit {
         this.records = json.json_records;
         this.totalRecords = json.total_records;
         this.uuids = json.uuids;
+        this.setSelectionStatusesForNewPageRecords();
         this.changeDetectorRef.markForCheck();
       })
       .catch(error => {
         if (error.json().message) {
           this.totalRecords = -1;
           this.errorMessage = error.json().message;
-        }else {
+        } else {
           this.errorMessage = error;
         }
         this.changeDetectorRef.markForCheck();
@@ -160,20 +183,6 @@ export class MultiEditorComponent implements OnInit {
     return index;
   }
 
-  private addChecked(uuid: string) {
-    this.checkedRecords.includes(uuid) ? this.checkedRecords.splice(this.checkedRecords.indexOf(uuid), 1)
-      : this.checkedRecords.push(uuid);
-  }
-
-  private selectOrDeselectAll(value: boolean) {
-    if (value) {
-      this.checkedRecords = [];
-    }else {
-      this.checkedRecords = this.uuids.slice();
-    }
-    this.changeDetectorRef.markForCheck();
-  }
-
   private getBundledRecords() {
     this.queryService
       .fetchBundledRecords(this.lastSearchedQuery, this.currentPage, this.lastSearchedCollection, this.pageSize, this.previewedActions)
@@ -181,11 +190,15 @@ export class MultiEditorComponent implements OnInit {
         this.records = json.oldRecords.json_records;
         this.errorMessage = undefined;
         this.uuids = json.oldRecords.uuids;
+        this.setSelectionStatusesForNewPageRecords();
         this.newRecords = json.newRecords.json_records;
         this.validationErrors = json.newRecords.errors;
         this.changeDetectorRef.markForCheck();
       },
-      error => { this.errorMessage   = error; this.changeDetectorRef.markForCheck(); });
+      error => {
+        this.errorMessage = error;
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   filterRecord(record: object): object {

@@ -12,14 +12,16 @@ export class QueryService {
   private url = `${environment.baseUrl}/api/multieditor`;
   private schemaUrl = `${environment.baseUrl}/schemas/records`;
 
-  constructor(private http: Http) {}
+  constructor(private http: Http) { }
 
-  save(userActions: UserActions, checkedRecords: string[]): Promise<void> {
+  save(userActions: UserActions, checkedRecords: string[], allSelected: boolean): Promise<void> {
     return this.http
       .post(`${this.url}/update`, {
         userActions,
         ids: checkedRecords,
-      }).map(res => res.json())
+        allSelected
+      }
+      ).map(res => res.json())
       .toPromise();
   }
 
