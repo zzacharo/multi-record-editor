@@ -73,7 +73,7 @@ describe('TagFilterPipe', () => {
         ]
       }]
     }];
-    let result = pipe.transform(records, 'authors/affiliations/value');
+    let result = pipe.transform(records, 'authors.affiliations.value');
     expect(result).toEqual(expected);
   });
 });

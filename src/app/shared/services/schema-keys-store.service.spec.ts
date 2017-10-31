@@ -52,9 +52,9 @@ describe('SchemaKeysStoreService', () => {
     };
     let expectedMap = {
       '': OrderedSet(['anArray']),
-      '/anArray': OrderedSet(['anObject', 'aString', 'innerArray']),
-      '/anArray/anObject': OrderedSet(['prop1', 'prop2']),
-      '/anArray/innerArray': OrderedSet(['prop1', 'prop2'])
+      '.anArray': OrderedSet(['anObject', 'aString', 'innerArray']),
+      '.anArray.anObject': OrderedSet(['prop1', 'prop2']),
+      '.anArray.innerArray': OrderedSet(['prop1', 'prop2'])
     };
 
     service.buildSchemaKeyStore(schema);
@@ -122,7 +122,7 @@ describe('SchemaKeysStoreService', () => {
     };
 
     service.buildSchemaKeyStore(schema);
-    let subschema = service.findSubschema('anArray/innerArray');
+    let subschema = service.findSubschema('anArray.innerArray');
     expect(subschema).toEqual(expectedMap);
   });
 

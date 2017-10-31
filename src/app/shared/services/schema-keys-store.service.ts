@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 @Injectable()
 export class SchemaKeysStoreService {
 
-  public separator = '/';
+  public readonly separator = '.';
   public schemaKeyStoreMap: { [path: string]: OrderedSet<string> } = {};
   public recordKeysStoreMap: any = {};
   public schema = {};
@@ -60,7 +60,7 @@ export class SchemaKeysStoreService {
     if (path === '') {
       return subSchema;
     }
-    let splitPath = path.split('/');
+    let splitPath = path.split(this.separator);
     for (let index in splitPath) {
       if (subSchema['type'] === 'object') {
         if (subSchema['properties'][splitPath[index]]) {

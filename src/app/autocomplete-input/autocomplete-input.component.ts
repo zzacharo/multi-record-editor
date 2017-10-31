@@ -18,7 +18,6 @@ export class AutocompleteInputComponent {
   @Output() valueChange = new EventEmitter<string>();
   value = '';
 
-  private readonly separator = '/';
   currentPath = '';
   dataSource: Observable<any>;
 
@@ -41,14 +40,14 @@ export class AutocompleteInputComponent {
   }
 
   selectUserInput(event) {
-    this.value = this.currentPath !== '' ? `${this.currentPath}${this.separator}${event.value}` : event.value;
+    this.value = this.currentPath !== '' ? `${this.currentPath}${this.schemaKeysStoreService.separator}${event.value}` : event.value;
     this.valueChange.emit(this.value);
   }
 
   private getStateForValue(value): ParsedAutocompleteInput {
     let path = '';
     let query = '';
-    let separatorIndex = value.lastIndexOf(this.separator);
+    let separatorIndex = value.lastIndexOf(this.schemaKeysStoreService.separator);
     if (separatorIndex < 0) {
       path = '';
       query = value;
