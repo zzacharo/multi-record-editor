@@ -7,7 +7,6 @@ export class SchemaKeysStoreService {
 
   public readonly separator = '.';
   public schemaKeyStoreMap: { [path: string]: OrderedSet<string> } = {};
-  public recordKeysStoreMap: any = {};
   public schema = {};
 
   constructor() { }
