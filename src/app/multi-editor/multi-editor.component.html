@@ -28,7 +28,8 @@
       <div class="row">
         <div class="col-md-2">
           <span>
-            <input class="results-checkbox" type="checkbox" [ngModel]="checkedRecords.length === 0" (ngModelChange)="selectOrDeselectAll($event)"> Select all results
+            <button *ngIf="!allSelected" class="button" (click)="selectAll()" > Select all</button>            
+            <button *ngIf="allSelected" class="button" (click)="deselectAll()" > Deselect all</button>
           </span>
         </div>
         <div class="col-md-2  col-md-offset-5">
@@ -40,7 +41,7 @@
         </div>
       </div>
       <li *ngFor="let record of records; let count = index; trackBy: trackByFunction" class="list-group list-group-item">
-        <input type="checkbox" [checked]="checkedRecords.indexOf(uuids[count]) === -1" (change)="addChecked(uuids[count])">
+        <input type="checkbox" [(ngModel)]="recordSelectionStatus[uuids[count]]">
         <div *ngIf="previewMode === false;then recordView else diffView"></div>
         <ng-template #diffView>
           <div *ngIf="validationErrors[count]">
