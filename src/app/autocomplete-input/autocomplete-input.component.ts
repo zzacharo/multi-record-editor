@@ -76,7 +76,7 @@ export class AutocompleteInputComponent {
 
   selectUserInput(match: TypeaheadMatch) {
     this.value = this.currentPath !== '' ? `${this.currentPath}${this.schemaKeysStoreService.separator}${match.value}` : match.value;
-    this.valueChange.emit(this.value);
+    this.valueChange$.next(this.value);
   }
 
   private getStateForValue(value: string): ParsedAutocompleteInput {
