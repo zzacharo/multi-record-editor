@@ -27,7 +27,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/zip';
 
 import { environment } from '../../../environments/environment';
-import { UserActions, QueryResult, RecordsPreview, RecordsToCompare } from '../interfaces';
+import { UserActions, QueryResult, RecordsPreview, RecordsToCompare, SubmitMessage } from '../interfaces';
 
 @Injectable()
 export class QueryService {
@@ -36,7 +36,7 @@ export class QueryService {
 
   constructor(private http: Http) { }
 
-  save(userActions: UserActions, checkedRecords: string[], allSelected: boolean): Promise<void> {
+  save(userActions: UserActions, checkedRecords: string[], allSelected: boolean): Promise<SubmitMessage> {
     return this.http
       .post(`${this.url}/update`, {
         userActions,

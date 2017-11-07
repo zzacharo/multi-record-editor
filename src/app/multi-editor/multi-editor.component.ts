@@ -86,6 +86,11 @@ export class MultiEditorComponent implements OnInit {
     let uuids = Object.keys(this.recordSelectionStatus)
       .filter(key => this.recordSelectionStatus[key] !== this.allSelected);
     this.queryService.save(this.previewedActions, uuids, this.allSelected)
+      .then((res) => {
+        this.successMessage = res.message;
+        this.totalRecords = -1;
+        this.changeDetectorRef.markForCheck();
+      })
       .catch((error) => {
         if (error.json().message) {
           this.totalRecords = -1;
