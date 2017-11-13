@@ -32,7 +32,7 @@ import { AppGlobalsService, UserActionsService } from '../shared/services';
 })
 
 export class ActionsComponent implements OnInit {
-  selectedAction = 'Update';
+  selectedAction = 'Addition';
   userActions: UserActions;
 
   constructor(
