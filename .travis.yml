@@ -43,5 +43,5 @@ deploy:
     tag: dev
     on:
       repo: inspirehep/ng2-multi-record-editor
-      branch: master
+      branch: dev-release
       node: 6.9.1
