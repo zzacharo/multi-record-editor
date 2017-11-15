@@ -12,7 +12,8 @@
     "e2e": "ng e2e",
     "preversion": "npm test",
     "version": "npm run build",
-    "postversion": "git push upstream && git push upstream --tags"
+    "postversion": "git push upstream && git push upstream --tags",
+    "watch": "ng build --watch=true"
   },
   "dependencies": {
     "@angular/common": "^4.0.0",
@@ -42,8 +43,9 @@
     "@types/diff": "^3.2.0",
     "@types/jasmine": "2.5.38",
     "@types/node": "~6.0.60",
-    "font-awesome": "^4.7.0",
+    "child_process": "^1.0.2",
     "codelyzer": "~2.0.0",
+    "font-awesome": "^4.7.0",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
     "karma": "~1.4.1",
