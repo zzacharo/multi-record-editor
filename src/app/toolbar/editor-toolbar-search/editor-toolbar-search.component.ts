@@ -25,7 +25,8 @@ import { Collection } from '../../shared/interfaces';
 
 @Component({
   selector: 'me-editor-toolbar-search',
-  templateUrl: './editor-toolbar-search.component.html'
+  templateUrl: './editor-toolbar-search.component.html',
+  styleUrls: ['./editor-toolbar-search.component.scss']
 })
 export class EditorToolbarSearchComponent {
   selectedCollection = 'hep';
