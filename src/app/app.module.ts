@@ -1,14 +1,16 @@
+import * as Raven from 'raven-js';
+
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+
 import { AppComponent } from './app.component';
 import { MultiEditorComponent } from './multi-editor';
-import { SHARED_SERVICES, SHARED_PIPES } from './shared';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { ActionTemplateComponent} from './action';
+import { ActionTemplateComponent } from './action';
 import { ActionsComponent } from './actions/actions.component';
 import { DiffViewComponent } from './diff-view/diff-view.component';
 import { JsonEditorModule } from 'ng2-json-editor';
@@ -21,6 +23,20 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { EditorToolbarSaveComponent } from './toolbar/editor-toolbar-save/editor-toolbar-save.component';
 import { EditorToolbarSearchComponent } from './toolbar/editor-toolbar-search/editor-toolbar-search.component';
 import { AutocompleteInputComponent } from './autocomplete-input';
+
+import { SHARED_SERVICES, SHARED_PIPES } from './shared';
+
+import { environment } from '../environments/environment';
+
+Raven
+  .config(environment.sentryPublicDSN, { release: environment.version })
+  .install();
+
+export class RavenErrorHandler implements ErrorHandler {
+  handleError(error: any) {
+    Raven.captureException(error);
+  }
+}
 
 @NgModule({
   declarations: [
@@ -49,7 +65,10 @@ import { AutocompleteInputComponent } from './autocomplete-input';
     JsonEditorModule,
     TypeaheadModule.forRoot()
   ],
-  providers: SHARED_SERVICES,
+  providers: [
+    ...SHARED_SERVICES,
+    { provide: ErrorHandler, useClass: RavenErrorHandler }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

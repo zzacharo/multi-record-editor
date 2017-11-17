@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng build --watch --progress --extract-css",
-    "build": "ng build --prod --output-hashing none",
+    "build": "ng build --prod --sourcemaps --output-hashing none",
     "test": "ng test --watch=false",
     "test-dev": "ng test",
     "lint": "tslint \"src/**/*.ts\"",
@@ -32,6 +32,7 @@
     "ngx-bootstrap": "2.0.0-beta.1",
     "ngx-pagination": "^3.0.1",
     "lodash": "^4.17.4",
+    "raven-js": "^3.20.0",
     "rxjs": "^5.1.0",
     "ts-helpers": "^1.1.2",
     "zone.js": "^0.8.4"

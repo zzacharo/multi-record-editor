@@ -12,36 +12,40 @@ addons:
     - google-chrome
     packages:
     - google-chrome-stable
-
-before_script: 
+before_script:
 - npm run lint
 - npm run build
-
 before_install:
 - npm install buffer-shims
 - export CHROME_BIN=chromium-browser
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
-
-before_deploy: npm run build
+before_deploy:
+- node ./write-version.js
+- npm run build
+after_deploy:
+- "./deploy-sourcemaps.sh"
 deploy:
-  - provider: npm
-    skip_cleanup: true
-    email: admin@inspirehep.net
-    api_key:
-      secure: gH4L8hYteuweDy/PNlIa5TWX91CaYBwAyJAwdNt5E5Nz8rlaCV/LfI2LvPN+ZQDs8mNVNyG9HbBd46Vl9g8wQzThXV8zKTahsGUTlL5LuBLzzBF4/DzzD7ehMu+A3eZqq1VAdj7QVmvcTFJSfx+WqolnJWdzK+CdhJI2D9c1OpLWEuTH7074E39hpMKn1dt6MvC5aRJIpvL/xKhyMFCSZIvmlKuSrZ5TX6k2NoBvfke72XgO16egYgkJzu0dyGbMJMH2KmHeb8O3aILB1reI3tGKwFPlc4Puki9MF0T6ojO6P/4RRdYwRWS0DCa2+FLYqIV0oygMyFc22eA/yNO02OQYchTb3N+nVZ//CJdguQZoiPMJdczU1W9zOIW8hid/Jj0H6j8PEBn7wQz/R7caZ6R051ugER3Si0cyHtntuQQd0HBoQdcbkf56T8LyWU99uFEKIyOQ3KjOUk2/KH1S/f2Ak6BlJA3Yk95Hu2kDKaBbEdub9DVSAlJP5UQbaw3M4cne/saeK06f3tn1YcW1fn6HClC/RW6aUvbjf5MTQYqXLoZk3I3TrZEv1yXyjPtXmQcR0PfQ14Z24l1JwwPxq+SxsTQ2DXZjkSyuq6g8KorSf16ku2V9vSGYgApLLw5VEJi3IlQ7cBcWl2wP6HSJKup9tZJUmIrKbDKxHQfZ4s4=
-    on:
-      tags: true
-      repo: inspirehep/ng2-multi-record-editor
-      all_branches: true
-      node: 6.9.1
-  - provider: npm
-    skip_cleanup: true
-    email: admin@inspirehep.net
-    api_key:
-      secure: gH4L8hYteuweDy/PNlIa5TWX91CaYBwAyJAwdNt5E5Nz8rlaCV/LfI2LvPN+ZQDs8mNVNyG9HbBd46Vl9g8wQzThXV8zKTahsGUTlL5LuBLzzBF4/DzzD7ehMu+A3eZqq1VAdj7QVmvcTFJSfx+WqolnJWdzK+CdhJI2D9c1OpLWEuTH7074E39hpMKn1dt6MvC5aRJIpvL/xKhyMFCSZIvmlKuSrZ5TX6k2NoBvfke72XgO16egYgkJzu0dyGbMJMH2KmHeb8O3aILB1reI3tGKwFPlc4Puki9MF0T6ojO6P/4RRdYwRWS0DCa2+FLYqIV0oygMyFc22eA/yNO02OQYchTb3N+nVZ//CJdguQZoiPMJdczU1W9zOIW8hid/Jj0H6j8PEBn7wQz/R7caZ6R051ugER3Si0cyHtntuQQd0HBoQdcbkf56T8LyWU99uFEKIyOQ3KjOUk2/KH1S/f2Ak6BlJA3Yk95Hu2kDKaBbEdub9DVSAlJP5UQbaw3M4cne/saeK06f3tn1YcW1fn6HClC/RW6aUvbjf5MTQYqXLoZk3I3TrZEv1yXyjPtXmQcR0PfQ14Z24l1JwwPxq+SxsTQ2DXZjkSyuq6g8KorSf16ku2V9vSGYgApLLw5VEJi3IlQ7cBcWl2wP6HSJKup9tZJUmIrKbDKxHQfZ4s4=
-    tag: dev
-    on:
-      repo: inspirehep/ng2-multi-record-editor
-      branch: dev-release
-      node: 6.9.1
+- provider: npm
+  skip_cleanup: true
+  email: admin@inspirehep.net
+  api_key:
+    secure: gH4L8hYteuweDy/PNlIa5TWX91CaYBwAyJAwdNt5E5Nz8rlaCV/LfI2LvPN+ZQDs8mNVNyG9HbBd46Vl9g8wQzThXV8zKTahsGUTlL5LuBLzzBF4/DzzD7ehMu+A3eZqq1VAdj7QVmvcTFJSfx+WqolnJWdzK+CdhJI2D9c1OpLWEuTH7074E39hpMKn1dt6MvC5aRJIpvL/xKhyMFCSZIvmlKuSrZ5TX6k2NoBvfke72XgO16egYgkJzu0dyGbMJMH2KmHeb8O3aILB1reI3tGKwFPlc4Puki9MF0T6ojO6P/4RRdYwRWS0DCa2+FLYqIV0oygMyFc22eA/yNO02OQYchTb3N+nVZ//CJdguQZoiPMJdczU1W9zOIW8hid/Jj0H6j8PEBn7wQz/R7caZ6R051ugER3Si0cyHtntuQQd0HBoQdcbkf56T8LyWU99uFEKIyOQ3KjOUk2/KH1S/f2Ak6BlJA3Yk95Hu2kDKaBbEdub9DVSAlJP5UQbaw3M4cne/saeK06f3tn1YcW1fn6HClC/RW6aUvbjf5MTQYqXLoZk3I3TrZEv1yXyjPtXmQcR0PfQ14Z24l1JwwPxq+SxsTQ2DXZjkSyuq6g8KorSf16ku2V9vSGYgApLLw5VEJi3IlQ7cBcWl2wP6HSJKup9tZJUmIrKbDKxHQfZ4s4=
+  on:
+    tags: true
+    repo: inspirehep/ng2-multi-record-editor
+    all_branches: true
+    node: 6.9.1
+- provider: npm
+  skip_cleanup: true
+  email: admin@inspirehep.net
+  api_key:
+    secure: gH4L8hYteuweDy/PNlIa5TWX91CaYBwAyJAwdNt5E5Nz8rlaCV/LfI2LvPN+ZQDs8mNVNyG9HbBd46Vl9g8wQzThXV8zKTahsGUTlL5LuBLzzBF4/DzzD7ehMu+A3eZqq1VAdj7QVmvcTFJSfx+WqolnJWdzK+CdhJI2D9c1OpLWEuTH7074E39hpMKn1dt6MvC5aRJIpvL/xKhyMFCSZIvmlKuSrZ5TX6k2NoBvfke72XgO16egYgkJzu0dyGbMJMH2KmHeb8O3aILB1reI3tGKwFPlc4Puki9MF0T6ojO6P/4RRdYwRWS0DCa2+FLYqIV0oygMyFc22eA/yNO02OQYchTb3N+nVZ//CJdguQZoiPMJdczU1W9zOIW8hid/Jj0H6j8PEBn7wQz/R7caZ6R051ugER3Si0cyHtntuQQd0HBoQdcbkf56T8LyWU99uFEKIyOQ3KjOUk2/KH1S/f2Ak6BlJA3Yk95Hu2kDKaBbEdub9DVSAlJP5UQbaw3M4cne/saeK06f3tn1YcW1fn6HClC/RW6aUvbjf5MTQYqXLoZk3I3TrZEv1yXyjPtXmQcR0PfQ14Z24l1JwwPxq+SxsTQ2DXZjkSyuq6g8KorSf16ku2V9vSGYgApLLw5VEJi3IlQ7cBcWl2wP6HSJKup9tZJUmIrKbDKxHQfZ4s4=
+  tag: dev
+  on:
+    repo: inspirehep/ng2-multi-record-editor
+    branch: dev-release
+    node: 6.9.1
+env:
+  global:
+    secure: lYI6olRWuVnZjgowDY0GBNxnwhtrZRABhNusrbsoJcYl8CMV8JIRZOk+ZbC/YTmE3cHPixDoOcaGVnjuhGw38PM4uj2nfAbSJJ/jAVXWpvANkEWY+Uhvzk3mUfp6AHQAg0pWQD0nkcDaeodys57Vvx0VBO5e+Vscd3H1FAfiHR3OZ/Z98/ODP4uxiZxRuJbmMbKJ63XezNuHY3lDWZGRdlNPjH5bsuXpzgzNWZFsvfQ1yFVthtgCTSsnBK9jL18P6tRVskkt6RJTqVOb+prZBPZXrnSI0CSCu1YiCa17JmlV3VVxytLL+Dnerna9zCuEPYdsuQjmxj1BY7mmFPu5kT9gxgmO8vVqWMn19e5xtQJvGRaynLv60aE53DI67SnphyWIFuX/d+1F4sNr2wVW+oj17QoMbuQYnllZPX5SGdqHdPQed2vpC0RZJBjMrLi0hQLDongQ15YVVtZZODYms8QVXHU2xfEc7UWMWGSAIWRgOo0BmxEM4jYaTocyVT2PIB7oBWvaBQ8Ea86hPfKPDDqOuimA0cCkNUdFLB/FSVpLhDyuEJALOEwFvkLb1UGFNq/N2OZKUxF3BSQOpwi3QVuA4rOGLtoDQqot9RFF1Wssgm0o02aNVHQ8t9wjnSa59zfO+i2OiWMFrm8e3tCOuwiPeVlShgnn97EQLDr9W+A=
