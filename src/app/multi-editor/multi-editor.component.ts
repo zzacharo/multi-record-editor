@@ -29,6 +29,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { SchemaKeysStoreService, QueryService, JsonUtilsService, UserActionsService } from '../shared/services';
 import { UserActions } from '../shared/interfaces';
+import { Set } from 'immutable';
 
 @Component({
   selector: 'me-multi-editor',
@@ -36,7 +37,6 @@ import { UserActions } from '../shared/interfaces';
   styleUrls: ['multi-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class MultiEditorComponent implements OnInit {
   records: object[];
   currentPage = 1;
@@ -55,7 +55,7 @@ export class MultiEditorComponent implements OnInit {
   selectedCollection: string;
   newRecords: object[];
   uuids: string[] = [];
-  filterExpression: string;
+  filterExpressions: Set<string>;
 
   readonly collections: object[] = [
     ['hep', 'HEP'],
@@ -229,14 +229,14 @@ export class MultiEditorComponent implements OnInit {
   }
 
   filterRecord(record: object): object {
-    if (this.filterExpression) {
-      return this.jsonUtilsService.filterObject(record, [this.filterExpression]);
+    if (this.filterExpressions && this.filterExpressions.size > 0) {
+      return this.jsonUtilsService.filterObject(record, this.filterExpressions);
     }
     return record;
   }
 
-  filterRecords(newFilterExpression) {
-    this.filterExpression = newFilterExpression;
+  filterRecords(newFilterExpressionArray) {
+    this.filterExpressions = newFilterExpressionArray;
     this.changeDetectorRef.markForCheck();
   }
 

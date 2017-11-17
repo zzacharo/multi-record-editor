@@ -1,5 +1,6 @@
 import { JsonUtilsService } from './json-utils.service';
 import { SchemaKeysStoreService } from './schema-keys-store.service';
+import { Set } from 'immutable';
 
 describe('JsonUtilsService', () => {
   it('filters a nested complex object given a path and returns the object keeping the object structure.', () => {
@@ -60,7 +61,7 @@ describe('JsonUtilsService', () => {
       ]
     };
 
-    let result = service.filterObject(record, ['authors.affiliations.value', 'authors.full_name']);
+    let result = service.filterObject(record, Set(['authors.affiliations.value', 'authors.full_name']));
     expect(result).toEqual(expected);
   });
 
@@ -105,7 +106,7 @@ describe('JsonUtilsService', () => {
       }
     ]};
     let tags = ['authors.affiliations.value', 'authors.full_name'];
-    let result = service.filterObject(record, tags);
+    let result = service.filterObject(record, Set(tags));
     expect(result).toEqual(expected);
   });
 });

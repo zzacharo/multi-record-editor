@@ -23,6 +23,7 @@
 import { Injectable } from '@angular/core';
 import { SchemaKeysStoreService } from './schema-keys-store.service';
 import * as _ from 'lodash';
+import { Set } from 'immutable';
 
 @Injectable()
 export class JsonUtilsService {
@@ -30,11 +31,11 @@ export class JsonUtilsService {
   constructor(private schemaKeysStoreService: SchemaKeysStoreService) { }
 
   filterObjectArray(jsonArray: Array<object>, filterExpression: string) {
-    return jsonArray.map(record => this.filterObject(record, [filterExpression]))
+    return jsonArray.map(record => this.filterObject(record, Set([filterExpression])))
       .filter(value => !this.isEmpty(value));
   }
 
-  filterObject(json: object, paths: Array<string>): object {
+  filterObject(json: object, paths: Set<string>): object {
     let result = {};
     paths.forEach(path => {
       let filteredObject = this.filterObjectRecursively(json, path);

@@ -18,8 +18,7 @@
     <div *ngIf="totalRecords > 0">
       <div class="tag-filter">
         <label>Show only:</label>
-        <me-autocomplete-input type="text" name="key" (valueChange)="filterRecords($event)" className="form-control input-sm inline-input"
-          placeholder="field key">
+        <me-autocomplete-input type="text" name="key" [tagsEnabled]="true" (valueChange)="filterRecords($event)" placeholder="field key">
         </me-autocomplete-input>
       </div>
       <div class="preview-border">
@@ -28,7 +27,7 @@
       <div class="row">
         <div class="col-md-2">
           <span>
-            <button *ngIf="!allSelected" class="button" (click)="selectAll()" > Select all</button>            
+            <button *ngIf="!allSelected" class="button" (click)="selectAll()" > Select all</button>
             <button *ngIf="allSelected" class="button" (click)="deselectAll()" > Deselect all</button>
           </span>
         </div>
