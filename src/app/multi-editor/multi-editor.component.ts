@@ -158,6 +158,7 @@ export class MultiEditorComponent implements OnInit {
     this.lastSearchedCollection = this.selectedCollection;
     this.currentPage = 1;
     this.allSelected = true;
+    this.previewMode = false;
     this.recordSelectionStatus = {};
     if (!query) {
       query = '';
