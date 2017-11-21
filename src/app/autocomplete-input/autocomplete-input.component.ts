@@ -20,14 +20,20 @@
  * as an Intergovernmental Organization or submit itself to any jurisdiction.
  */
 
-import {Component, Input, Output, ChangeDetectionStrategy, EventEmitter} from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+  EventEmitter
+} from '@angular/core';
 import { SchemaKeysStoreService } from '../shared/services/schema-keys-store.service';
 import { ParsedAutocompleteInput } from '../shared/interfaces/parsed-autocomplete-input';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
+import { Set } from 'immutable';
 
 @Component({
   selector: 'me-autocomplete-input',
@@ -39,16 +45,20 @@ export class AutocompleteInputComponent {
   @Input() disabled;
   @Input() className;
   @Input() placeholder;
-  @Output() valueChange = new EventEmitter<string>();
-  valueChange$ = new Subject<string>();
+  @Input() tagsEnabled = false;
+  @Output() valueChange = new EventEmitter<Set<string>>();
+  @Output() tagInsert = new EventEmitter<Set<string>>();
   value = '';
-
+  selectedValues = Set<string>();
   currentPath = '';
   dataSource: Observable<any>;
 
   typeaheadNoResults = false;
 
-  constructor(private schemaKeysStoreService: SchemaKeysStoreService) {
+  private tagShortcut = 'space';
+
+  constructor(
+    private schemaKeysStoreService: SchemaKeysStoreService) {
     this.dataSource = Observable
     .create((observer: any) => {
       observer.next(this.value);
@@ -62,21 +72,19 @@ export class AutocompleteInputComponent {
         this.schemaKeysStoreService.forPath(state.path).filter(item => item.startsWith(state.query))
       );
     });
-    this.valueChange$
-      .debounceTime(500)
-      .subscribe(value => {
-        this.valueChange.emit(value);
-      });
   }
 
-  modelChange(value: string) {
-    this.value = value;
-    this.valueChange$.next(this.value);
+  onSpaceKeydown(event) {
+    if (this.tagsEnabled) {
+      event.preventDefault();
+      this.selectedValues = this.selectedValues.add(this.value);
+      this.value = '';
+      this.valueChange.emit(this.selectedValues);
+    }
   }
 
   selectUserInput(match: TypeaheadMatch) {
     this.value = this.currentPath !== '' ? `${this.currentPath}${this.schemaKeysStoreService.separator}${match.value}` : match.value;
-    this.valueChange$.next(this.value);
   }
 
   private getStateForValue(value: string): ParsedAutocompleteInput {
@@ -95,4 +103,10 @@ export class AutocompleteInputComponent {
     }
     return {path, query};
   }
+
+  private removeValue(value) {
+    this.selectedValues = this.selectedValues.remove(value);
+    this.valueChange.emit(this.selectedValues);
+  }
+
 }
